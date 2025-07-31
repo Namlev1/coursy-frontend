@@ -20,6 +20,7 @@ export interface TenantTheme {
     secondary: string
     tertiary: string
     background: string
+    textPrimary: string
   }
 
   courseListLayout: 'grid' | 'list' | 'table' | 'album'

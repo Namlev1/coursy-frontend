@@ -18,6 +18,7 @@ export const mockTenantConfigs: Record<string, TenantConfig> = {
         secondary: '#000000',
         tertiary: '#000000',
         background: '#fefeff',
+        textPrimary: '#000000',
       },
       courseListLayout: 'grid',
       videoPlayerType: 'minimal',
