@@ -1,23 +1,24 @@
 import React from 'react';
+import { TenantConfig } from '@/types/tenant';
 
 interface FooterSectionProps {
   links: Array<{ label: string; href: string }>;
   copyright: string;
-  theme: any;
+  config: TenantConfig;
 }
 
 export default function FooterSection({
   links,
   copyright,
-  theme,
+  config,
 }: FooterSectionProps) {
   return (
     <footer
       className="border-t"
-      style={{
-        backgroundColor: theme.backgroundLight,
-        borderColor: theme.borderColor,
-      }}
+      // style={{
+      //   backgroundColor: theme.backgroundLight,
+      //   borderColor: theme.borderColor,
+      // }}
     >
       <div className="container mx-auto px-4 py-8">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
@@ -26,16 +27,16 @@ export default function FooterSection({
               <a
                 key={link.label}
                 className="transition-colors hover:opacity-80"
-                style={{ color: theme.textSecondary }}
+                // style={{ color: theme.textSecondary }}
                 href={link.href}
               >
                 {link.label}
               </a>
             ))}
           </div>
-          <p className="text-sm" style={{ color: theme.textSecondary }}>
-            {copyright}
-          </p>
+          {/*<p className="text-sm" style={{ color: theme.textSecondary }}>*/}
+          {/*  {copyright}*/}
+          {/*</p>*/}
         </div>
       </div>
     </footer>

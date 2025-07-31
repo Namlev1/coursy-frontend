@@ -1,4 +1,5 @@
 import React from 'react';
+import { TenantTheme } from '@/types/tenant';
 
 interface HeroSectionProps {
   title: string;
@@ -6,7 +7,7 @@ interface HeroSectionProps {
   backgroundImage: string;
   ctaText: string;
   ctaHref: string;
-  theme: any;
+  theme: TenantTheme;
 }
 
 export default function HeroSection({
@@ -36,7 +37,7 @@ export default function HeroSection({
             <a
               href={ctaHref}
               className="inline-flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-md h-12 px-6 text-white text-base font-bold shadow-lg transition-transform transform hover:scale-105"
-              style={{ backgroundColor: theme.primaryColor }}
+              style={{ backgroundColor: theme.colors.primary }}
             >
               <span className="truncate">{ctaText}</span>
             </a>
