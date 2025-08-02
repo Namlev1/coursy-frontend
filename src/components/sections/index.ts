@@ -8,6 +8,9 @@ import QuickActionsSection from '@/components/sections/QuickActionsSection';
 import AnalyticsGridSection from '@/components/sections/AnalyticsGridSection';
 import { PageHeaderSection } from '@/components/sections/PageHeaderSection';
 import CourseCreationFormSection from '@/components/sections/CourseCreationFormSection';
+import OrganizationDetailsSection from '@/components/sections/OrganizationDetailsSection';
+import PlatformsTableSection from '@/components/sections/PlatformsTableSection';
+import SubscriptionSidebarSection from '@/components/sections/SubscriptionSidebarSection';
 
 export const SectionComponents = {
   header: HeaderSection,
@@ -20,4 +23,7 @@ export const SectionComponents = {
   'analytics-grid': AnalyticsGridSection,
   'page-header': PageHeaderSection,
   'course-creation-form': CourseCreationFormSection,
+  'organization-details': OrganizationDetailsSection,
+  'platforms-table': PlatformsTableSection,
+  'subscription-sidebar': SubscriptionSidebarSection,
 };

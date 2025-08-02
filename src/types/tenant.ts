@@ -20,6 +20,9 @@ export interface TenantConfig {
   courseCreationPageTemplate: {
     sections: PageSection[];
   };
+  hostDashboardTemplate: {
+    sections: PageSection[];
+  };
 }
 
 export interface TenantTheme {
@@ -53,7 +56,14 @@ export const getTenantConfig = cache(async () => {
 });
 
 export const getTenantPageTemplate = cache(
-  async (pageType: 'home' | 'signup' | 'dashboard' | 'course-create') => {
+  async (
+    pageType:
+      | 'home'
+      | 'signup'
+      | 'dashboard'
+      | 'course-create'
+      | 'host-dashboard'
+  ) => {
     const config = await getTenantConfig();
     if (!config) return null;
 
@@ -66,6 +76,8 @@ export const getTenantPageTemplate = cache(
         return config.dashboardPageTemplate;
       case 'course-create':
         return config.courseCreationPageTemplate;
+      case 'host-dashboard':
+        return config.hostDashboardTemplate;
       default:
         return null;
     }

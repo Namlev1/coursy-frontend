@@ -239,5 +239,95 @@ export const mockTenantConfigs: Record<string, TenantConfig> = {
         },
       ],
     },
+    hostDashboardTemplate: {
+      sections: [
+        {
+          type: 'header',
+          order: 1,
+          props: {
+            logoText: 'EduPlatform',
+            navigation: [
+              { label: 'Dashboard', href: '/dashboard', active: true },
+              { label: 'Platforms', href: '/platforms' },
+              { label: 'Settings', href: '/settings' },
+            ],
+            isAuthenticated: true,
+            user: {
+              name: 'John Doe',
+              email: 'john@acmecorp.com',
+              avatar:
+                'https://lh3.googleusercontent.com/aida-public/AB6AXuDPx35_yYxQikb8S1STkWVTqCrKG9cv_ZtCqE1DM0kqYxO7Zo-_wWz5nuqy3P7b6BBmHGkBr_7n0F1cQbMLVdXYvJmNOfAU0kU4lyUAAyDR8pNGRErUdxtph-rBKCJmlm3cQr0TQK-9bCM7wggfMTeL6h-koCze-yl2Ipd_hVzAXu3PP-nGMijCe79Y1qVDF-pVTzR_vplA2I0zMZOD6SRXxUeoDmWoXZjMOoUAADHKcqjYUBE6Nb7n0AG3A-auLWQc-5sIk0l_n5k',
+              role: 'Admin',
+            },
+          },
+        },
+        {
+          type: 'page-header',
+          order: 2,
+          props: {
+            title: 'Account Overview',
+            subtitle: "Manage your organization's details and platforms.",
+          },
+        },
+        {
+          type: 'organization-details',
+          order: 3,
+          props: {
+            title: 'Organization Details',
+            details: [
+              { label: 'Organization Name', value: 'Acme Corp' },
+              { label: 'Contact Email', value: 'contact@acmecorp.com' },
+              {
+                label: 'Subscription Status',
+                value: { type: 'badge', text: 'Active', variant: 'green' },
+              },
+            ],
+          },
+        },
+        {
+          type: 'platforms-table',
+          order: 4,
+          props: {
+            title: 'Platforms',
+            createButtonText: 'Create Platform',
+            platforms: [
+              {
+                id: '1',
+                name: 'Innovate & Learn',
+                url: 'innovate.eduplatform.com',
+                subdomain: 'innovate',
+                status: 'active',
+              },
+              {
+                id: '2',
+                name: 'Marketing Masters',
+                url: 'marketing.eduplatform.com',
+                subdomain: 'marketing',
+                status: 'active',
+              },
+              {
+                id: '3',
+                name: 'Sales Academy',
+                url: 'sales.eduplatform.com',
+                subdomain: 'sales',
+                status: 'active',
+              },
+            ],
+          },
+        },
+        {
+          type: 'subscription-sidebar',
+          order: 5,
+          props: {
+            subscription: {
+              planName: 'Enterprise Plan',
+              platformsUsed: 3,
+              platformsLimit: 4,
+              usagePercentage: 75,
+            },
+          },
+        },
+      ],
+    },
   },
 };
