@@ -9,52 +9,29 @@ export default async function DashboardPage() {
     return <div>Dashboard not found</div>;
   }
 
+  const contentSections = pageTemplate.sections
+    .filter((section) => section.type !== 'sidebar')
+    .sort((a, b) => a.order - b.order);
+
   return (
-    <div className="relative flex size-full min-h-screen flex-col group/design-root overflow-x-hidden">
-      <div className="flex h-full grow">
-        {/* Sidebar - always first */}
-        {pageTemplate.sections
-          .filter((section) => section.type === 'sidebar')
-          .map((section, index) => {
-            const Component =
-              SectionComponents[section.type as keyof typeof SectionComponents];
-            return Component ? (
-              <Component
-                key={`sidebar-${index}`}
-                {...section.props}
-                theme={tenantConfig.theme}
-              />
-            ) : null;
-          })}
+    <>
+      {contentSections.map((section, index) => {
+        const Component =
+          SectionComponents[section.type as keyof typeof SectionComponents];
 
-        {/* Main Content */}
-        <main className="flex-1 p-8">
-          <div className="max-w-6xl mx-auto">
-            {pageTemplate.sections
-              .filter((section) => section.type !== 'sidebar')
-              .sort((a, b) => a.order - b.order)
-              .map((section, index) => {
-                const Component =
-                  SectionComponents[
-                    section.type as keyof typeof SectionComponents
-                  ];
+        if (!Component) {
+          console.warn(`Unknown section type: ${section.type}`);
+          return null;
+        }
 
-                if (!Component) {
-                  console.warn(`Unknown section type: ${section.type}`);
-                  return null;
-                }
-
-                return (
-                  <Component
-                    key={index}
-                    {...section.props}
-                    theme={tenantConfig.theme}
-                  />
-                );
-              })}
-          </div>
-        </main>
-      </div>
-    </div>
+        return (
+          <Component
+            key={index}
+            {...section.props}
+            theme={tenantConfig.theme}
+          />
+        );
+      })}
+    </>
   );
 }
