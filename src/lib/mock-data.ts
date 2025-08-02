@@ -65,5 +65,21 @@ export const mockTenantConfigs: Record<string, TenantConfig> = {
         },
       ],
     },
+    signupPageTemplate: {
+      sections: [
+        {
+          type: 'signupFormCentered',
+          order: 1,
+          props: {
+            logoText: 'Coursy',
+            title: 'Create your organization',
+            subtitle: 'Join our platform and start building your course empire.',
+            submitText: 'Create organization',
+            loginLinkText: 'Already have an account?',
+            loginLinkHref: '/login'
+          }
+        }
+      ]
+    }
   },
 };

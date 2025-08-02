@@ -11,10 +11,12 @@ export interface TenantConfig {
   homePageTemplate: {
     sections: PageSection[];
   };
+  signupPageTemplate: {
+    sections: PageSection[];
+  };
 }
 
 export interface TenantTheme {
-  // Colors (stored as CSS variables)
   colors: {
     primary: string
     secondary: string
@@ -39,7 +41,7 @@ const fetchTenantConfig = cache(async (tenantId: string) => {
 });
 
 export const getTenantConfig = cache(async () => {
-  const headersList = headers();
+  const headersList = await headers();
   const tenantId = headersList.get('x-tenant-id') || 'coursy';
   return fetchTenantConfig(tenantId);
 });
