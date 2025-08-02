@@ -2,55 +2,85 @@ import React, { JSX } from 'react';
 import { TenantTheme } from '@/types/tenant';
 
 interface NavItem {
-  label: string
-  href: string
-  icon: string
-  active?: boolean
+  label: string;
+  href: string;
+  icon: string;
+  active?: boolean;
 }
 
 interface SidebarSectionProps {
-  organizationName: string
-  userRole: string
-  navigationItems: NavItem[]
-  theme: TenantTheme
+  organizationName: string;
+  userRole: string;
+  navigationItems: NavItem[];
+  theme: TenantTheme;
 }
 
 export default function SidebarSection({
-                                         organizationName,
-                                         userRole,
-                                         navigationItems,
-                                         theme
-                                       }: SidebarSectionProps) {
+  organizationName,
+  userRole,
+  navigationItems,
+  theme,
+}: SidebarSectionProps) {
   const getIcon = (iconName: string) => {
     const icons: Record<string, JSX.Element> = {
       dashboard: (
-        <svg fill="currentColor" height="24" viewBox="0 0 256 256" width="24" xmlns="http://www.w3.org/2000/svg">
+        <svg
+          fill="currentColor"
+          height="24"
+          viewBox="0 0 256 256"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
           <path d="M224,115.55V208a16,16,0,0,1-16,16H168a16,16,0,0,1-16-16V168a8,8,0,0,0-8-8H112a8,8,0,0,0-8,8v40a16,16,0,0,1-16,16H48a16,16,0,0,1-16-16V115.55a16,16,0,0,1,5.17-11.78l80-75.48.11-.11a16,16,0,0,1,21.53,0,1.14,1.14,0,0,0,.11.11l80,75.48A16,16,0,0,1,224,115.55Z"></path>
         </svg>
       ),
       courses: (
-        <svg fill="currentColor" height="24" viewBox="0 0 256 256" width="24" xmlns="http://www.w3.org/2000/svg">
+        <svg
+          fill="currentColor"
+          height="24"
+          viewBox="0 0 256 256"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
           <path d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40Zm0,160H40V56H216V200ZM164.44,105.34l-48,32A8,8,0,0,1,104,130.68V77.32a8,8,0,0,1,12.44-6.66l48,32a8,8,0,0,1,0,13.36Z"></path>
         </svg>
       ),
       users: (
-        <svg fill="currentColor" height="24" viewBox="0 0 256 256" width="24" xmlns="http://www.w3.org/2000/svg">
+        <svg
+          fill="currentColor"
+          height="24"
+          viewBox="0 0 256 256"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
           <path d="M240,128a11.9,11.9,0,0,1-8.52,11.45L216,144l15.48,5.45a12,12,0,0,1,0,21.09L216,176l15.48,5.45a12,12,0,0,1,0,21.09L216,208l15.48,5.45A12,12,0,0,1,220,224a12.13,12.13,0,0,1-11.45-8.52L203,196.6,184.09,212a12,12,0,0,1-16.18-16.18L186.8,176l-18.89-18.88A12,12,0,0,1,184.09,141L203,159.9,208.52,144A12,12,0,0,1,240,128ZM128,120a40,40,0,1,0-40-40A40,40,0,0,0,128,120Zm0,16a56,56,0,1,0-56,56A56.06,56.06,0,0,0,128,136Zm0-72a24,24,0,1,1-24,24A24,24,0,0,1,128,64Zm0,88a40,40,0,1,1,40-40A40,40,0,0,1,128,152Z"></path>
         </svg>
       ),
       appearance: (
-        <svg fill="currentColor" height="24" viewBox="0 0 256 256" width="24" xmlns="http://www.w3.org/2000/svg">
+        <svg
+          fill="currentColor"
+          height="24"
+          viewBox="0 0 256 256"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
           <path d="M232,32a8,8,0,0,0-8-8c-44.08,0-89.31,49.71-114.43,82.63A60,60,0,0,0,32,164c0,30.88-19.54,44.73-20.47,45.37A8,8,0,0,0,16,224H92a60,60,0,0,0,57.37-77.57C182.3,121.31,232,76.08,232,32ZM92,208H34.63C41.38,198.41,48,183.92,48,164a44,44,0,1,1,44,44Zm32.42-94.45q5.14-6.66,10.09-12.55A76.23,76.23,0,0,1,155,121.49q-5.9,4.94-12.55,10.09A60.54,60.54,0,0,0,124.42,113.55Zm42.7-2.68a92.57,92.57,0,0,0-22-22c31.78-34.53,55.75-45,69.9-47.91C212.17,55.12,201.65,79.09,167.12,110.87Z"></path>
         </svg>
       ),
       settings: (
-        <svg fill="currentColor" height="24" viewBox="0 0 256 256" width="24" xmlns="http://www.w3.org/2000/svg">
+        <svg
+          fill="currentColor"
+          height="24"
+          viewBox="0 0 256 256"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
           <path d="M128,80a48,48,0,1,0,48,48A48.05,48.05,0,0,0,128,80Zm0,80a32,32,0,1,1,32-32A32,32,0,0,1,128,160Zm88-29.84q.06-2.16,0-4.32l14.92-18.64a8,8,0,0,0,1.48-7.06,107.21,107.21,0,0,0-10.88-26.25,8,8,0,0,0-6-3.93l-23.72-2.64q-1.48-1.56-3-3L186,40.54a8,8,0,0,0-3.94-6,107.71,107.71,0,0,0-26.25-10.87,8,8,0,0,0-7.06,1.49L130.16,40Q128,40,125.84,40L107.2,25.11a8,8,0,0,0-7.06-1.48A107.6,107.6,0,0,0,73.89,34.51a8,8,0,0,0-3.93,6L67.32,64.27q-1.56,1.49-3,3L40.54,70a8,8,0,0,0-6,3.94,107.71,107.71,0,0,0-10.87,26.25,8,8,0,0,0,1.49,7.06L40,125.84Q40,128,40,130.16L25.11,148.8a8,8,0,0,0-1.48,7.06,107.21,107.21,0,0,0,10.88,26.25,8,8,0,0,0,6,3.93l23.72,2.64q1.49,1.56,3,3L70,215.46a8,8,0,0,0,3.94,6,107.71,107.71,0,0,0,26.25,10.87,8,8,0,0,0,7.06-1.49L125.84,216q2.16.06,4.32,0l18.64,14.92a8,8,0,0,0,7.06,1.48,107.21,107.21,0,0,0,26.25-10.88,8,8,0,0,0,3.93-6l2.64-23.72q1.56-1.48,3-3L215.46,186a8,8,0,0,0,6-3.94,107.71,107.71,0,0,0,10.87-26.25,8,8,0,0,0-1.49-7.06Zm-16.1-6.5a73.93,73.93,0,0,1,0,8.68,8,8,0,0,0,1.74,5.48l14.19,17.73a91.57,91.57,0,0,1-6.23,15L187,173.11a8,8,0,0,0-5.1,2.64,74.11,74.11,0,0,1-6.14,6.14,8,8,0,0,0-2.64,5.1l-2.51,22.58a91.32,91.32,0,0,1-15,6.23l-17.74-14.19a8,8,0,0,0-5-1.75h-.48a73.93,73.93,0,0,1-8.68,0,8,8,0,0,0-5.48,1.74L100.45,215.8a91.57,91.57,0,0,1-15-6.23L82.89,187a8,8,0,0,0-2.64-5.1,74.11,74.11,0,0,1-6.14-6.14,8,8,0,0,0-5.1-2.64L46.43,170.6a91.32,91.32,0,0,1-6.23-15l14.19-17.74a8,8,0,0,0,1.74-5.48,73.93,73.93,0,0,1,0-8.68,8,8,0,0,0-1.74-5.48L40.2,100.45a91.57,91.57,0,0,1,6.23-15L69,82.89a8,8,0,0,0,5.1-2.64,74.11,74.11,0,0,1,6.14-6.14A8,8,0,0,0,82.89,69L85.4,46.43a91.32,91.32,0,0,1,15-6.23l17.74,14.19a8,8,0,0,0,5.48,1.74,73.93,73.93,0,0,1,8.68,0,8,8,0,0,0,5.48-1.74L155.55,40.2a91.57,91.57,0,0,1,15,6.23L173.11,69a8,8,0,0,0,2.64,5.1,74.11,74.11,0,0,1,6.14,6.14,8,8,0,0,0,5.1,2.64l22.58,2.51a91.32,91.32,0,0,1,6.23,15l-14.19,17.74A8,8,0,0,0,199.87,123.66Z"></path>
         </svg>
-      )
-    }
-    return icons[iconName] || icons.dashboard
-  }
+      ),
+    };
+    return icons[iconName] || icons.dashboard;
+  };
 
   return (
     <div className="w-72 flex-shrink-0 bg-white border-r border-gray-200 flex flex-col justify-between">
@@ -58,7 +88,9 @@ export default function SidebarSection({
         <div className="flex items-center gap-3 mb-8">
           <div className="w-10 h-10 bg-gray-900 rounded-lg"></div>
           <div>
-            <h1 className="text-gray-900 text-lg font-semibold">{organizationName}</h1>
+            <h1 className="text-gray-900 text-lg font-semibold">
+              {organizationName}
+            </h1>
             <p className="text-gray-500 text-sm">{userRole}</p>
           </div>
         </div>
@@ -80,11 +112,14 @@ export default function SidebarSection({
         </nav>
       </div>
       <div className="p-6">
-        <a className="flex items-center gap-3 px-4 py-2 rounded-lg text-gray-600 hover:bg-gray-100 hover:text-gray-900 font-medium" href="#">
+        <a
+          className="flex items-center gap-3 px-4 py-2 rounded-lg text-gray-600 hover:bg-gray-100 hover:text-gray-900 font-medium"
+          href="#"
+        >
           {getIcon('settings')}
           <span>Settings</span>
         </a>
       </div>
     </div>
-  )
+  );
 }
