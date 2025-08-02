@@ -68,18 +68,159 @@ export const mockTenantConfigs: Record<string, TenantConfig> = {
     signupPageTemplate: {
       sections: [
         {
-          type: 'signupFormCentered',
+          type: 'signup-form-centered',
           order: 1,
           props: {
             logoText: 'Coursy',
             title: 'Create your organization',
-            subtitle: 'Join our platform and start building your course empire.',
+            subtitle:
+              'Join our platform and start building your course empire.',
             submitText: 'Create organization',
             loginLinkText: 'Already have an account?',
-            loginLinkHref: '/login'
-          }
-        }
-      ]
-    }
+            loginLinkHref: '/login',
+          },
+        },
+      ],
+    },
+    dashboardPageTemplate: {
+      sections: [
+        {
+          type: 'sidebar',
+          order: 1,
+          props: {
+            organizationName: 'CourseHub',
+            userRole: 'Super Admin',
+            navigationItems: [
+              {
+                label: 'Dashboard',
+                icon: 'dashboard',
+                href: '/dashboard',
+                active: true,
+              },
+              {
+                label: 'Courses',
+                icon: 'courses',
+                href: '/courses',
+              },
+              {
+                label: 'Users',
+                icon: 'users',
+                href: '/users',
+              },
+              {
+                label: 'Appearance',
+                icon: 'appearance',
+                href: '/appearance',
+              },
+            ],
+          },
+        },
+        {
+          type: 'dashboard-header',
+          order: 2,
+          props: {
+            title: 'Dashboard',
+            subtitle:
+              "Welcome back! Here's what's happening with your learning platform.",
+          },
+        },
+        {
+          type: 'stats-cards',
+          order: 3,
+          props: {
+            stats: [
+              {
+                label: 'Total Courses',
+                value: 25,
+                icon: 'courses',
+                trend: { value: '+12%', type: 'positive' },
+              },
+              {
+                label: 'Active Users',
+                value: 150,
+                icon: 'users',
+                trend: { value: '+8%', type: 'positive' },
+              },
+              {
+                label: 'Recent Enrollments',
+                value: 12,
+                icon: 'enrollments',
+                trend: { value: '+3%', type: 'positive' },
+              },
+            ],
+          },
+        },
+        {
+          type: 'quick-actions',
+          order: 4,
+          props: {
+            title: 'Quick Actions',
+            actions: [
+              {
+                label: 'Create New Course',
+                href: '/courses/new',
+                primary: true,
+                icon: 'plus',
+              },
+              {
+                label: 'Manage Courses',
+                href: '/courses',
+                primary: false,
+              },
+              {
+                label: 'View Analytics',
+                href: '/analytics',
+                primary: false,
+              },
+            ],
+          },
+        },
+        {
+          type: 'analytics-grid',
+          order: 5,
+          props: {
+            title: 'User Statistics',
+            analytics: [
+              {
+                title: 'User Engagement',
+                value: '75%',
+                change: '+5%',
+                changeType: 'positive',
+                chartType: 'line',
+                description: 'vs last 30 days',
+                chartData: {
+                  // Mock data for line chart
+                  points: [
+                    { x: 0, y: 109 },
+                    { x: 1, y: 21 },
+                    { x: 2, y: 41 },
+                    { x: 3, y: 93 },
+                    { x: 4, y: 33 },
+                    { x: 5, y: 101 },
+                    { x: 6, y: 61 },
+                  ],
+                },
+              },
+              {
+                title: 'Course Completion',
+                value: '60%',
+                change: '+3%',
+                changeType: 'positive',
+                chartType: 'bar',
+                description: 'vs last 30 days',
+                chartData: {
+                  bars: [
+                    { label: 'Course A', value: 50, percentage: 50 },
+                    { label: 'Course B', value: 90, percentage: 90 },
+                    { label: 'Course C', value: 70, percentage: 70 },
+                    { label: 'Course D', value: 55, percentage: 55 },
+                  ],
+                },
+              },
+            ],
+          },
+        },
+      ],
+    },
   },
 };
