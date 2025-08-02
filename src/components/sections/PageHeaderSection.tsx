@@ -1,16 +1,16 @@
 import { TenantTheme } from '@/types/tenant';
 
-interface DashboardHeaderSectionProps {
+interface PageHeaderSectionProps {
   title: string;
   subtitle?: string;
   theme: TenantTheme;
 }
 
-export function DashboardHeaderSection({
+export function PageHeaderSection({
   title,
   subtitle,
   theme,
-}: DashboardHeaderSectionProps) {
+}: PageHeaderSectionProps) {
   return (
     <div className="mb-8">
       <h1

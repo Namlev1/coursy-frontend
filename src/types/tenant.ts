@@ -6,7 +6,7 @@ import { notFound } from 'next/navigation';
 export interface TenantConfig {
   id: string;
   name: string;
-  title: string
+  title: string;
   theme: TenantTheme;
   homePageTemplate: {
     sections: PageSection[];
@@ -17,19 +17,22 @@ export interface TenantConfig {
   dashboardPageTemplate: {
     sections: PageSection[];
   };
+  courseCreationPageTemplate: {
+    sections: PageSection[];
+  };
 }
 
 export interface TenantTheme {
   colors: {
-    primary: string
-    secondary: string
-    tertiary: string
-    background: string
-    textPrimary: string
-  }
+    primary: string;
+    secondary: string;
+    tertiary: string;
+    background: string;
+    textPrimary: string;
+  };
 
-  courseListLayout: 'grid' | 'list' | 'table' | 'album'
-  videoPlayerType: 'minimal' | 'advanced' | 'branded' | 'cinema'
+  courseListLayout: 'grid' | 'list' | 'table' | 'album';
+  videoPlayerType: 'minimal' | 'advanced' | 'branded' | 'cinema';
 }
 
 const fetchTenantConfig = cache(async (tenantId: string) => {
@@ -37,10 +40,10 @@ const fetchTenantConfig = cache(async (tenantId: string) => {
   await new Promise((resolve) => setTimeout(resolve, 100));
 
   const config = mockTenantConfigs[tenantId];
-  if(!config) {
-    return notFound()
+  if (!config) {
+    return notFound();
   }
-  return config
+  return config;
 });
 
 export const getTenantConfig = cache(async () => {
@@ -49,18 +52,22 @@ export const getTenantConfig = cache(async () => {
   return fetchTenantConfig(tenantId);
 });
 
-export const getTenantPageTemplate = cache(async (pageType: 'home' | 'signup' | 'dashboard') => {
-  const config = await getTenantConfig();
-  if (!config) return null;
+export const getTenantPageTemplate = cache(
+  async (pageType: 'home' | 'signup' | 'dashboard' | 'course-create') => {
+    const config = await getTenantConfig();
+    if (!config) return null;
 
-  switch (pageType) {
-    case 'home':
-      return config.homePageTemplate;
-    case 'signup':
-      return config.signupPageTemplate;
-    case 'dashboard':
-      return config.dashboardPageTemplate;
-    default:
-      return null;
+    switch (pageType) {
+      case 'home':
+        return config.homePageTemplate;
+      case 'signup':
+        return config.signupPageTemplate;
+      case 'dashboard':
+        return config.dashboardPageTemplate;
+      case 'course-create':
+        return config.courseCreationPageTemplate;
+      default:
+        return null;
+    }
   }
-});
+);

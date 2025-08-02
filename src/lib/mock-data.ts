@@ -116,7 +116,7 @@ export const mockTenantConfigs: Record<string, TenantConfig> = {
           },
         },
         {
-          type: 'dashboard-header',
+          type: 'page-header',
           order: 2,
           props: {
             title: 'Dashboard',
@@ -219,6 +219,23 @@ export const mockTenantConfigs: Record<string, TenantConfig> = {
               },
             ],
           },
+        },
+      ],
+    },
+    courseCreationPageTemplate: {
+      sections: [
+        {
+          type: 'page-header',
+          order: 1,
+          props: {
+            title: 'Create a new course',
+            subtitle: 'Fill in the details below to get started.',
+          },
+        },
+        {
+          type: 'course-creation-form',
+          order: 2,
+          props: {},
         },
       ],
     },

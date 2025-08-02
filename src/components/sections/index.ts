@@ -6,7 +6,8 @@ import SidebarSection from '@/components/sections/SidebarSection';
 import StatsCardsSection from '@/components/sections/StatsCardsSection';
 import QuickActionsSection from '@/components/sections/QuickActionsSection';
 import AnalyticsGridSection from '@/components/sections/AnalyticsGridSection';
-import { DashboardHeaderSection } from '@/components/sections/DashboardHeaderSection';
+import { PageHeaderSection } from '@/components/sections/PageHeaderSection';
+import CourseCreationFormSection from '@/components/sections/CourseCreationFormSection';
 
 export const SectionComponents = {
   header: HeaderSection,
@@ -17,5 +18,6 @@ export const SectionComponents = {
   'stats-cards': StatsCardsSection,
   'quick-actions': QuickActionsSection,
   'analytics-grid': AnalyticsGridSection,
-  'dashboard-header': DashboardHeaderSection
+  'page-header': PageHeaderSection,
+  'course-creation-form': CourseCreationFormSection,
 };
