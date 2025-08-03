@@ -85,34 +85,28 @@ export const mockTenantConfigs: Record<string, TenantConfig> = {
     dashboardPageTemplate: {
       sections: [
         {
-          type: 'sidebar',
+          type: 'header',
           order: 1,
           props: {
-            organizationName: 'CourseHub',
-            userRole: 'Super Admin',
-            navigationItems: [
+            logoText: 'Coursy',
+            navigation: [
               {
-                label: 'Dashboard',
-                icon: 'dashboard',
-                href: '/dashboard',
+                label: 'Home',
+                href: '/',
+                access: 'public',
                 active: true,
               },
-              {
-                label: 'Courses',
-                icon: 'courses',
-                href: '/courses',
-              },
-              {
-                label: 'Users',
-                icon: 'users',
-                href: '/users',
-              },
-              {
-                label: 'Appearance',
-                icon: 'appearance',
-                href: '/appearance',
-              },
+              { label: 'Courses', href: '/courses', access: 'public' },
+              { label: 'Dashboard', href: '/dashboard', access: 'public' },
             ],
+            isAuthenticated: true,
+            user: {
+              name: 'John Doe',
+              email: 'john@acmecorp.com',
+              avatar:
+                'https://lh3.googleusercontent.com/aida-public/AB6AXuDPx35_yYxQikb8S1STkWVTqCrKG9cv_ZtCqE1DM0kqYxO7Zo-_wWz5nuqy3P7b6BBmHGkBr_7n0F1cQbMLVdXYvJmNOfAU0kU4lyUAAyDR8pNGRErUdxtph-rBKCJmlm3cQr0TQK-9bCM7wggfMTeL6h-koCze-yl2Ipd_hVzAXu3PP-nGMijCe79Y1qVDF-pVTzR_vplA2I0zMZOD6SRXxUeoDmWoXZjMOoUAADHKcqjYUBE6Nb7n0AG3A-auLWQc-5sIk0l_n5k',
+              role: 'Admin',
+            },
           },
         },
         {
