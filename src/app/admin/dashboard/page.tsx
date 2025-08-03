@@ -1,5 +1,6 @@
 import { SectionComponents } from '@/components/sections';
 import { getTenantConfig, getTenantPageTemplate } from '@/types/tenant';
+import HeaderSection from '@/components/sections/header/HeaderSection';
 
 export default async function DashboardPage() {
   const tenantConfig = await getTenantConfig();
@@ -10,28 +11,38 @@ export default async function DashboardPage() {
   }
 
   const contentSections = pageTemplate.sections
-    .filter((section) => section.type !== 'sidebar')
+    .filter((section) => section.type !== 'header')
     .sort((a, b) => a.order - b.order);
+  const header = pageTemplate.sections.find(
+    (section) => section.type === 'header'
+  );
 
   return (
     <>
-      {contentSections.map((section, index) => {
-        const Component =
-          SectionComponents[section.type as keyof typeof SectionComponents];
+      <HeaderSection
+        logoText={header?.props.logoText}
+        navigation={header?.props.navigation}
+        theme={tenantConfig.theme}
+      />
+      <div className="mx-auto max-w-7xl p-8">
+        {contentSections.map((section, index) => {
+          const Component =
+            SectionComponents[section.type as keyof typeof SectionComponents];
 
-        if (!Component) {
-          console.warn(`Unknown section type: ${section.type}`);
-          return null;
-        }
+          if (!Component) {
+            console.warn(`Unknown section type: ${section.type}`);
+            return null;
+          }
 
-        return (
-          <Component
-            key={index}
-            {...section.props}
-            theme={tenantConfig.theme}
-          />
-        );
-      })}
+          return (
+            <Component
+              key={index}
+              {...section.props}
+              theme={tenantConfig.theme}
+            />
+          );
+        })}
+      </div>
     </>
   );
 }
