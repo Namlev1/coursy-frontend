@@ -1,4 +1,4 @@
-import HeaderSection from './HeaderSection';
+import HeaderSection from './header/HeaderSection';
 import HeroSection from './HeroSection';
 import FooterSection from './FooterSection';
 import SignupFormCenteredSection from './SignupFormCenteredSection';

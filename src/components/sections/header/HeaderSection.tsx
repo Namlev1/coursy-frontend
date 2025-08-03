@@ -1,6 +1,13 @@
 import React from 'react';
 import { TenantTheme } from '@/types/tenant';
 
+type NavigationField = {
+  label: string;
+  href: string;
+  active?: boolean;
+  access: 'public' | 'student' | 'admin';
+};
+
 interface User {
   name: string;
   email: string;
@@ -10,11 +17,19 @@ interface User {
 
 interface HeaderSectionProps {
   logoText: string;
-  navigation: Array<{ label: string; href: string; active?: boolean }>;
+  navigation: Array<NavigationField>;
   theme: TenantTheme;
   isAuthenticated?: boolean;
   user?: User;
 }
+
+const filterNavigation = (fields: Array<NavigationField>, user?: User) => {
+  return fields.filter((item) => {
+    if (item.access === 'public') return true;
+
+    return user?.role === item.access;
+  });
+};
 
 export default function HeaderSection({
   logoText,
@@ -23,29 +38,20 @@ export default function HeaderSection({
   isAuthenticated = false,
   user,
 }: HeaderSectionProps) {
+  const navigationFieldsToRender = filterNavigation(navigation, user);
+
   return (
     <header className="sticky top-0 z-10 w-full border-b border-gray-200 bg-white/80 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-4">
           <a className="flex items-center gap-2" href="#">
-            <div className="h-7 w-7" style={{ color: theme.colors.primary }}>
-              <svg
-                fill="none"
-                viewBox="0 0 48 48"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M4 4H17.3334V17.3334H30.6666V30.6666H44V44H4V4Z"
-                  fill="currentColor"
-                ></path>
-              </svg>
-            </div>
+            {/*TODO logo*/}
             <h1 className="text-xl font-bold text-gray-900">{logoText}</h1>
           </a>
         </div>
 
         <nav className="hidden items-center gap-8 md:flex">
-          {navigation.map((item) => (
+          {navigationFieldsToRender.map((item) => (
             <a
               key={item.label}
               className={`text-sm font-medium transition-colors hover:text-primary-600 ${

@@ -31,10 +31,10 @@ export const mockTenantConfigs: Record<string, TenantConfig> = {
           props: {
             logoText: 'Coursy',
             navigation: [
-              { label: 'Home', href: '#' },
-              { label: 'Features', href: '#' },
-              { label: 'Pricing', href: '#' },
-              { label: 'Contact', href: '#' },
+              { label: 'Home', href: '#', access: 'public' },
+              { label: 'Features', href: '#', access: 'public' },
+              { label: 'Pricing', href: '#', access: 'public' },
+              { label: 'Contact', href: '#', access: 'public' },
             ],
           },
         },
@@ -245,11 +245,16 @@ export const mockTenantConfigs: Record<string, TenantConfig> = {
           type: 'header',
           order: 1,
           props: {
-            logoText: 'EduPlatform',
+            logoText: 'Coursy',
             navigation: [
-              { label: 'Dashboard', href: '/dashboard', active: true },
-              { label: 'Platforms', href: '/platforms' },
-              { label: 'Settings', href: '/settings' },
+              {
+                label: 'Dashboard',
+                href: '/dashboard',
+                active: true,
+                access: 'public',
+              },
+              { label: 'Platforms', href: '/platforms', access: 'public' },
+              { label: 'Settings', href: '/settings', access: 'public' },
             ],
             isAuthenticated: true,
             user: {
