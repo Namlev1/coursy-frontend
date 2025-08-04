@@ -1,8 +1,8 @@
 import React from 'react';
-import { TenantTheme } from '@/types/tenant';
+import { Theme } from '@/types/tenant';
 
 interface CourseCreationFormSectionProps {
-  theme: TenantTheme;
+  theme: Theme;
 }
 
 export default function CourseCreationFormSection({

@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
-import { TenantTheme } from '@/types/tenant';
+import { Theme } from '@/types/tenant';
 
 interface SignupFormCenteredSectionProps {
   logoUrl: string;
@@ -11,20 +11,19 @@ interface SignupFormCenteredSectionProps {
   submitText: string;
   loginLinkText: string;
   loginLinkHref: string;
-  theme: TenantTheme;
+  theme: Theme;
 }
 
 export default function SignupFormCenteredSection({
-                                                    logoUrl,
-                                                    logoText,
-                                                    title,
-                                                    subtitle,
-                                                    submitText,
-                                                    loginLinkText,
-                                                    loginLinkHref,
-                                                    theme,
-                                                  }: SignupFormCenteredSectionProps) {
-
+  logoUrl,
+  logoText,
+  title,
+  subtitle,
+  submitText,
+  loginLinkText,
+  loginLinkHref,
+  theme,
+}: SignupFormCenteredSectionProps) {
   // Server Action for form handling
   async function handleSignup(formData: FormData) {
     'use server';
@@ -55,7 +54,12 @@ export default function SignupFormCenteredSection({
       // const user = await createUser({ organizationName, firstName, lastName, email, password });
 
       // Mock successful signup
-      console.log('Creating user:', { organizationName, firstName, lastName, email });
+      console.log('Creating user:', {
+        organizationName,
+        firstName,
+        lastName,
+        email,
+      });
 
       // Redirect on success
       redirect('/dashboard');

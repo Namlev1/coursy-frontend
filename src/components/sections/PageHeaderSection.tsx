@@ -1,9 +1,9 @@
-import { TenantTheme } from '@/types/tenant';
+import { Theme } from '@/types/tenant';
 
 interface PageHeaderSectionProps {
   title: string;
   subtitle?: string;
-  theme: TenantTheme;
+  theme: Theme;
 }
 
 export function PageHeaderSection({

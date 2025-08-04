@@ -1,5 +1,4 @@
 import { SectionComponents } from '@/components/sections';
-import { getTenantConfig, getTenantPageTemplate } from '@/types/tenant';
 import HeaderSection from '@/components/sections/header/HeaderSection';
 
 export default async function DashboardPage() {

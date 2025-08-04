@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { TenantTheme } from '@/types/tenant';
+import { Theme } from '@/types/tenant';
 
 type NavigationField = {
   label: string;
@@ -20,7 +20,7 @@ interface User {
 interface HeaderSectionProps {
   logoText: string;
   navigation: Array<NavigationField>;
-  theme: TenantTheme;
+  theme: Theme;
   isAuthenticated?: boolean;
   user?: User;
 }

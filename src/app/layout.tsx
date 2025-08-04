@@ -1,6 +1,6 @@
+import fetchTheme from '@/types/theme';
 import { Inter } from 'next/font/google';
 import React from 'react';
-import { getTenantConfig } from '@/types/tenant';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -13,19 +13,18 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const tenantConfig = await getTenantConfig();
+  const theme = await fetchTheme();
 
   const cssVariables = {
-    '--color-primary': tenantConfig.theme.colors.primary,
-    '--color-secondary': tenantConfig.theme.colors.secondary,
-    '--color-tertiary': tenantConfig.theme.colors.tertiary,
-    '--color-background': tenantConfig.theme.colors.background,
+    '--color-primary': theme.colors.primary,
+    '--color-secondary': theme.colors.secondary,
+    '--color-tertiary': theme.colors.tertiary,
+    '--color-background': theme.colors.background,
   };
 
   return (
     <html lang="en">
       <head>
-        <title>{tenantConfig.title}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta charSet="utf-8" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />

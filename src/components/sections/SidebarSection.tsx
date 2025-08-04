@@ -1,5 +1,5 @@
 import React, { JSX } from 'react';
-import { TenantTheme } from '@/types/tenant';
+import { Theme } from '@/types/tenant';
 
 interface NavItem {
   label: string;
@@ -12,7 +12,7 @@ interface SidebarSectionProps {
   organizationName: string;
   userRole: string;
   navigationItems: NavItem[];
-  theme: TenantTheme;
+  theme: Theme;
 }
 
 export default function SidebarSection({

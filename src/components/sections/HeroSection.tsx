@@ -1,5 +1,5 @@
 import React from 'react';
-import { TenantTheme } from '@/types/tenant';
+import { Theme } from '@/types/tenant';
 
 interface HeroSectionProps {
   title: string;
@@ -7,7 +7,7 @@ interface HeroSectionProps {
   backgroundImage: string;
   ctaText: string;
   ctaHref: string;
-  theme: TenantTheme;
+  theme: Theme;
 }
 
 export default function HeroSection({

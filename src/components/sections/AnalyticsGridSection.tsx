@@ -1,5 +1,5 @@
 import React from 'react';
-import { TenantTheme } from '@/types/tenant';
+import { Theme } from '@/types/tenant';
 
 interface AnalyticsCard {
   title: string;
@@ -13,7 +13,7 @@ interface AnalyticsCard {
 interface AnalyticsGridSectionProps {
   title: string;
   analytics: AnalyticsCard[];
-  theme: TenantTheme;
+  theme: Theme;
 }
 
 export default function AnalyticsGridSection({

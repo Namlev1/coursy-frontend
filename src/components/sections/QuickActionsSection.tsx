@@ -1,5 +1,5 @@
 import React from 'react';
-import { TenantTheme } from '@/types/tenant';
+import { Theme } from '@/types/tenant';
 
 interface ActionButton {
   label: string;
@@ -11,7 +11,7 @@ interface ActionButton {
 interface QuickActionsSectionProps {
   title: string;
   actions: ActionButton[];
-  theme: TenantTheme;
+  theme: Theme;
 }
 
 export default function QuickActionsSection({

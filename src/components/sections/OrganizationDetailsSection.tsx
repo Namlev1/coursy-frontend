@@ -1,5 +1,5 @@
 import React from 'react';
-import { TenantTheme } from '@/types/tenant';
+import { Theme } from '@/types/tenant';
 
 interface OrganizationDetail {
   label: string;
@@ -11,7 +11,7 @@ interface OrganizationDetail {
 interface OrganizationDetailsSectionProps {
   title: string;
   details: OrganizationDetail[];
-  theme: TenantTheme;
+  theme: Theme;
 }
 
 export default function OrganizationDetailsSection({
