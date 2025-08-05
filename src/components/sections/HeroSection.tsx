@@ -16,14 +16,19 @@ export default function HeroSection({
   ctaHref,
 }: HeroSectionProps) {
   return (
-    <main className="flex-1">
-      <section className="relative">
+    <main className="flex-1 flex">
+      <section className="relative flex-1 flex items-center justify-center">
+        {/* Background Image */}
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{ backgroundImage: `url("${backgroundImage}")` }}
-        ></div>
-        <div className="absolute inset-0 bg-black/50"></div>
-        <div className="container mx-auto px-4 relative z-10 py-32 md:py-48">
+        />
+
+        {/* Overlay */}
+        <div className="absolute inset-0 bg-black/50" />
+
+        {/* Content Container */}
+        <div className="container mx-auto px-4 py-16 sm:py-20 md:py-24 lg:py-32 relative z-10">
           <div className="max-w-3xl mx-auto text-center">
             <h1 className="text-white text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight tracking-tighter mb-6">
               {title}
