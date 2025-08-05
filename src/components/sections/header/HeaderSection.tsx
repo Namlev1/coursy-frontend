@@ -1,7 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Theme } from '@/types/tenant';
 
 type NavigationField = {
   label: string;
@@ -20,7 +19,6 @@ interface User {
 interface HeaderSectionProps {
   logoText: string;
   navigation: Array<NavigationField>;
-  theme: Theme;
   isAuthenticated?: boolean;
   user?: User;
 }
@@ -35,7 +33,6 @@ const filterNavigation = (fields: Array<NavigationField>, user?: User) => {
 export default function HeaderSection({
   logoText,
   navigation,
-  theme,
   isAuthenticated = false,
   user,
 }: HeaderSectionProps) {
@@ -73,7 +70,7 @@ export default function HeaderSection({
                 className="relative rounded-full p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2"
                 style={
                   {
-                    '--tw-ring-color': theme.colors.primary,
+                    '--tw-ring-color': 'var(--color-primary)',
                   } as React.CSSProperties
                 }
                 aria-label="View notifications"
@@ -114,14 +111,14 @@ export default function HeaderSection({
               <Link
                 href="/login"
                 className="hidden sm:inline-flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-md h-10 px-4 bg-transparent text-sm font-bold transition-colors hover:bg-gray-100"
-                style={{ color: theme.colors.textPrimary }}
+                style={{ color: 'var(--color-text-primary)' }}
               >
                 <span className="truncate">Login</span>
               </Link>
               <Link
                 href="/register"
                 className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-md h-10 px-4 text-white text-sm font-bold shadow-sm transition-all hover:opacity-90"
-                style={{ backgroundColor: theme.colors.primary }}
+                style={{ backgroundColor: 'var(--color-primary)' }}
               >
                 <span className="truncate">Get Started</span>
               </Link>
