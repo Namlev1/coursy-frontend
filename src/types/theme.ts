@@ -8,6 +8,7 @@ export interface Theme {
     tertiary: string;
     background: string;
     textPrimary: string;
+    textSecondary: string;
   };
 
   courseListLayout: 'Grid' | 'List' | 'Table' | 'Album';

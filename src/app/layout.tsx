@@ -21,6 +21,7 @@ export default async function RootLayout({
     '--color-tertiary': theme.colors.tertiary,
     '--color-background': theme.colors.background,
     '--color-text-primary': theme.colors.textPrimary,
+    '--color-text-secondary': theme.colors.textSecondary,
   };
 
   return (
