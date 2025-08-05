@@ -1,12 +1,12 @@
 import { SectionComponents } from '@/components/sections';
-import { getTenantConfig } from '@/types/tenant';
+import fetchPageTemplate, { PageType } from '@/types/pageTemplate';
 
 export default async function SignupPage() {
-  const tenantConfig = await getTenantConfig();
+  const pageTemplate = await fetchPageTemplate(PageType.Signup);
 
   return (
     <div>
-      {tenantConfig.signupPageTemplate.sections
+      {pageTemplate.sections
         .sort((a, b) => a.order - b.order)
         .map((section, index) => {
           const Component =
@@ -17,13 +17,7 @@ export default async function SignupPage() {
             return null;
           }
 
-          return (
-            <Component
-              key={index}
-              {...section.props}
-              theme={tenantConfig.theme}
-            />
-          );
+          return <Component key={index} {...section.props} />;
         })}
     </div>
   );

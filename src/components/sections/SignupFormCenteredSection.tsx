@@ -1,7 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
-import { Theme } from '@/types/tenant';
 
 interface SignupFormCenteredSectionProps {
   logoUrl: string;
@@ -11,7 +10,6 @@ interface SignupFormCenteredSectionProps {
   submitText: string;
   loginLinkText: string;
   loginLinkHref: string;
-  theme: Theme;
 }
 
 export default function SignupFormCenteredSection({
@@ -22,7 +20,6 @@ export default function SignupFormCenteredSection({
   submitText,
   loginLinkText,
   loginLinkHref,
-  theme,
 }: SignupFormCenteredSectionProps) {
   // Server Action for form handling
   async function handleSignup(formData: FormData) {
@@ -223,7 +220,7 @@ export default function SignupFormCenteredSection({
               <button
                 className="flex w-full justify-center rounded-lg bg-[var(--primary-600)] px-4 py-3 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-[var(--primary-500)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--primary-600)]"
                 type="submit"
-                style={{ backgroundColor: theme.colors.primary }}
+                style={{ backgroundColor: 'var(--color-primary)' }}
               >
                 {submitText}
               </button>
@@ -233,7 +230,7 @@ export default function SignupFormCenteredSection({
           <p className="mt-8 text-center text-sm text-gray-500">
             {`${loginLinkText} `}
             <Link
-              className="font-semibold leading-6 text-[var(--primary-600)] hover:text-[var(--primary-500)]"
+              className="font-semibold leading-6 text-[var(--color-primary)] hover:text-[var(--primary-500)]"
               href={loginLinkHref}
             >
               Log in
