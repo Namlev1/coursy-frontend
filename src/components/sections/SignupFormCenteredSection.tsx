@@ -180,35 +180,32 @@ export default function SignupFormCenteredSection({
           lastName: formData.lastName.trim(),
           email: formData.email.trim(),
           password: formData.password,
+          roleName: 'ROLE_USER',
         }),
       });
 
-      const data = await response.json();
-
       if (!response.ok) {
-        // Handle specific error messages from the server
-        if (response.status === 409) {
-          setErrors({ email: 'This email is already registered' });
-        } else if (response.status === 400) {
-          // Parse validation errors from server
-          if (data.errors) {
-            setErrors(data.errors);
-          } else {
-            setErrors({ general: data.message || 'Invalid input data' });
-          }
-        } else {
-          setErrors({
-            general: data.message || 'Registration failed. Please try again.',
-          });
+        const message = await response.text();
+        switch (response.status) {
+          case 400:
+            setErrors({ general: message });
+            break;
+
+          case 409: // CONFLICT - Email already exists
+            setErrors({ email: message || 'This email is already registered' });
+            break;
+
+          default:
+            setErrors({
+              general: message || 'Registration failed. Please try again.',
+            });
         }
         return;
       }
 
-      // Success! Redirect to login or dashboard
-      console.log('Registration successful!', data);
+      console.log('Registration successful!');
 
-      // You might want to show a success message first
-      // or auto-login the user
+      // todo login user, redirect to dashboard
       router.push(loginLinkHref);
     } catch (error) {
       console.error('Registration error:', error);
