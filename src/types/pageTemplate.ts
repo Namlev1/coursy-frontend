@@ -19,6 +19,7 @@ export enum PageType {
   Signup = 'Signup',
   Dashboard = 'Dashboard',
   CourseCreation = 'CourseCreation',
+  Login = 'Login',
 }
 
 const fetchPageTemplateInternal = async (

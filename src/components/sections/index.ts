@@ -11,12 +11,14 @@ import CourseCreationFormSection from '@/components/sections/CourseCreationFormS
 import OrganizationDetailsSection from '@/components/sections/OrganizationDetailsSection';
 import PlatformsTableSection from '@/components/sections/PlatformsTableSection';
 import SubscriptionSidebarSection from '@/components/sections/SubscriptionSidebarSection';
+import LoginFormCenteredSection from '@/components/sections/LoginFormCenteredSection';
 
 export const SectionComponents = {
   header: HeaderSection,
   hero: HeroSection,
   footer: FooterSection,
   'signup-form-centered': SignupFormCenteredSection,
+  'login-form-centered': LoginFormCenteredSection,
   sidebar: SidebarSection,
   'stats-cards': StatsCardsSection,
   'quick-actions': QuickActionsSection,
