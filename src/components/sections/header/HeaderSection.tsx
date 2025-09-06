@@ -18,6 +18,7 @@ interface User {
 
 interface HeaderSectionProps {
   logoText: string;
+  logoUrl: string;
   navigation: Array<NavigationField>;
   isAuthenticated?: boolean;
   user?: User;
@@ -32,6 +33,7 @@ const filterNavigation = (fields: Array<NavigationField>, user?: User) => {
 
 export default function HeaderSection({
   logoText,
+  logoUrl,
   navigation,
   isAuthenticated = false,
   user,
@@ -40,10 +42,10 @@ export default function HeaderSection({
 
   return (
     <header className="sticky top-0 z-10 w-full border-b border-gray-200 bg-white/80 backdrop-blur-md">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+      <div className="flex h-16 {/*max-w-7xl*/} items-center justify-between px-8 sm:px-12 lg:px-16">
         <div className="flex items-center gap-4">
           <Link href="/" className="flex items-center gap-2">
-            {/*TODO: Add Next.js Image component for logo when available */}
+            <Image src={logoUrl} alt={'Company logo'} width={36} height={36} />
             <h1 className="text-xl font-bold text-gray-900">{logoText}</h1>
           </Link>
         </div>

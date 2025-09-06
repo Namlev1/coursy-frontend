@@ -14,7 +14,7 @@ export function PageHeaderSection({
   return (
     <div>
       <h1
-        className="text-3xl font-bold text-gray-900 mb-2"
+        className="text-3xl font-bold text-gray-900 mb-2 mt-8"
         style={{ color: theme.colors.secondary }}
       >
         {title}
