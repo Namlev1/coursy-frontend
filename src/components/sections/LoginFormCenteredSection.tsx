@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { validateEmail, validatePassword } from '@/utils/loginValidation';
 
 interface LoginFormCenteredSectionProps {
   logoUrl: string;
@@ -49,7 +50,19 @@ export default function LoginFormCenteredSection({
     };
 
   const handleBlur = (field: keyof FormData) => () => {
-    //  TODO
+    setTouched((prev) => new Set(prev).add(field));
+
+    let error: string | undefined;
+    switch (field) {
+      case 'email':
+        error = validateEmail(formData.email);
+        break;
+      case 'password':
+        error = validatePassword(formData.password);
+        break;
+    }
+
+    setErrors((prev) => ({ ...prev, [field]: error }));
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -198,9 +211,8 @@ export default function LoginFormCenteredSection({
                 className="flex w-full justify-center rounded-lg bg-[var(--primary-600)] px-4 py-3 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-[var(--primary-500)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--primary-600)] disabled:opacity-50 disabled:cursor-not-allowed transition-opacity"
                 type="submit"
                 style={{
-                  backgroundColor: isSubmitting
-                    ? '#9CA3AF'
-                    : 'var(--color-primary)',
+                  backgroundColor:
+                    isSubmitting || errors ? '#9CA3AF' : 'var(--color-primary)',
                 }}
                 disabled={isSubmitting}
               >
