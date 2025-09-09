@@ -4,16 +4,7 @@ export function middleware(request: NextRequest) {
   const hostname = request.headers.get('host') || 'localhost:3000'
 
   // Mock tenant detection - in real app this would query database
-  let tenantId = 'coursy' // Default to mother app
-
-  // Simple domain mapping for demo
-  if (hostname.includes('localhost') || hostname.includes('coursy.com')) {
-    tenantId = 'coursy'
-  }
-  // You can add more tenant mappings here later
-  // else if (hostname === 'companyabc.com') {
-  //   tenantId = 'company-abc'
-  // }
+  let tenantId = '4e1c791d-c481-4f9a-9eff-b701c2875c5f';
 
   // Add tenant info to headers for pages to use
   const response = NextResponse.next()
