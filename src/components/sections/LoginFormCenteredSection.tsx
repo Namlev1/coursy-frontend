@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { validateEmail, validatePassword } from '@/utils/loginValidation';
+import Cookies from 'js-cookie';
 
 interface LoginFormCenteredSectionProps {
   logoUrl: string;
@@ -99,6 +100,9 @@ export default function LoginFormCenteredSection({
         }
         return;
       }
+
+      const data = await response.json();
+      Cookies.set('jwt', data.token, { expires: 7 });
 
       console.log('Login successful!');
 
