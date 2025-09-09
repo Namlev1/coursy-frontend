@@ -11,6 +11,7 @@ import {
   validateLastName,
   validatePassword,
 } from '@/utils/signupValidation';
+import { Roles } from '@/types/Roles';
 
 interface SignupFormCenteredSectionProps {
   logoUrl: string;
@@ -170,19 +171,22 @@ export default function SignupFormCenteredSection({
     setErrors({});
 
     try {
-      const response = await fetch('http://localhost:8080/api/users/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          firstName: formData.firstName.trim(),
-          lastName: formData.lastName.trim(),
-          email: formData.email.trim(),
-          password: formData.password,
-          roleName: 'ROLE_USER',
-        }),
-      });
+      const response = await fetch(
+        'http://localhost:8080/api/users/host/register',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            firstName: formData.firstName.trim(),
+            lastName: formData.lastName.trim(),
+            email: formData.email.trim(),
+            password: formData.password,
+            roleName: Roles.ROLE_TENANT,
+          }),
+        }
+      );
 
       if (!response.ok) {
         const message = await response.text();
