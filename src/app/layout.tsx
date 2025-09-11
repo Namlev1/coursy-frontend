@@ -1,6 +1,7 @@
 import fetchTheme from '@/types/theme';
 import { Inter } from 'next/font/google';
 import React from 'react';
+import { ReduxProvider } from './providers';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -41,11 +42,13 @@ export default async function RootLayout({
         className={`${inter.className} bg-white`}
         style={cssVariables as React.CSSProperties}
       >
-        <div className="relative flex size-full min-h-screen flex-col group/design-root overflow-x-hidden">
-          <div className="layout-container flex h-full grow flex-col">
-            {children}
+        <ReduxProvider>
+          <div className="relative flex size-full min-h-screen flex-col group/design-root overflow-x-hidden">
+            <div className="layout-container flex h-full grow flex-col">
+              {children}
+            </div>
           </div>
-        </div>
+        </ReduxProvider>
       </body>
     </html>
   );
