@@ -172,7 +172,7 @@ export default function LoginFormCenteredSection({
         <div className="mb-8 text-center">
           <Link
             className="inline-flex items-center gap-3 text-2xl font-bold text-gray-900"
-            href="/"
+            href="/public"
           >
             {logoUrl && (
               <Image

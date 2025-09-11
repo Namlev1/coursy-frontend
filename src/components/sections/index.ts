@@ -1,17 +1,12 @@
 import HeaderSection from './header/HeaderSection';
-import HeroSection from './HeroSection';
-import FooterSection from './FooterSection';
-import SignupFormCenteredSection from './SignupFormCenteredSection';
-import SidebarSection from '@/components/sections/SidebarSection';
-import StatsCardsSection from '@/components/sections/StatsCardsSection';
-import QuickActionsSection from '@/components/sections/QuickActionsSection';
-import AnalyticsGridSection from '@/components/sections/AnalyticsGridSection';
-import { PageHeaderSection } from '@/components/sections/PageHeaderSection';
-import CourseCreationFormSection from '@/components/sections/CourseCreationFormSection';
-import OrganizationDetailsSection from '@/components/sections/OrganizationDetailsSection';
-import PlatformsTableSection from '@/components/sections/PlatformsTableSection';
-import SubscriptionSidebarSection from '@/components/sections/SubscriptionSidebarSection';
-import LoginFormCenteredSection from '@/components/sections/LoginFormCenteredSection';
+import HeroSection from './hero/HeroSection';
+import FooterSection from './footer/FooterSection';
+import SignupFormCenteredSection from './signup/SignupFormCenteredSection';
+import QuickActionsSection from '@/components/sections/dashboard/QuickActionsSection';
+import AnalyticsGridSection from '@/components/sections/dashboard/AnalyticsGridSection';
+import { PageHeaderSection } from '@/components/sections/header/PageHeaderSection';
+import CourseCreationFormSection from '@/components/sections/dashboard/CourseCreationFormSection';
+import LoginFormCenteredSection from '@/components/sections/login/LoginFormCenteredSection';
 
 export const SectionComponents = {
   header: HeaderSection,
@@ -19,13 +14,8 @@ export const SectionComponents = {
   footer: FooterSection,
   'signup-form-centered': SignupFormCenteredSection,
   'login-form-centered': LoginFormCenteredSection,
-  sidebar: SidebarSection,
-  'stats-cards': StatsCardsSection,
   'quick-actions': QuickActionsSection,
   'analytics-grid': AnalyticsGridSection,
   'page-header': PageHeaderSection,
   'course-creation-form': CourseCreationFormSection,
-  'organization-details': OrganizationDetailsSection,
-  'platforms-table': PlatformsTableSection,
-  'subscription-sidebar': SubscriptionSidebarSection,
 };
