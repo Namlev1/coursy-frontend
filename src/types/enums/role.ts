@@ -1,4 +1,4 @@
-export enum Roles {
+export enum Role {
   ROLE_HOST_OWNER = 'ROLE_HOST_OWNER',
   ROLE_HOST_ADMIN = 'ROLE_HOST_ADMIN',
   ROLE_TENANT = 'ROLE_TENANT',
