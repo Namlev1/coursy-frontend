@@ -6,6 +6,10 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { validateEmail, validatePassword } from '@/utils/loginValidation';
 import Cookies from 'js-cookie';
+import { useAppDispatch } from '@/app/hooks/redux';
+import { login } from '@/store/slices/authSlice';
+import { UserResponse } from '@/types/user';
+import { Role } from '@/types/enums';
 
 interface LoginFormCenteredSectionProps {
   logoUrl: string;
@@ -36,6 +40,7 @@ export default function LoginFormCenteredSection({
   loginLinkHref,
 }: LoginFormCenteredSectionProps) {
   const router = useRouter();
+  const dispatch = useAppDispatch();
   const [formData, setFormData] = useState<FormData>({
     email: '',
     password: '',
@@ -102,7 +107,43 @@ export default function LoginFormCenteredSection({
       }
 
       const data = await response.json();
+      const token = data.token;
+      const meResponse = await fetch('http://localhost:8080/api/users/me', {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!meResponse.ok) {
+        const message = await meResponse.text();
+        switch (meResponse.status) {
+          case 400:
+            setErrors({ general: message });
+            break;
+
+          default:
+            setErrors({
+              general: message || 'Login failed',
+            });
+        }
+        return;
+      }
+      const userResponse: UserResponse = await meResponse.json();
+
       Cookies.set('jwt', data.token, { expires: 7 });
+      dispatch(
+        login({
+          user: {
+            id: userResponse.id,
+            platformId: userResponse.platformId,
+            email: userResponse.email,
+            firstName: userResponse.firstName,
+            lastName: userResponse.lastName,
+          },
+          role: userResponse.roleName as Role,
+        })
+      );
 
       console.log('Login successful!');
 

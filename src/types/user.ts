@@ -3,6 +3,7 @@ import { Role } from '@/types/enums';
 
 export interface User {
   id: UUID;
+  platformId: UUID | null;
   email: string;
   firstName: string;
   lastName: string;
@@ -10,6 +11,7 @@ export interface User {
 
 export interface UserResponse {
   id: UUID;
+  platformId: UUID | null;
   email: string;
   firstName: string;
   lastName: string;

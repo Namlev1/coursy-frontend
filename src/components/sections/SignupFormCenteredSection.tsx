@@ -11,7 +11,7 @@ import {
   validateLastName,
   validatePassword,
 } from '@/utils/signupValidation';
-import { Roles } from '@/types/Roles';
+import { Role } from '@/types/enums';
 
 interface SignupFormCenteredSectionProps {
   logoUrl: string;
@@ -183,7 +183,7 @@ export default function SignupFormCenteredSection({
             lastName: formData.lastName.trim(),
             email: formData.email.trim(),
             password: formData.password,
-            roleName: Roles.ROLE_TENANT,
+            roleName: Role.ROLE_TENANT,
           }),
         }
       );
