@@ -11,6 +11,11 @@ import { login } from '@/store/slices/authSlice';
 import { UserResponse } from '@/types/user';
 import { Role } from '@/types/enums';
 
+// Constants
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8080';
+const JWT_EXPIRES_DAYS = 7;
+
 interface LoginFormCenteredSectionProps {
   logoUrl: string;
   logoText: string;
@@ -31,6 +36,10 @@ interface FormErrors {
   general?: string;
 }
 
+interface LoginResponse {
+  token: string;
+}
+
 export default function LoginFormCenteredSection({
   logoUrl,
   logoText,
@@ -48,6 +57,48 @@ export default function LoginFormCenteredSection({
   const [errors, setErrors] = useState<FormErrors>({});
   const [touched, setTouched] = useState<Set<keyof FormData>>(new Set());
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // API calls
+  const loginUser = async (
+    email: string,
+    password: string
+  ): Promise<LoginResponse> => {
+    const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email: email.trim(),
+        password,
+      }),
+    });
+
+    if (!response.ok) {
+      const message = await response.text();
+      throw new Error(message || `Login failed with status ${response.status}`);
+    }
+
+    return response.json();
+  };
+
+  const fetchUserData = async (token: string): Promise<UserResponse> => {
+    const response = await fetch(`${API_BASE_URL}/api/users/me`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      const message = await response.text();
+      throw new Error(
+        message || `Failed to fetch user data with status ${response.status}`
+      );
+    }
+
+    return response.json();
+  };
 
   const handleInputChange =
     (field: keyof FormData) => (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -80,71 +131,27 @@ export default function LoginFormCenteredSection({
     setIsSubmitting(true);
 
     try {
-      const response = await fetch('http://localhost:8080/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: formData.email.trim(),
-          password: formData.password,
-        }),
-      });
+      // Login user
+      const loginData = await loginUser(formData.email, formData.password);
 
-      if (!response.ok) {
-        const message = await response.text();
-        switch (response.status) {
-          case 400:
-            setErrors({ general: message });
-            break;
+      // Fetch user data
+      const userData = await fetchUserData(loginData.token);
 
-          default:
-            setErrors({
-              general: message || 'Login failed',
-            });
-        }
-        return;
-      }
+      // Store token and update Redux state
+      Cookies.set('jwt', loginData.token, { expires: JWT_EXPIRES_DAYS });
 
-      const data = await response.json();
-      const token = data.token;
-      const meResponse = await fetch('http://localhost:8080/api/users/me', {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (!meResponse.ok) {
-        const message = await meResponse.text();
-        switch (meResponse.status) {
-          case 400:
-            setErrors({ general: message });
-            break;
-
-          default:
-            setErrors({
-              general: message || 'Login failed',
-            });
-        }
-        return;
-      }
-      const userResponse: UserResponse = await meResponse.json();
-
-      Cookies.set('jwt', data.token, { expires: 7 });
       dispatch(
         login({
           user: {
-            id: userResponse.id,
-            platformId: userResponse.platformId,
-            email: userResponse.email,
-            firstName: userResponse.firstName,
-            lastName: userResponse.lastName,
+            id: userData.id,
+            platformId: userData.platformId,
+            email: userData.email,
+            firstName: userData.firstName,
+            lastName: userData.lastName,
           },
-          role: userResponse.roleName as Role,
+          role: userData.roleName as Role,
         })
       );
-
       console.log('Login successful!');
 
       router.push(loginLinkHref);
