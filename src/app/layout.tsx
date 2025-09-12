@@ -1,7 +1,8 @@
-import fetchTheme from '@/types/theme';
 import { Inter } from 'next/font/google';
 import React from 'react';
-import { ReduxProvider } from './providers';
+import { ReduxProvider } from '@/store/providers';
+import { headers } from 'next/headers';
+import ThemeProvider from '@/components/ThemeProvider';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -14,16 +15,8 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const theme = await fetchTheme();
-
-  const cssVariables = {
-    '--color-primary': theme.colors.primary,
-    '--color-secondary': theme.colors.secondary,
-    '--color-tertiary': theme.colors.tertiary,
-    '--color-background': theme.colors.background,
-    '--color-text-primary': theme.colors.textPrimary,
-    '--color-text-secondary': theme.colors.textSecondary,
-  };
+  const headersList = await headers();
+  const platformId = headersList.get('x-platform-id')!;
 
   return (
     <html lang="en">
@@ -38,16 +31,15 @@ export default async function RootLayout({
         />
         <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
       </head>
-      <body
-        className={`${inter.className} bg-white`}
-        style={cssVariables as React.CSSProperties}
-      >
+      <body className={`${inter.className} bg-white`}>
         <ReduxProvider>
-          <div className="relative flex size-full min-h-screen flex-col group/design-root overflow-x-hidden">
-            <div className="layout-container flex h-full grow flex-col">
-              {children}
+          <ThemeProvider platformId={platformId}>
+            <div className="relative flex size-full min-h-screen flex-col group/design-root overflow-x-hidden">
+              <div className="layout-container flex h-full grow flex-col">
+                {children}
+              </div>
             </div>
-          </div>
+          </ThemeProvider>
         </ReduxProvider>
       </body>
     </html>

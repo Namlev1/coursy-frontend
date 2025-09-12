@@ -3,8 +3,8 @@ import { NextRequest, NextResponse } from 'next/server';
 const privateRoutes = ['/dashboard', '/profile', '/admin'];
 
 function getPlatformIdHeader() {
-  const platformId = '4e1c791d-c481-4f9a-9eff-b701c2875c5f'; // Coursy
-  // const platformId = '6ba24dac-f6ca-471c-8f00-9ea89128170f'; // EduCorp
+  // const platformId = '4e1c791d-c481-4f9a-9eff-b701c2875c5f'; // Coursy
+  const platformId = '6ba24dac-f6ca-471c-8f00-9ea89128170f'; // EduCorp
 
   return {
     'x-platform-id': platformId,

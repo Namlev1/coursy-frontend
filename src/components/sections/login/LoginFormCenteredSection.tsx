@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { validateEmail, validatePassword } from '@/utils/loginValidation';
 import Cookies from 'js-cookie';
-import { useAppDispatch } from '@/app/hooks/redux';
+import { useAppDispatch } from '@/store/hooks/redux';
 import { login } from '@/store/slices/authSlice';
 import { UserResponse } from '@/types/user';
 import { Role } from '@/types/enums';

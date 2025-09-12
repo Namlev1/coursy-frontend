@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Theme } from '@/types/theme';
-import { useAppSelector } from '@/app/hooks/redux';
+import { useAppSelector } from '@/store/hooks/redux';
 
 interface OrganizationDetailsProps {
   theme: Theme;

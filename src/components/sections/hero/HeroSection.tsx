@@ -1,4 +1,6 @@
+'use client';
 import React from 'react';
+import { useTheme } from '@/hooks/useTheme';
 
 interface HeroSectionProps {
   title: string;
@@ -15,6 +17,7 @@ export default function HeroSection({
   ctaText,
   ctaHref,
 }: HeroSectionProps) {
+  const { theme } = useTheme();
   return (
     <main className="flex-1 flex">
       <section className="relative flex-1 flex items-center justify-center">
@@ -39,7 +42,7 @@ export default function HeroSection({
             <a
               href={ctaHref}
               className="inline-flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-md h-12 px-6 text-white text-base font-bold shadow-lg transition-transform transform hover:scale-105"
-              style={{ backgroundColor: 'var(--color-primary)' }}
+              style={{ backgroundColor: theme?.colors.primary }}
             >
               <span className="truncate">{ctaText}</span>
             </a>

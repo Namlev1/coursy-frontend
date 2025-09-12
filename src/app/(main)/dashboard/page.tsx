@@ -1,6 +1,6 @@
 import fetchTheme from '@/types/theme';
 import fetchPageTemplate, { PageType } from '@/types/pageTemplate';
-import HeaderSection from '@/components/sections/header/HeaderSection';
+import Navbar from '@/components/sections/header/Navbar';
 import { PageHeaderSection } from '@/components/sections/header/PageHeaderSection';
 import DashboardContentGrid from '@/components/sections/dashboard/home/DashboardContentGrid';
 import DashboardContentRows from '@/components/sections/dashboard/home/DashboardContentRows';
@@ -23,7 +23,7 @@ export default async function HostDashboardPage() {
   return (
     <div className="relative flex size-full min-h-screen flex-col group/design-root overflow-x-hidden">
       <div className="layout-container flex h-full grow flex-col">
-        <HeaderSection
+        <Navbar
           logoText={header?.props['logoText']}
           logoUrl={header?.props['logoUrl']}
           navigation={header?.props['navigation']}
