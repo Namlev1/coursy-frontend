@@ -7,16 +7,14 @@ interface Platform {
 
 interface YourPlatformsWidgetProps {
   platforms?: Platform[];
-  onManagePlatform?: (platformId: string) => void;
 }
 
 export default function YourPlatformsWidget({
   platforms = [],
-  onManagePlatform,
 }: YourPlatformsWidgetProps) {
   const handleManageClick = (platformId: string, e: React.MouseEvent) => {
     e.preventDefault();
-    onManagePlatform?.(platformId);
+    console.log('Manage platform with ID:', platformId);
   };
 
   return (

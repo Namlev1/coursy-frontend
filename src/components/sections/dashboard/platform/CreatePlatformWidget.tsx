@@ -1,73 +1,99 @@
 'use client';
 
-import { useState } from 'react';
+import { FormEvent, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import apiClient from '@/api/client';
 
-interface PlatformFormData {
-  title: string;
+interface BasicInfo {
+  name: string;
   description: string;
-  courseLayout: 'Grid' | 'List';
+}
+
+interface ThemeSettings {
+  courseListLayout: 'Grid' | 'List';
   videoPlayerType: 'Minimal' | 'Advanced';
-  colors: {
-    primary: string;
-    secondary: string;
-    tertiary: string;
-    background: string;
-    textPrimary: string;
-    textSecondary: string;
-  };
 }
 
-interface CreatePlatformWidgetProps {
-  onSubmit?: (data: PlatformFormData) => void;
-  onCancel?: () => void;
+interface Colors {
+  primary: string;
+  secondary: string;
+  tertiary: string;
+  background: string;
+  textPrimary: string;
+  textSecondary: string;
 }
 
-export default function CreatePlatformWidget({
-  onSubmit,
-  onCancel,
-}: CreatePlatformWidgetProps) {
-  const [formData, setFormData] = useState<PlatformFormData>({
-    title: '',
+export default function CreatePlatformWidget() {
+  const router = useRouter();
+
+  const [basicInfo, setBasicInfo] = useState<BasicInfo>({
+    name: '',
     description: '',
-    courseLayout: 'Grid',
-    videoPlayerType: 'Minimal',
-    colors: {
-      primary: '#1383eb',
-      secondary: '#f97316',
-      tertiary: '#8b5cf6',
-      background: '#f8fafc',
-      textPrimary: '#0f172a',
-      textSecondary: '#475569',
-    },
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [themeSettings, setThemeSettings] = useState<ThemeSettings>({
+    courseListLayout: 'Grid',
+    videoPlayerType: 'Minimal',
+  });
+
+  const [colors, setColors] = useState<Colors>({
+    primary: '#1383eb',
+    secondary: '#f97316',
+    tertiary: '#8b5cf6',
+    background: '#f8fafc',
+    textPrimary: '#0f172a',
+    textSecondary: '#475569',
+  });
+
+  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    onSubmit?.(formData);
+
+    // Combine all states into the expected API format
+    const formData = {
+      ...basicInfo,
+      theme: {
+        ...themeSettings,
+        colors,
+      },
+    };
+
+    try {
+      const response = await apiClient.post(
+        'http://localhost:8080/api/platforms',
+        formData
+      );
+      console.log('Form submitted successfully');
+      router.push('/dashboard');
+    } catch (error) {
+      console.error('Error submitting form:', error);
+    }
+
+    console.log('Form submitted:', formData);
   };
 
-  const handleInputChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
+  // Handlers for each state
+  const handleBasicInfoChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
+    setBasicInfo((prev) => ({
       ...prev,
       [name]: value,
     }));
   };
 
-  const handleColorChange = (
-    colorType: keyof PlatformFormData['colors'],
-    value: string
-  ) => {
-    setFormData((prev) => ({
+  const handleThemeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setThemeSettings((prev) => ({
       ...prev,
-      colors: {
-        ...prev.colors,
-        [colorType]: value,
-      },
+      [name]: value,
+    }));
+  };
+
+  const handleColorChange = (colorType: keyof Colors, value: string) => {
+    setColors((prev) => ({
+      ...prev,
+      [colorType]: value,
     }));
   };
 
@@ -83,11 +109,11 @@ export default function CreatePlatformWidget({
       </div>
 
       <div className="border-t border-gray-200 p-6">
-        <form onSubmit={handleSubmit} className="space-y-8">
+        <form onSubmit={onSubmit} className="space-y-8">
           {/* Platform Title */}
           <div>
             <label
-              htmlFor="title"
+              htmlFor="name"
               className="block text-sm font-medium leading-6 text-gray-900"
             >
               Platform Title
@@ -95,10 +121,10 @@ export default function CreatePlatformWidget({
             <div className="mt-2">
               <input
                 type="text"
-                id="title"
-                name="title"
-                value={formData.title}
-                onChange={handleInputChange}
+                id="name"
+                name="name"
+                value={basicInfo.name}
+                onChange={handleBasicInfoChange}
                 placeholder="e.g. Innovate & Learn"
                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                 required
@@ -118,8 +144,8 @@ export default function CreatePlatformWidget({
               <textarea
                 id="description"
                 name="description"
-                value={formData.description}
-                onChange={handleInputChange}
+                value={basicInfo.description}
+                onChange={handleBasicInfoChange}
                 rows={3}
                 placeholder="A short description of your platform."
                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
@@ -131,17 +157,17 @@ export default function CreatePlatformWidget({
           <div className="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
             <div className="sm:col-span-3">
               <label
-                htmlFor="courseLayout"
+                htmlFor="courseListLayout"
                 className="block text-sm font-medium leading-6 text-gray-900"
               >
                 Course List Layout
               </label>
               <div className="mt-2">
                 <select
-                  id="courseLayout"
-                  name="courseLayout"
-                  value={formData.courseLayout}
-                  onChange={handleInputChange}
+                  id="courseListLayout"
+                  name="courseListLayout"
+                  value={themeSettings.courseListLayout}
+                  onChange={handleThemeChange}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                 >
                   <option value="Grid">Grid</option>
@@ -161,8 +187,8 @@ export default function CreatePlatformWidget({
                 <select
                   id="videoPlayerType"
                   name="videoPlayerType"
-                  value={formData.videoPlayerType}
-                  onChange={handleInputChange}
+                  value={themeSettings.videoPlayerType}
+                  onChange={handleThemeChange}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                 >
                   <option value="Minimal">Minimal</option>
@@ -194,7 +220,7 @@ export default function CreatePlatformWidget({
                   <input
                     type="color"
                     id={`${key}-color`}
-                    value={formData.colors[key]}
+                    value={colors[key]}
                     onChange={(e) => handleColorChange(key, e.target.value)}
                     className="h-10 w-10 rounded-full border-gray-300 p-0 cursor-pointer"
                   />
@@ -211,13 +237,6 @@ export default function CreatePlatformWidget({
 
           {/* Action Buttons */}
           <div className="mt-8 flex justify-end gap-x-3 border-t border-gray-900/10 pt-6">
-            <button
-              type="button"
-              onClick={onCancel}
-              className="text-sm font-semibold leading-6 text-gray-900 hover:text-gray-700 transition-colors"
-            >
-              Cancel
-            </button>
             <button
               type="submit"
               className="rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 transition-colors"

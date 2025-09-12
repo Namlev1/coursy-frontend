@@ -24,7 +24,7 @@ export default async function DashboardPlatformPage() {
             subtitle={'Create and manage your course platforms'}
             theme={theme}
           />
-          <DashboardPlatformSection />
+          <DashboardPlatformSection theme={theme} />
         </div>
       </div>
     </div>
