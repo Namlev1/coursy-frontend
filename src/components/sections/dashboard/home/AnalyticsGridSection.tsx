@@ -1,5 +1,5 @@
 import React from 'react';
-import { Theme } from '@/types/tenant';
+import { Theme } from '@/types/theme';
 
 interface AnalyticsCard {
   title: string;

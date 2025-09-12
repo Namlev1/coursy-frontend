@@ -12,6 +12,7 @@ export interface PageTemplate {
   title: string;
   sections: PageSection[];
   type: PageType;
+  props: Record<string, any> | null;
 }
 
 export enum PageType {

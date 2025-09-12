@@ -2,11 +2,15 @@ import HeaderSection from './header/HeaderSection';
 import HeroSection from './hero/HeroSection';
 import FooterSection from './footer/FooterSection';
 import SignupFormCenteredSection from './signup/SignupFormCenteredSection';
-import QuickActionsSection from '@/components/sections/dashboard/QuickActionsSection';
-import AnalyticsGridSection from '@/components/sections/dashboard/AnalyticsGridSection';
+import QuickActionsSection from '@/components/sections/dashboard/home/QuickActionsSection';
+import AnalyticsGridSection from '@/components/sections/dashboard/home/AnalyticsGridSection';
 import { PageHeaderSection } from '@/components/sections/header/PageHeaderSection';
-import CourseCreationFormSection from '@/components/sections/dashboard/CourseCreationFormSection';
+import CourseCreationFormSection from '@/components/sections/dashboard/home/CourseCreationFormSection';
 import LoginFormCenteredSection from '@/components/sections/login/LoginFormCenteredSection';
+import PlatformsTableSection from '@/components/sections/dashboard/home/PlatformsTableSection';
+import SubscriptionPlanSection from '@/components/sections/dashboard/home/SubscriptionPlanSection';
+import SupportSection from '@/components/sections/dashboard/home/SupportSection';
+import OrganizationDetailsSection from '@/components/sections/dashboard/home/OrganizationDetailsSection';
 
 export const SectionComponents = {
   header: HeaderSection,
@@ -18,4 +22,8 @@ export const SectionComponents = {
   'analytics-grid': AnalyticsGridSection,
   'page-header': PageHeaderSection,
   'course-creation-form': CourseCreationFormSection,
+  'organization-details': OrganizationDetailsSection,
+  'platforms-table': PlatformsTableSection,
+  'subscription-plan': SubscriptionPlanSection,
+  support: SupportSection,
 };
