@@ -1,5 +1,5 @@
 import React from 'react';
-import { Theme } from '@/types/theme';
+import { PlatformConfig } from '@/types/platformConfig';
 
 interface Platform {
   id: string;
@@ -9,7 +9,7 @@ interface Platform {
 
 interface PlatformsTableProps {
   platforms: Platform[];
-  theme: Theme;
+  theme: PlatformConfig;
 }
 
 export default function PlatformsTableSection({

@@ -1,9 +1,7 @@
 import { SectionComponents } from '@/components/sections';
-import fetchTheme from '@/types/theme';
 import fetchPageTemplate, { PageType } from '@/types/pageTemplate';
 
 export default async function HomePage() {
-  const theme = await fetchTheme();
   const pageTemplate = await fetchPageTemplate(PageType.Home);
 
   return (
@@ -20,7 +18,7 @@ export default async function HomePage() {
               return null;
             }
 
-            return <Component key={index} {...section.props} theme={theme} />;
+            return <Component key={index} {...section.props} />;
           })}
       </div>
     </div>

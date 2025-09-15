@@ -1,8 +1,6 @@
 import { Inter } from 'next/font/google';
 import React from 'react';
 import { ReduxProvider } from '@/store/providers';
-import { headers } from 'next/headers';
-import ThemeProvider from '@/components/ThemeProvider';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -15,9 +13,6 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const headersList = await headers();
-  const platformId = headersList.get('x-platform-id')!;
-
   return (
     <html lang="en">
       <head>
@@ -33,13 +28,11 @@ export default async function RootLayout({
       </head>
       <body className={`${inter.className} bg-white`}>
         <ReduxProvider>
-          <ThemeProvider platformId={platformId}>
-            <div className="relative flex size-full min-h-screen flex-col group/design-root overflow-x-hidden">
-              <div className="layout-container flex h-full grow flex-col">
-                {children}
-              </div>
+          <div className="relative flex size-full min-h-screen flex-col group/design-root overflow-x-hidden">
+            <div className="layout-container flex h-full grow flex-col">
+              {children}
             </div>
-          </ThemeProvider>
+          </div>
         </ReduxProvider>
       </body>
     </html>

@@ -1,9 +1,9 @@
 import React from 'react';
-import { Theme } from '@/types/theme';
+import { PlatformConfig } from '@/types/platformConfig';
 
 interface SubscriptionPlanProps {
   planName: string;
-  theme: Theme;
+  theme: PlatformConfig;
 }
 
 export default function SubscriptionPlanSection({

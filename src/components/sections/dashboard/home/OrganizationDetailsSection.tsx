@@ -1,11 +1,11 @@
 'use client';
 
 import React from 'react';
-import { Theme } from '@/types/theme';
+import { PlatformConfig } from '@/types/platformConfig';
 import { useAppSelector } from '@/store/hooks/redux';
 
 interface OrganizationDetailsProps {
-  theme: Theme;
+  theme: PlatformConfig;
 }
 
 export default function OrganizationDetailsSection({

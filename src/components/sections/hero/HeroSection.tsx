@@ -1,6 +1,5 @@
-'use client';
 import React from 'react';
-import { useTheme } from '@/hooks/useTheme';
+import { getCachedConfig } from '@/lib/configCache';
 
 interface HeroSectionProps {
   title: string;
@@ -10,14 +9,15 @@ interface HeroSectionProps {
   ctaHref: string;
 }
 
-export default function HeroSection({
+export default async function HeroSection({
   title,
   subtitle,
   backgroundImage,
   ctaText,
   ctaHref,
 }: HeroSectionProps) {
-  const { theme } = useTheme();
+  const config = await getCachedConfig();
+  const theme = config;
   return (
     <main className="flex-1 flex">
       <section className="relative flex-1 flex items-center justify-center">

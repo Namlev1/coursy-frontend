@@ -1,10 +1,10 @@
 import { PageSection } from '@/types/pageTemplate';
 import { SectionComponents } from '@/components/sections';
-import { Theme } from '@/types/theme';
+import { PlatformConfig } from '@/types/platformConfig';
 
 interface DashboardContentRowsProps {
   content: PageSection[];
-  theme: Theme;
+  theme: PlatformConfig;
 }
 
 export default function DashboardContentRows({

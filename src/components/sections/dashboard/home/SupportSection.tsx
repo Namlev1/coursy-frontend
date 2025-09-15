@@ -1,12 +1,12 @@
 import React from 'react';
-import { Theme } from '@/types/theme';
+import { PlatformConfig } from '@/types/platformConfig';
 
 interface SupportSectionProps {
   title?: string;
   description?: string;
   buttonText?: string;
   onContactSupport: () => void;
-  theme: Theme;
+  theme: PlatformConfig;
 }
 
 export default function SupportSection({

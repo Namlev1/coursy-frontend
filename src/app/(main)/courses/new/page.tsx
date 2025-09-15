@@ -1,5 +1,5 @@
 import { SectionComponents } from '@/components/sections';
-import fetchTheme from '@/types/theme';
+import fetchTheme from '@/types/platformConfig';
 import fetchPageTemplate, { PageType } from '@/types/pageTemplate';
 
 export default async function CoursesPage() {

@@ -23,6 +23,7 @@ export enum PageType {
   Login = 'Login',
 }
 
+// todo think about caching
 const fetchPageTemplateInternal = async (
   platformId: string,
   pageType: PageType

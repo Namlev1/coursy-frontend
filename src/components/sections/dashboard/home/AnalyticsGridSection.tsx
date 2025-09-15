@@ -1,5 +1,5 @@
 import React from 'react';
-import { Theme } from '@/types/theme';
+import { PlatformConfig } from '@/types/platformConfig';
 
 interface AnalyticsCard {
   title: string;
@@ -13,7 +13,7 @@ interface AnalyticsCard {
 interface AnalyticsGridSectionProps {
   title: string;
   analytics: AnalyticsCard[];
-  theme: Theme;
+  theme: PlatformConfig;
 }
 
 export default function AnalyticsGridSection({

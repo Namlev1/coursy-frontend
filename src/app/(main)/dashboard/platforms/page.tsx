@@ -1,4 +1,4 @@
-import fetchTheme from '@/types/theme';
+import fetchTheme from '@/types/platformConfig';
 import fetchPageTemplate, { PageType } from '@/types/pageTemplate';
 import Navbar from '@/components/sections/header/Navbar';
 import { PageHeaderSection } from '@/components/sections/header/PageHeaderSection';

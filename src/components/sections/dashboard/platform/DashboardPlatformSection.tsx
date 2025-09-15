@@ -4,7 +4,7 @@ import CreatePlatformWidget from './CreatePlatformWidget';
 import YourPlatformsWidget from './YourPlatformsWidget';
 import React from 'react';
 import SubscriptionPlanSection from '@/components/sections/dashboard/home/SubscriptionPlanSection';
-import { Theme } from '@/types/theme';
+import { PlatformConfig } from '@/types/platformConfig';
 
 const mockPlatforms = [
   { id: '1', name: 'Innovate & Learn' },
@@ -15,7 +15,7 @@ const mockPlatforms = [
 interface DashboardPlatformSectionProps {
   platforms?: Array<{ id: string; name: string }>;
   subscriptionWidget?: React.ReactNode;
-  theme: Theme;
+  theme: PlatformConfig;
 }
 
 export default function DashboardPlatformSection({
