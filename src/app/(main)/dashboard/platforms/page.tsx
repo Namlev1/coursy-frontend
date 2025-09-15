@@ -1,6 +1,6 @@
 import fetchTheme from '@/types/platformConfig';
 import fetchPageTemplate, { PageType } from '@/types/pageTemplate';
-import Navbar from '@/components/sections/header/Navbar';
+import NavbarSection from '@/components/sections/navbar/NavbarSection';
 import { PageHeaderSection } from '@/components/sections/header/PageHeaderSection';
 import DashboardPlatformSection from '@/components/sections/dashboard/platform/DashboardPlatformSection';
 
@@ -13,7 +13,7 @@ export default async function DashboardPlatformPage() {
   return (
     <div className="relative flex size-full min-h-screen flex-col group/design-root overflow-x-hidden">
       <div className="layout-container flex h-full grow flex-col">
-        <Navbar
+        <NavbarSection
           logoText={header?.props['logoText']}
           logoUrl={header?.props['logoUrl']}
           navigation={header?.props['navigation']}

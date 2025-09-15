@@ -1,4 +1,4 @@
-import Navbar from './header/Navbar';
+import NavbarSection from './navbar/NavbarSection';
 import HeroSection from './hero/HeroSection';
 import FooterSection from './footer/FooterSection';
 import SignupFormCenteredSection from './signup/SignupFormCenteredSection';
@@ -13,7 +13,7 @@ import SupportSection from '@/components/sections/dashboard/home/SupportSection'
 import OrganizationDetailsSection from '@/components/sections/dashboard/home/OrganizationDetailsSection';
 
 export const SectionComponents = {
-  header: Navbar,
+  header: NavbarSection,
   hero: HeroSection,
   footer: FooterSection,
   'signup-form-centered': SignupFormCenteredSection,

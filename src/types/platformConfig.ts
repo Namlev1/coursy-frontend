@@ -17,7 +17,7 @@ interface Colors {
 
 interface NavbarConfig {
   logoUrl: string | null;
-  logoText: string | null;
+  logoText: string;
   isLogoVisible: boolean;
   navItems: NavItem[];
 }

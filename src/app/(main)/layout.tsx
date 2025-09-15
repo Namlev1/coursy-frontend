@@ -1,4 +1,4 @@
-import Navbar from '@/components/sections/header/Navbar';
+import NavbarSection from '@/components/sections/navbar/NavbarSection';
 
 export default function MainLayout({
   children,
@@ -7,7 +7,7 @@ export default function MainLayout({
 }) {
   return (
     <div>
-      <Navbar />
+      <NavbarSection />
       <main>{children}</main>
       {/*<FooterSection />*/}
     </div>
