@@ -17,7 +17,6 @@ export default async function HeroSection({
   ctaHref,
 }: HeroSectionProps) {
   const config = await getCachedConfig();
-  const theme = config;
   return (
     <main className="flex-1 flex">
       <section className="relative flex-1 flex items-center justify-center">
@@ -42,7 +41,7 @@ export default async function HeroSection({
             <a
               href={ctaHref}
               className="inline-flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-md h-12 px-6 text-white text-base font-bold shadow-lg transition-transform transform hover:scale-105"
-              style={{ backgroundColor: theme?.colors.primary }}
+              style={{ backgroundColor: config?.colors.primary }}
             >
               <span className="truncate">{ctaText}</span>
             </a>
