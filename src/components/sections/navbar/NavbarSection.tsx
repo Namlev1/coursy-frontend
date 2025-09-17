@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { getCachedConfig } from '@/lib/configCache';
 import NavbarLogo from '@/components/sections/navbar/NavbarLogo';
+import NavbarNavigation from '@/components/sections/navbar/NavbarNavigation';
 
 type NavigationField = {
   label: string;
@@ -47,19 +48,7 @@ export default async function NavbarSection({
           isLogoVisible={navbarConfig.isLogoVisible}
         />
 
-        <nav className="hidden items-center gap-8 md:flex">
-          {navigationFieldsToRender.map((item) => {
-            return (
-              <Link
-                key={item.label}
-                href={item.href}
-                className={`text-sm font-medium transition-colors hover:text-primary-600 text-gray-500}`}
-              >
-                {item.label}
-              </Link>
-            );
-          })}
-        </nav>
+        <NavbarNavigation navItems={navbarConfig.navItems} />
 
         <div className="flex items-center gap-4">
           {isAuthenticated && user ? (

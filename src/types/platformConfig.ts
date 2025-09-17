@@ -22,7 +22,7 @@ interface NavbarConfig {
   navItems: NavItem[];
 }
 
-interface NavItem {
+export interface NavItem {
   href: string;
   label: string;
   access: 'public' | 'authenticated' | 'user' | 'admin';
