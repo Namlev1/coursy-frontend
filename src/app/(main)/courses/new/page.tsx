@@ -1,9 +1,9 @@
 import { SectionComponents } from '@/components/sections';
-import fetchTheme from '@/types/platformConfig';
 import fetchPageTemplate, { PageType } from '@/types/pageTemplate';
+import { getCachedConfig } from '@/lib/configCache';
 
 export default async function CoursesPage() {
-  const theme = await fetchTheme();
+  const config = await getCachedConfig();
   const pageTemplate = await fetchPageTemplate(PageType.CourseCreation);
 
   return (
@@ -20,11 +20,9 @@ export default async function CoursesPage() {
               return null;
             }
 
-            if (section.type == 'header')
-              return <Component key={index} {...section.props} theme={theme} />;
             return (
               <div key={index} className={'px-8 sm:px-12 lg:px-16'}>
-                <Component {...section.props} theme={theme} />
+                <Component {...section.props} config={config} />
               </div>
             );
           })}
