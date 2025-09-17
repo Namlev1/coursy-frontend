@@ -1,11 +1,12 @@
 import React from 'react';
+import Link from 'next/link';
 import { PlatformConfig } from '@/types/platformConfig';
 
 interface ActionButton {
   label: string;
-  href?: string;
-  primary?: boolean;
-  icon?: string;
+  href: string;
+  primary: boolean;
+  icon: string;
 }
 
 interface QuickActionsSectionProps {
@@ -32,29 +33,41 @@ export default function QuickActionsSection({
     </svg>
   );
 
+  const getActionElement = (action: ActionButton, index: number) => {
+    const commonClasses =
+      'flex items-center justify-center rounded-full h-12 px-6 text-base font-semibold shadow-sm transition-colors';
+
+    const primaryClasses = `${commonClasses} text-white hover:bg-opacity-90`;
+    const secondaryClasses = `${commonClasses} bg-white border border-gray-300 text-gray-800 hover:bg-gray-50`;
+
+    const content = (
+      <>
+        {action.icon === 'plus' && getPlusIcon()}
+        <span>{action.label}</span>
+      </>
+    );
+
+    return (
+      <Link
+        key={index}
+        href={action.href}
+        className={action.primary ? primaryClasses : secondaryClasses}
+        style={
+          action.primary
+            ? { backgroundColor: config.colors.primary }
+            : undefined
+        }
+      >
+        {content}
+      </Link>
+    );
+  };
+
   return (
     <div className="mb-8">
       <h2 className="text-2xl font-bold text-gray-900 mb-4">{title}</h2>
       <div className="flex gap-4">
-        {actions.map((action, index) =>
-          action.primary ? (
-            <button
-              key={index}
-              className="flex items-center justify-center rounded-full h-12 px-6 text-white text-base font-semibold shadow-sm hover:bg-opacity-90 transition-colors"
-              style={{ backgroundColor: config.colors.primary }}
-            >
-              {action.icon === 'plus' && getPlusIcon()}
-              <span>{action.label}</span>
-            </button>
-          ) : (
-            <button
-              key={index}
-              className="flex items-center justify-center rounded-full h-12 px-6 bg-white border border-gray-300 text-gray-800 text-base font-semibold shadow-sm hover:bg-gray-50 transition-colors"
-            >
-              <span>{action.label}</span>
-            </button>
-          )
-        )}
+        {actions.map((action, index) => getActionElement(action, index))}
       </div>
     </div>
   );
