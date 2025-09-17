@@ -1,16 +1,14 @@
-import fetchTheme from '@/types/platformConfig';
 import fetchPageTemplate, { PageType } from '@/types/pageTemplate';
-import NavbarSection from '@/components/sections/navbar/NavbarSection';
 import { PageHeaderSection } from '@/components/sections/header/PageHeaderSection';
 import DashboardContentGrid from '@/components/sections/dashboard/home/DashboardContentGrid';
 import DashboardContentRows from '@/components/sections/dashboard/home/DashboardContentRows';
+import { getCachedConfig } from '@/lib/configCache';
 
-export default async function HostDashboardPage() {
-  const theme = await fetchTheme();
+export default async function DashboardPage() {
   const pageTemplate = await fetchPageTemplate(PageType.Dashboard);
-
   const layout = pageTemplate.props?.layout;
-  const header = pageTemplate.sections.find((it) => it.type == 'header');
+  const config = await getCachedConfig();
+
   const pageHeader = pageTemplate.sections.find(
     (it) => it.type == 'page-header'
   );
@@ -23,26 +21,21 @@ export default async function HostDashboardPage() {
   return (
     <div className="relative flex size-full min-h-screen flex-col group/design-root overflow-x-hidden">
       <div className="layout-container flex h-full grow flex-col">
-        <NavbarSection
-          logoText={header?.props['logoText']}
-          logoUrl={header?.props['logoUrl']}
-          navigation={header?.props['navigation']}
-        />
         <div className={'px-8 sm:px-12 lg:px-16'}>
           {pageHeader && (
             <PageHeaderSection
               title={pageHeader?.props['title']}
               subtitle={pageHeader?.props['subtitle']}
-              theme={theme}
+              config={config}
             />
           )}
 
           {/*content*/}
           <div>
             {layout == 'grid' ? (
-              <DashboardContentGrid content={content} theme={theme} />
+              <DashboardContentGrid content={content} config={config} />
             ) : (
-              <DashboardContentRows content={content} theme={theme} />
+              <DashboardContentRows content={content} config={config} />
             )}
           </div>
         </div>
