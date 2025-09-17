@@ -2,11 +2,11 @@ import React from 'react';
 import { PlatformConfig } from '@/types/platformConfig';
 
 interface CourseCreationFormSectionProps {
-  theme: PlatformConfig;
+  config: PlatformConfig;
 }
 
 export default function CourseCreationFormSection({
-  theme,
+  config,
 }: CourseCreationFormSectionProps) {
   const inputStyle = {
     borderColor: '#e2e8f0',
@@ -14,7 +14,7 @@ export default function CourseCreationFormSection({
   } as React.CSSProperties;
 
   const focusStyle = `focus:ring-2 focus:border-transparent`;
-  const ringColor = `focus:ring-[${theme.colors.primary}]`;
+  const ringColor = `focus:ring-[${config.colors.primary}]`;
 
   return (
     <form>
@@ -112,7 +112,7 @@ export default function CourseCreationFormSection({
             <button
               type="button"
               className="font-semibold rounded-md px-4 py-2 mt-6 text-white transition-colors hover:opacity-90"
-              style={{ backgroundColor: theme.colors.primary }}
+              style={{ backgroundColor: config.colors.primary }}
             >
               Add Module
             </button>
@@ -131,7 +131,7 @@ export default function CourseCreationFormSection({
         <button
           type="submit"
           className="font-semibold rounded-md px-6 py-2 text-white transition-colors hover:opacity-90"
-          style={{ backgroundColor: theme.colors.primary }}
+          style={{ backgroundColor: config.colors.primary }}
         >
           Create Course
         </button>

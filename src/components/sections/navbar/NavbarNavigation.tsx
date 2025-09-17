@@ -11,7 +11,6 @@ interface NavbarNavigationProps {
 
 export default function NavbarNavigation({ navItems }: NavbarNavigationProps) {
   const pathname = usePathname();
-  console.log(navItems);
 
   return (
     <nav className="hidden items-center gap-8 md:flex">

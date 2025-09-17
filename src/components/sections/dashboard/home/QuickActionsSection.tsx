@@ -1,5 +1,5 @@
 import React from 'react';
-import { Theme } from '@/types/tenant';
+import { PlatformConfig } from '@/types/platformConfig';
 
 interface ActionButton {
   label: string;
@@ -11,13 +11,13 @@ interface ActionButton {
 interface QuickActionsSectionProps {
   title: string;
   actions: ActionButton[];
-  theme: Theme;
+  config: PlatformConfig;
 }
 
 export default function QuickActionsSection({
   title,
   actions,
-  theme,
+  config,
 }: QuickActionsSectionProps) {
   const getPlusIcon = () => (
     <svg
@@ -41,7 +41,7 @@ export default function QuickActionsSection({
             <button
               key={index}
               className="flex items-center justify-center rounded-full h-12 px-6 text-white text-base font-semibold shadow-sm hover:bg-opacity-90 transition-colors"
-              style={{ backgroundColor: theme.colors.primary }}
+              style={{ backgroundColor: config.colors.primary }}
             >
               {action.icon === 'plus' && getPlusIcon()}
               <span>{action.label}</span>

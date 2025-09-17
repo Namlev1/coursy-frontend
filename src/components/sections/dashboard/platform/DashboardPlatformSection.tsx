@@ -15,12 +15,12 @@ const mockPlatforms = [
 interface DashboardPlatformSectionProps {
   platforms?: Array<{ id: string; name: string }>;
   subscriptionWidget?: React.ReactNode;
-  theme: PlatformConfig;
+  config: PlatformConfig;
 }
 
 export default function DashboardPlatformSection({
   platforms = mockPlatforms,
-  theme,
+  config,
 }: DashboardPlatformSectionProps) {
   return (
     <main className="flex-1 bg-gray-50">
@@ -38,7 +38,10 @@ export default function DashboardPlatformSection({
               {/* Your Platforms Widget */}
               <YourPlatformsWidget platforms={platforms} />
 
-              <SubscriptionPlanSection planName={'Enterprise'} theme={theme} />
+              <SubscriptionPlanSection
+                planName={'Enterprise'}
+                config={config}
+              />
             </div>
           </div>
         </div>

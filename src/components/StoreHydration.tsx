@@ -12,7 +12,6 @@ export default function StoreHydration() {
 
   useEffect(() => {
     const hydrateStore = async () => {
-      console.log('hello');
       const encodedUserData = Cookies.get('userData');
 
       if (!encodedUserData) {

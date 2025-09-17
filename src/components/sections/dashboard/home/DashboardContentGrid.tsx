@@ -4,12 +4,12 @@ import { PlatformConfig } from '@/types/platformConfig';
 
 interface DashboardContentGridProps {
   content: PageSection[];
-  theme: PlatformConfig;
+  config: PlatformConfig;
 }
 
 export default function DashboardContentGrid({
   content,
-  theme,
+  config,
 }: DashboardContentGridProps) {
   const midpoint = Math.ceil(content.length / 2);
   const firstHalf = content.slice(0, midpoint);
@@ -24,7 +24,7 @@ export default function DashboardContentGrid({
       return null;
     }
 
-    return <Component key={index} {...section.props} theme={theme} />;
+    return <Component key={index} {...section.props} config={config} />;
   };
 
   return (

@@ -22,7 +22,6 @@ export const getCachedConfig = async (): Promise<PlatformConfig> => {
     const cached = await redis.get(cacheKey);
 
     if (cached) {
-      console.log(`Cache hit for platform ${platformId}`);
       return JSON.parse(cached);
     }
   } catch (redisError) {
@@ -30,9 +29,7 @@ export const getCachedConfig = async (): Promise<PlatformConfig> => {
     // Continue to backend fetch if Redis fails
   }
 
-  // Cache miss or Redis error - fetch from your Spring Boot backend
-  console.log(`Cache miss for platform ${platformId}, fetching from backend`);
-
+  // Cache miss or Redis error - fetch from backend
   try {
     const response = await apiClient.get<PlatformConfig>(
       `/api/platforms/${platformId}/config`,

@@ -3,14 +3,15 @@ import { PlatformConfig } from '@/types/platformConfig';
 
 interface SubscriptionPlanProps {
   planName: string;
-  theme: PlatformConfig;
+  config: PlatformConfig;
 }
 
 export default function SubscriptionPlanSection({
   planName,
-  theme,
+  config,
 }: SubscriptionPlanProps) {
   const usagePercentage = 75;
+  console.log(config.colors);
 
   return (
     <div className="rounded-lg bg-white p-6 shadow">
@@ -26,7 +27,7 @@ export default function SubscriptionPlanSection({
           className="h-2 rounded-full transition-all duration-300 ease-in-out"
           style={{
             width: `${usagePercentage}%`,
-            backgroundColor: theme.colors.primary,
+            // backgroundColor: config.colors.primary,
           }}
         />
       </div>
@@ -35,8 +36,8 @@ export default function SubscriptionPlanSection({
         // onClick={onManageSubscription}
         className="mt-4 w-full rounded-lg border px-4 py-2 text-sm font-semibold shadow-sm hover:opacity-90 transition-opacity"
         style={{
-          borderColor: theme.colors.primary,
-          color: theme.colors.primary,
+          // borderColor: config.colors.primary,
+          // color: config.colors.primary,
           backgroundColor: 'white',
         }}
         // onMouseEnter={(e) => {

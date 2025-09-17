@@ -4,12 +4,12 @@ import { PlatformConfig } from '@/types/platformConfig';
 
 interface DashboardContentRowsProps {
   content: PageSection[];
-  theme: PlatformConfig;
+  config: PlatformConfig;
 }
 
 export default function DashboardContentRows({
   content,
-  theme,
+  config,
 }: DashboardContentRowsProps) {
   return (
     <div>
@@ -22,7 +22,7 @@ export default function DashboardContentRows({
           return null;
         }
 
-        return <Component key={index} {...section.props} theme={theme} />;
+        return <Component key={index} {...section.props} theme={config} />;
       })}
     </div>
   );

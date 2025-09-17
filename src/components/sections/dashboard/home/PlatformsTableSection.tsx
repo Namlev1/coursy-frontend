@@ -9,12 +9,12 @@ interface Platform {
 
 interface PlatformsTableProps {
   platforms: Platform[];
-  theme: PlatformConfig;
+  config: PlatformConfig;
 }
 
 export default function PlatformsTableSection({
   platforms = [],
-  theme,
+  config,
 }: PlatformsTableProps) {
   return (
     <div className="overflow-hidden rounded-lg bg-white shadow">
@@ -26,8 +26,8 @@ export default function PlatformsTableSection({
           // onClick={onCreatePlatform}
           className="rounded-lg px-4 py-2 text-sm font-semibold text-white shadow-sm hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 transition-opacity"
           style={{
-            backgroundColor: theme.colors.primary,
-            outlineColor: theme.colors.primary,
+            backgroundColor: config.colors.primary,
+            outlineColor: config.colors.primary,
           }}
         >
           Create Platform
@@ -65,7 +65,7 @@ export default function PlatformsTableSection({
                     <a
                       href={`https://${platform.url}`}
                       className="hover:opacity-80 transition-opacity"
-                      style={{ color: theme.colors.primary }}
+                      style={{ color: config.colors.primary }}
                       target="_blank"
                       rel="noopener noreferrer"
                     >
@@ -76,7 +76,7 @@ export default function PlatformsTableSection({
                     <button
                       // onClick={() => onGoToPlatform(platform.id)}
                       className="hover:opacity-80 transition-opacity"
-                      style={{ color: theme.colors.primary }}
+                      style={{ color: config.colors.primary }}
                     >
                       Go to Platform
                     </button>
@@ -91,7 +91,7 @@ export default function PlatformsTableSection({
             <button
               // onClick={onCreatePlatform}
               className="mt-4 rounded-lg px-4 py-2 text-sm font-semibold text-white shadow-sm hover:opacity-90 transition-opacity"
-              style={{ backgroundColor: theme.colors.primary }}
+              style={{ backgroundColor: config.colors.primary }}
             >
               Create Your First Platform
             </button>

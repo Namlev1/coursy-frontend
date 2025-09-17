@@ -5,11 +5,11 @@ import { PlatformConfig } from '@/types/platformConfig';
 import { useAppSelector } from '@/store/hooks/redux';
 
 interface OrganizationDetailsProps {
-  theme: PlatformConfig;
+  config: PlatformConfig;
 }
 
 export default function OrganizationDetailsSection({
-  theme,
+  config,
 }: OrganizationDetailsProps) {
   // todo pull user data from redux
   const user = useAppSelector((state) => state.auth.user);

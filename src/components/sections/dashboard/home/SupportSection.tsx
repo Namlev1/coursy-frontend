@@ -6,7 +6,7 @@ interface SupportSectionProps {
   description?: string;
   buttonText?: string;
   onContactSupport: () => void;
-  theme: PlatformConfig;
+  config: PlatformConfig;
 }
 
 export default function SupportSection({
@@ -14,9 +14,9 @@ export default function SupportSection({
   description = 'Our support team is here to assist you.',
   buttonText = 'Contact Support',
   onContactSupport,
-  theme,
+  config,
 }: SupportSectionProps) {
-  const lighterColor = `${theme.colors.primary}1A`; // 10% opacity for background
+  const lighterColor = `${config.colors.primary}1A`; // 10% opacity for background
 
   return (
     <div className="rounded-lg p-6" style={{ backgroundColor: lighterColor }}>
@@ -26,8 +26,8 @@ export default function SupportSection({
         onClick={onContactSupport}
         className="mt-4 w-full rounded-lg px-4 py-2 text-sm font-semibold text-white shadow-sm hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 transition-opacity"
         style={{
-          backgroundColor: theme.colors.primary,
-          outlineColor: theme.colors.primary,
+          backgroundColor: config.colors.primary,
+          outlineColor: config.colors.primary,
         }}
       >
         {buttonText}
