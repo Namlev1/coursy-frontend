@@ -7,9 +7,7 @@ import { useRouter } from 'next/navigation';
 import { validateEmail, validatePassword } from '@/utils/loginValidation';
 import Cookies from 'js-cookie';
 import { useAppDispatch } from '@/store/hooks/redux';
-import { login } from '@/store/slices/authSlice';
 import { UserResponse } from '@/types/user';
-import { Role } from '@/types/enums';
 
 // Constants
 const API_BASE_URL =
@@ -136,23 +134,11 @@ export default function LoginFormCenteredSection({
 
       // Fetch user data
       const userData = await fetchUserData(loginData.token);
+      const encodedUserData = btoa(JSON.stringify(userData));
 
       // Store token and update Redux state
       Cookies.set('jwt', loginData.token, { expires: JWT_EXPIRES_DAYS });
-
-      dispatch(
-        login({
-          user: {
-            id: userData.id,
-            platformId: userData.platformId,
-            email: userData.email,
-            firstName: userData.firstName,
-            lastName: userData.lastName,
-          },
-          role: userData.roleName as Role,
-        })
-      );
-      console.log('Login successful!');
+      Cookies.set('userData', encodedUserData, { expires: JWT_EXPIRES_DAYS });
 
       router.push(loginLinkHref);
     } catch (error) {

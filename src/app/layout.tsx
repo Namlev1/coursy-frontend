@@ -1,6 +1,7 @@
 import { Inter } from 'next/font/google';
 import React from 'react';
 import { ReduxProvider } from '@/store/providers';
+import StoreHydration from '@/components/StoreHydration';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -28,6 +29,7 @@ export default async function RootLayout({
       </head>
       <body className={`${inter.className} bg-white`}>
         <ReduxProvider>
+          <StoreHydration />
           <div className="relative flex size-full min-h-screen flex-col group/design-root overflow-x-hidden">
             <div className="layout-container flex h-full grow flex-col">
               {children}
