@@ -16,6 +16,7 @@ export default function DashboardContentGrid({
   const secondHalf = content.slice(midpoint);
 
   const renderComponent = (section: PageSection, index: number) => {
+    console.log('Rendering section:', section);
     const Component =
       SectionComponents[section.type as keyof typeof SectionComponents];
 

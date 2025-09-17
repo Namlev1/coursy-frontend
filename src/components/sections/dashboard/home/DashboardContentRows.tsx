@@ -22,7 +22,7 @@ export default function DashboardContentRows({
           return null;
         }
 
-        return <Component key={index} {...section.props} theme={config} />;
+        return <Component key={index} {...section.props} config={config} />;
       })}
     </div>
   );
