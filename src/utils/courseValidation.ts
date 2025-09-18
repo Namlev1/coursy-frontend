@@ -25,3 +25,21 @@ export const validateDescription = (value: string): string | undefined => {
 
   return undefined;
 };
+
+export const validateImageUrl = (value: string): string | undefined => {
+  if (!value || value.length === 0) {
+    return 'Image URL is required';
+  }
+
+  try {
+    const url = new URL(value);
+
+    if (url.protocol !== 'http:' && url.protocol !== 'https:') {
+      return 'URL must use http or https protocol';
+    }
+
+    return undefined;
+  } catch (error) {
+    return 'Invalid URL format';
+  }
+};

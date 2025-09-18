@@ -4,7 +4,11 @@ import React, { useState } from 'react';
 import { PlatformConfig } from '@/types/platformConfig';
 import apiClient from '@/api/client';
 import axios from 'axios';
-import { validateDescription, validateName } from '@/utils/courseValidation';
+import {
+  validateDescription,
+  validateImageUrl,
+  validateName,
+} from '@/utils/courseValidation';
 import { useRouter } from 'next/navigation';
 
 interface CourseCreationFormSectionProps {
@@ -14,11 +18,13 @@ interface CourseCreationFormSectionProps {
 interface FormData {
   name: string;
   description: string;
+  imageUrl: string;
 }
 
 interface FormErrors {
   name?: string;
   description?: string;
+  imageUrl?: string;
   general?: string;
 }
 
@@ -30,6 +36,7 @@ export default function CourseCreationFormSection({
   const [formData, setFormData] = useState<FormData>({
     name: '',
     description: '',
+    imageUrl: '',
   });
   const [errors, setErrors] = useState<FormErrors>({});
   const [touched, setTouched] = useState<Set<keyof FormData>>(new Set());
@@ -43,12 +50,14 @@ export default function CourseCreationFormSection({
   // API calls
   const createCourse = async (
     name: string,
-    description: string
+    description: string,
+    imageUrl: string
   ): Promise<void> => {
     try {
       await apiClient.post('/api/courses', {
         name: name.trim(),
         description: description.trim(),
+        imageUrl: imageUrl,
       });
       return;
     } catch (error) {
@@ -106,12 +115,14 @@ export default function CourseCreationFormSection({
 
     const nameError = validateName(formData.name);
     const descriptionError = validateDescription(formData.description);
+    const imageUrlError = validateImageUrl(formData.imageUrl);
 
     if (nameError) newErrors.name = nameError;
     if (descriptionError) newErrors.description = descriptionError;
+    if (imageUrlError) newErrors.imageUrl = imageUrlError;
 
     setErrors(newErrors);
-    setTouched(new Set(['name', 'description']));
+    setTouched(new Set(['name', 'description', 'imageUrl']));
 
     return Object.keys(newErrors).length === 0;
   };
@@ -130,11 +141,15 @@ export default function CourseCreationFormSection({
     setIsSubmitting(true);
 
     try {
-      await createCourse(formData.name, formData.description);
+      await createCourse(
+        formData.name,
+        formData.description,
+        formData.imageUrl
+      );
 
       // Success
       console.log('Course created successfully!');
-      router.push('/dashboard/courses');
+      router.push('/courses');
     } catch (error) {
       console.error('Course creation error:', error);
       setErrors({
@@ -217,6 +232,34 @@ export default function CourseCreationFormSection({
                 <p className="mt-1 text-sm text-red-600">
                   {errors.description}
                 </p>
+              )}
+            </div>
+
+            {/* Course Image - Full Width */}
+            <div className="md:col-span-2">
+              <label
+                className="block text-sm font-medium text-gray-900 mb-1"
+                htmlFor="course-description"
+              >
+                Course image
+              </label>
+              <textarea
+                id="course-image-url"
+                value={formData.imageUrl}
+                onChange={handleTextareaChange('imageUrl')}
+                onBlur={handleBlur('imageUrl')}
+                className={`w-full rounded-md border transition px-3 py-2 ${
+                  touched.has('imageUrl') && errors.imageUrl
+                    ? 'border-red-300 focus:border-red-500 focus:ring-red-500'
+                    : 'border-gray-300 focus:border-[var(--primary-500)] focus:ring-[var(--primary-500)]'
+                }`}
+                style={inputStyle}
+                placeholder="https://example.com/course-image.png"
+                rows={4}
+                required
+              />
+              {touched.has('imageUrl') && errors.imageUrl && (
+                <p className="mt-1 text-sm text-red-600">{errors.imageUrl}</p>
               )}
             </div>
           </div>
