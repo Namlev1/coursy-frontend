@@ -132,14 +132,9 @@ export default function CourseCreationFormSection({
     try {
       await createCourse(formData.name, formData.description);
 
-      // Success - you might want to redirect or show success message
+      // Success
       console.log('Course created successfully!');
       router.push('/dashboard/courses');
-
-      // Reset form
-      setFormData({ name: '', description: '' });
-      setTouched(new Set());
-      setErrors({});
     } catch (error) {
       console.error('Course creation error:', error);
       setErrors({

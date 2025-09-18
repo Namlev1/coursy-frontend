@@ -19,6 +19,7 @@ export enum PageType {
   Home = 'Home',
   Signup = 'Signup',
   Dashboard = 'Dashboard',
+  Courses = 'Courses',
   CourseCreation = 'CourseCreation',
   Login = 'Login',
 }

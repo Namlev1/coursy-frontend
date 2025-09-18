@@ -11,6 +11,7 @@ import PlatformsTableSection from '@/components/sections/dashboard/home/Platform
 import SubscriptionPlanSection from '@/components/sections/dashboard/home/SubscriptionPlanSection';
 import SupportSection from '@/components/sections/dashboard/home/SupportSection';
 import OrganizationDetailsSection from '@/components/sections/dashboard/home/OrganizationDetailsSection';
+import CourseGrid from '@/components/sections/courses/CourseGrid';
 
 export const SectionComponents = {
   header: NavbarSection,
@@ -26,4 +27,5 @@ export const SectionComponents = {
   'platforms-table': PlatformsTableSection,
   'subscription-plan': SubscriptionPlanSection,
   support: SupportSection,
+  courses: CourseGrid,
 };

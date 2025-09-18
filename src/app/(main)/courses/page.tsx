@@ -1,10 +1,11 @@
-import { SectionComponents } from '@/components/sections';
-import fetchPageTemplate, { PageType } from '@/types/pageTemplate';
 import { getCachedConfig } from '@/lib/configCache';
+import fetchPageTemplate, { PageType } from '@/types/pageTemplate';
+import { SectionComponents } from '@/components/sections';
 
-export default async function CourseCreationPage() {
+export default async function CoursesPage() {
   const config = await getCachedConfig();
-  const pageTemplate = await fetchPageTemplate(PageType.CourseCreation);
+  const pageTemplate = await fetchPageTemplate(PageType.Courses);
+  console.log('Rendering Courses Page with template:', pageTemplate);
 
   return (
     <div className="relative flex size-full min-h-screen flex-col group/design-root overflow-x-hidden">
