@@ -6,12 +6,9 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { validateEmail, validatePassword } from '@/utils/loginValidation';
 import Cookies from 'js-cookie';
-import { useAppDispatch } from '@/store/hooks/redux';
 import { UserResponse } from '@/types/user';
+import apiClient from '@/api/client';
 
-// Constants
-const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8080';
 const JWT_EXPIRES_DAYS = 7;
 
 interface LoginFormCenteredSectionProps {
@@ -47,7 +44,6 @@ export default function LoginFormCenteredSection({
   loginLinkHref,
 }: LoginFormCenteredSectionProps) {
   const router = useRouter();
-  const dispatch = useAppDispatch();
   const [formData, setFormData] = useState<FormData>({
     email: '',
     password: '',
@@ -61,43 +57,29 @@ export default function LoginFormCenteredSection({
     email: string,
     password: string
   ): Promise<LoginResponse> => {
-    const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
+    try {
+      const response = await apiClient.post<LoginResponse>('/api/auth/login', {
         email: email.trim(),
         password,
-      }),
-    });
-
-    if (!response.ok) {
-      const message = await response.text();
-      throw new Error(message || `Login failed with status ${response.status}`);
+      });
+      return response.data;
+    } catch (error) {
+      throw error;
     }
-
-    return response.json();
   };
 
   const fetchUserData = async (token: string): Promise<UserResponse> => {
-    const response = await fetch(`${API_BASE_URL}/api/users/me`, {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    if (!response.ok) {
-      const message = await response.text();
-      throw new Error(
-        message || `Failed to fetch user data with status ${response.status}`
-      );
+    try {
+      const response = await apiClient.get<UserResponse>('/api/users/me', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      throw error;
     }
-
-    return response.json();
   };
-
   const handleInputChange =
     (field: keyof FormData) => (e: React.ChangeEvent<HTMLInputElement>) => {
       const value = e.target.value;
