@@ -1,8 +1,11 @@
 import { getCachedConfig } from '@/lib/configCache';
 import fetchPageTemplate, { PageType } from '@/types/pageTemplate';
 import { SectionComponents } from '@/components/sections';
+import { headers } from 'next/headers';
 
 export default async function CoursesPage() {
+  const headersList = await headers();
+  const platformId = headersList.get('x-platform-id');
   const config = await getCachedConfig();
   const pageTemplate = await fetchPageTemplate(PageType.Courses);
   console.log('Rendering Courses Page with template:', pageTemplate);
@@ -23,7 +26,11 @@ export default async function CoursesPage() {
 
             return (
               <div key={index} className={'px-8 sm:px-12 lg:px-16'}>
-                <Component {...section.props} config={config} />
+                <Component
+                  {...section.props}
+                  config={config}
+                  platformId={platformId}
+                />
               </div>
             );
           })}

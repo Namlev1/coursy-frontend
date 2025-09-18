@@ -1,5 +1,5 @@
 interface CourseCardProps {
-  title: string;
+  name: string;
   description: string;
   imageUrl: string;
   onViewCourse?: () => void;
@@ -7,7 +7,7 @@ interface CourseCardProps {
 }
 
 export default function CourseCard({
-  title,
+  name,
   description,
   imageUrl,
   onViewCourse,
@@ -31,7 +31,7 @@ export default function CourseCard({
         />
       </div>
       <div className="flex flex-1 flex-col p-4">
-        <h3 className="text-base font-bold text-slate-800">{title}</h3>
+        <h3 className="text-base font-bold text-slate-800">{name}</h3>
         <p className="mt-1 flex-grow text-sm text-slate-600">{description}</p>
         <button
           className="mt-4 w-full rounded-full bg-blue-100 py-2 px-4 text-sm font-semibold text-indigo-600 hover:bg-indigo-100 transition-colors"
