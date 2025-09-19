@@ -8,7 +8,6 @@ export default async function CoursesPage() {
   const platformId = headersList.get('x-platform-id');
   const config = await getCachedConfig();
   const pageTemplate = await fetchPageTemplate(PageType.Courses);
-  console.log('Rendering Courses Page with template:', pageTemplate);
 
   return (
     <div className="relative flex size-full min-h-screen flex-col group/design-root overflow-x-hidden">

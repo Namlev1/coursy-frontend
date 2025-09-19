@@ -4,6 +4,8 @@ import Link from 'next/link';
 import React from 'react';
 import { usePathname } from 'next/navigation';
 import { NavItem } from '@/types/platformConfig';
+import { useAppSelector } from '@/store/hooks/redux';
+import { isAdminRole, isUserRole } from '@/utils/roleUtils';
 
 interface NavbarNavigationProps {
   navItems: NavItem[];
@@ -11,10 +13,20 @@ interface NavbarNavigationProps {
 
 export default function NavbarNavigation({ navItems }: NavbarNavigationProps) {
   const pathname = usePathname();
+  const authState = useAppSelector((state) => state.auth);
+
+  const navItemsToRender = navItems.filter((navItem) => {
+    return (
+      navItem.access == 'public' ||
+      (navItem.access == 'authenticated' && authState.isAuthenticated) ||
+      (navItem.access == 'admin' && isAdminRole(authState.role)) ||
+      (navItem.access == 'user' && isUserRole(authState.role))
+    );
+  });
 
   return (
     <nav className="hidden items-center gap-8 md:flex">
-      {navItems.map((item) => {
+      {navItemsToRender.map((item) => {
         const isActive = pathname === item.href;
 
         return (
