@@ -1,5 +1,5 @@
 import { cache } from 'react';
-import { headers } from 'next/headers';
+import { getPlatformId } from '@/utils/headerUtils';
 
 export interface PageSection {
   type: string;
@@ -20,6 +20,7 @@ export enum PageType {
   Signup = 'Signup',
   Dashboard = 'Dashboard',
   Courses = 'Courses',
+  CoursesDashboard = 'CoursesDashboard',
   CourseCreation = 'CourseCreation',
   Login = 'Login',
 }
@@ -43,12 +44,7 @@ const fetchPageTemplateInternal = async (
 
 const fetchPageTemplate = cache(
   async (pageType: PageType): Promise<PageTemplate> => {
-    const headersList = await headers();
-    const platformId = headersList.get('x-platform-id');
-
-    if (!platformId) {
-      throw new Error('Platform ID not found in headers');
-    }
+    const platformId = await getPlatformId();
 
     return await fetchPageTemplateInternal(platformId, pageType);
   }

@@ -1,11 +1,10 @@
 import { getCachedConfig } from '@/lib/configCache';
 import fetchPageTemplate, { PageType } from '@/types/pageTemplate';
 import { SectionComponents } from '@/components/sections';
-import { headers } from 'next/headers';
+import { getPlatformId } from '@/utils/headerUtils';
 
 export default async function CoursesPage() {
-  const headersList = await headers();
-  const platformId = headersList.get('x-platform-id');
+  const platformId = await getPlatformId();
   const config = await getCachedConfig();
   const pageTemplate = await fetchPageTemplate(PageType.Courses);
 

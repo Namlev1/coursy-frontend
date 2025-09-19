@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@mdi/js": "^7.4.47",
+    "@mdi/react": "^1.6.1",
     "@reduxjs/toolkit": "^2.9.0",
     "@types/js-cookie": "^3.0.6",
     "@types/redis": "^4.0.10",

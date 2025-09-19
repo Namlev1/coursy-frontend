@@ -1,18 +1,13 @@
 import { getRedisClient } from './redis';
 import apiClient from '@/api/client';
 import { PlatformConfig } from '@/types/platformConfig';
-import { headers } from 'next/headers';
+import { getPlatformId } from '@/utils/headerUtils';
 
 const CACHE_TTL = 3600; // 1 hour in seconds
 const CACHE_KEY_PREFIX = 'platform:config:';
 
 export const getCachedConfig = async (): Promise<PlatformConfig> => {
-  const headersList = await headers();
-  const platformId = headersList.get('x-platform-id');
-
-  if (!platformId) {
-    throw new Error('Platform ID not found in headers');
-  }
+  const platformId = await getPlatformId();
 
   const cacheKey = `${CACHE_KEY_PREFIX}${platformId}`;
 
