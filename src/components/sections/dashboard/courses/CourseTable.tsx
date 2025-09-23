@@ -5,22 +5,18 @@ import { PlatformConfig } from '@/types/platformConfig';
 import { Course } from '@/types/course';
 import Icon from '@mdi/react';
 import { mdiArrowRight } from '@mdi/js';
+import { useRouter } from 'next/navigation';
 
 interface CourseTableProps {
   courses: Course[];
   config: PlatformConfig;
-  onManageCourse?: (courseId: string) => void;
 }
 
-export default function CourseTable({
-  courses,
-  config,
-  onManageCourse,
-}: CourseTableProps) {
+export default function CourseTable({ courses, config }: CourseTableProps) {
+  const router = useRouter();
+
   const handleManageClick = (courseId: string) => {
-    if (onManageCourse) {
-      onManageCourse(courseId);
-    }
+    router.push('/dashboard/courses/' + courseId);
   };
 
   const getContentDescription = (course: Course) => {
