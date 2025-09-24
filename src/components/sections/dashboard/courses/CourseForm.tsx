@@ -2,24 +2,23 @@
 
 import { useState } from 'react';
 import { PlatformConfig } from '@/types/platformConfig';
+import { Course } from '@/types/course';
 
 interface CourseFormProps {
   config: PlatformConfig;
-  initialTitle?: string;
-  initialDescription?: string;
+  course: Course;
   onTitleChange?: (title: string) => void;
   onDescriptionChange?: (description: string) => void;
 }
 
 export default function CourseForm({
   config,
-  initialTitle = 'Data Science Mastery',
-  initialDescription = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
+  course,
   onTitleChange,
   onDescriptionChange,
 }: CourseFormProps) {
-  const [title, setTitle] = useState(initialTitle);
-  const [description, setDescription] = useState(initialDescription);
+  const [title, setTitle] = useState(course.name);
+  const [description, setDescription] = useState(course.description);
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newTitle = e.target.value;

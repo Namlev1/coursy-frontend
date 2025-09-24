@@ -1,0 +1,140 @@
+'use client';
+
+import { PlatformConfig } from '@/types/platformConfig';
+import { Video } from '@/types/video';
+import { UUID } from 'node:crypto';
+
+interface VideosManagementProps {
+  config: PlatformConfig;
+  videos: Video[];
+}
+
+export default function VideosManagement({
+  config,
+  videos,
+}: VideosManagementProps) {
+  const handleAddEpisode = () => {
+    // const newEpisode: Episode = {
+    //   id: Math.max(...episodes.map((e) => e.id)) + 1,
+    //   title: `${episodes.length + 1}. New Episode`,
+    //   description: 'Enter episode description here.',
+    //   thumbnail: 'https://via.placeholder.com/56x56?text=New',
+    // };
+    // setEpisodes((prev) => [...prev, newEpisode]);
+    // onEpisodeAdd?.(newEpisode);
+  };
+
+  const handleEditEpisode = (id: UUID) => {
+    // In a real app, this would open a modal or navigate to edit page
+    console.log(`Editing episode ${id}`);
+    // onEpisodeEdit?.(id, episodes.find((e) => e.id === id)!);
+  };
+
+  const EditIcon = () => (
+    <svg
+      fill="currentColor"
+      height="20"
+      viewBox="0 0 256 256"
+      width="20"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path d="M227.31,73.37,182.63,28.68a16,16,0,0,0-22.63,0L36.69,152A15.86,15.86,0,0,0,32,163.31V208a16,16,0,0,0,16,16H92.69A15.86,15.86,0,0,0,104,219.31L227.31,96a16,16,0,0,0,0-22.63ZM92.69,208H48V163.31l88-88L180.69,120ZM192,108.68,147.31,64l24-24L216,84.68Z" />
+    </svg>
+  );
+
+  return (
+    <div className="space-y-4">
+      <div className="flex justify-between items-center mb-4">
+        <h3
+          className="text-xl font-bold"
+          style={{ color: config.colors.textPrimary }}
+        >
+          Episodes
+        </h3>
+        <button
+          onClick={handleAddEpisode}
+          className="text-white text-sm font-bold py-2 px-4 rounded-lg hover:opacity-90 transition-opacity"
+          style={{ backgroundColor: config.colors.primary }}
+        >
+          Add Episode
+        </button>
+      </div>
+
+      {(videos.length > 0 && (
+        <ul className="space-y-3">
+          {videos.map((video) => (
+            <li
+              key={video.id}
+              className="flex items-center p-3 border rounded-lg hover:shadow-md transition-all duration-300"
+              style={{
+                backgroundColor: config.colors.background,
+                borderColor: config.colors.secondary,
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = `${config.colors.primary}80`;
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = config.colors.secondary;
+              }}
+            >
+              <div className="flex-shrink-0 mr-4">
+                <img
+                  alt="Video thumbnail"
+                  className="size-14 rounded-lg object-cover"
+                  src={video.thumbnail}
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.src =
+                      'https://via.placeholder.com/56x56?text=Episode';
+                  }}
+                />
+              </div>
+
+              <div className="flex-1 overflow-hidden">
+                <p
+                  className="font-bold truncate"
+                  style={{ color: config.colors.textPrimary }}
+                >
+                  {video.title}
+                </p>
+                <p
+                  className="text-sm truncate"
+                  style={{ color: config.colors.textSecondary }}
+                >
+                  {video.description}
+                </p>
+              </div>
+
+              <button
+                onClick={() => handleEditEpisode(video.id)}
+                className="ml-4 p-2 rounded-full hover:opacity-80 transition-all"
+                style={{
+                  color: config.colors.textSecondary,
+                  backgroundColor: 'transparent',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.color = config.colors.primary;
+                  e.currentTarget.style.backgroundColor = `${config.colors.primary}20`;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.color = config.colors.textSecondary;
+                  e.currentTarget.style.backgroundColor = 'transparent';
+                }}
+                aria-label={`Edit ${video.title}`}
+              >
+                <EditIcon />
+              </button>
+            </li>
+          ))}
+        </ul>
+      )) || (
+        <div
+          className="text-center py-8"
+          style={{ color: config.colors.textSecondary }}
+        >
+          <p>No videos yet. Click &#34;Add Video&#34; to get started.</p>
+        </div>
+      )}
+    </div>
+  );
+}
