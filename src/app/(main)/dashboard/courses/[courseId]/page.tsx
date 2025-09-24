@@ -49,7 +49,11 @@ export default async function CourseManagementPage({
         <div className="mx-auto w-full">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
             <CourseForm config={config} course={course} />
-            <VideosManagement config={config} videos={videos} />
+            <VideosManagement
+              config={config}
+              videos={videos}
+              courseId={courseId}
+            />
           </div>
         </div>
       </div>

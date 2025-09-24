@@ -3,31 +3,23 @@
 import { PlatformConfig } from '@/types/platformConfig';
 import { Video } from '@/types/video';
 import { UUID } from 'node:crypto';
+import Link from 'next/link';
+import { useParams } from 'next/navigation';
 
 interface VideosManagementProps {
   config: PlatformConfig;
   videos: Video[];
+  courseId: string;
 }
 
 export default function VideosManagement({
   config,
   videos,
 }: VideosManagementProps) {
-  const handleAddEpisode = () => {
-    // const newEpisode: Episode = {
-    //   id: Math.max(...episodes.map((e) => e.id)) + 1,
-    //   title: `${episodes.length + 1}. New Episode`,
-    //   description: 'Enter episode description here.',
-    //   thumbnail: 'https://via.placeholder.com/56x56?text=New',
-    // };
-    // setEpisodes((prev) => [...prev, newEpisode]);
-    // onEpisodeAdd?.(newEpisode);
-  };
+  const params = useParams();
 
   const handleEditEpisode = (id: UUID) => {
-    // In a real app, this would open a modal or navigate to edit page
     console.log(`Editing episode ${id}`);
-    // onEpisodeEdit?.(id, episodes.find((e) => e.id === id)!);
   };
 
   const EditIcon = () => (
@@ -51,13 +43,13 @@ export default function VideosManagement({
         >
           Episodes
         </h3>
-        <button
-          onClick={handleAddEpisode}
+        <Link
+          href={'/dashboard/courses/' + params.courseId + '/add'}
           className="text-white text-sm font-bold py-2 px-4 rounded-lg hover:opacity-90 transition-opacity"
           style={{ backgroundColor: config.colors.primary }}
         >
           Add Episode
-        </button>
+        </Link>
       </div>
 
       {(videos.length > 0 && (
