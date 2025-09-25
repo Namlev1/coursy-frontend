@@ -1,26 +1,16 @@
 'use client';
 import { useState } from 'react';
 import { PlatformConfig } from '@/types/platformConfig';
+import apiClient from '@/api/client';
+import { useParams, useRouter } from 'next/navigation';
 
 interface AddVideoFormProps {
   config: PlatformConfig;
-  onTitleChange?: (title: string) => void;
-  onDescriptionChange?: (description: string) => void;
-  onFileChange?: (file: File | null) => void;
-  onSubmit?: (data: {
-    title: string;
-    description: string;
-    file: File | null;
-  }) => void;
 }
 
-export default function AddVideoForm({
-  config,
-  onTitleChange,
-  onDescriptionChange,
-  onFileChange,
-  onSubmit,
-}: AddVideoFormProps) {
+export default function AddVideoForm({ config }: AddVideoFormProps) {
+  const params = useParams();
+  const router = useRouter();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [file, setFile] = useState<File | null>(null);
@@ -29,7 +19,6 @@ export default function AddVideoForm({
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newTitle = e.target.value;
     setTitle(newTitle);
-    onTitleChange?.(newTitle);
   };
 
   const handleDescriptionChange = (
@@ -37,12 +26,10 @@ export default function AddVideoForm({
   ) => {
     const newDescription = e.target.value;
     setDescription(newDescription);
-    onDescriptionChange?.(newDescription);
   };
 
   const handleFileChange = (selectedFile: File | null) => {
     setFile(selectedFile);
-    onFileChange?.(selectedFile);
   };
 
   const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -69,9 +56,28 @@ export default function AddVideoForm({
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit?.({ title, description, file });
+
+    // todo validate
+
+    try {
+      const formData = new FormData();
+      formData.append('title', title);
+      formData.append('description', description);
+      formData.append('file', file);
+      formData.append('course', params.courseId);
+
+      const response = await apiClient.post('/api/videos/upload', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      router.push(`/dashboard/courses/${params.courseId}`);
+    } catch (error) {
+      throw error;
+    }
   };
 
   return (
