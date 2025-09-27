@@ -15,10 +15,10 @@ export interface Video {
 }
 
 export enum ThumbnailType {
-  TEN,
-  TWENTY_FIVE,
-  FIFTY,
-  CUSTOM,
+  TEN = 'TEN',
+  TWENTY_FIVE = 'TWENTY_FIVE',
+  FIFTY = 'FIFTY',
+  CUSTOM = 'CUSTOM',
 }
 
 export enum ThumbnailSize {

@@ -1,87 +1,46 @@
 'use client';
-import { useState } from 'react';
+import { FormEvent, useState } from 'react';
 import { PlatformConfig } from '@/types/platformConfig';
-
-interface VideoMetadata {
-  filename: string;
-  filesize: string;
-  duration: string;
-}
-
-interface VideoData {
-  id: string;
-  title: string;
-  description: string;
-  metadata: VideoMetadata;
-  thumbnails: string[];
-  selectedThumbnailIndex: number;
-}
+import { ThumbnailSize, ThumbnailType, Video } from '@/types/video';
+import { getVideoThumbnailUrl } from '@/api/client';
 
 interface VideoManagementProps {
   config: PlatformConfig;
-  videoId: string;
+  metadata: Video;
 }
-
-// Mock data - replace with actual API call
-const mockVideoData: VideoData = {
-  id: '1',
-  title: 'Introduction to Course Platform',
-  description:
-    'Learn how to customize and manage your new course platform. This video covers the basics of theming, user management, and content creation.',
-  metadata: {
-    filename: 'intro_video.mp4',
-    filesize: '128MB',
-    duration: '12:34',
-  },
-  thumbnails: [
-    'https://lh3.googleusercontent.com/aida-public/AB6AXuAmFDj0VANLZqhn3H-p8Hv1xYpg_J-4asasS7jexX1CvreTF4MxR0cqJAiyxDjHPma3wLpAPpAAXtT55VfQUtrhXWiKSV3yS2A_fejcGGkZtqN0ZlXC-tiQosEX_NCWl_TkFlaHwSztqK0Gi6wgkmNfDOchgO35pDn3hVayyeiBmF2TjR8hhEBpXsuG5svr8xedWrAdnD9qMkBBNqDmWQQQtmgQt1IkjJzch4MeZMvqaxDL8zFkNmFcy0v8LP0TTsguyX5H6LGfmIE',
-    'https://lh3.googleusercontent.com/aida-public/AB6AXuB375VRWYfnpMGtxKAcfljekcf0O8PWmRB5gtG8wBzccnZOyHqaOWdXQrsOuDz7ZzVGDz7zobVBJRvnakoF1ZAcH-6W9XUS87PUoi-qf0cyZ7yZN4eqAXR3XSgpICDjkaRMo8olRSsgaQSRgOzh956KXIbFH1Vx4aopgjo76pG2T4EEEcvF6apQwEyqF6vl-TTG82Rfv737aAbU-5jjxa17ScwD5LGqmjJ2UuWf0VIm_QATzRwl0U8IVw4bveuTp7gX0cRwQywuAU0',
-    'https://lh3.googleusercontent.com/aida-public/AB6AXuCLVzyjcrbTFnDjo9Sw5T03652dmULDfBKAM0Q2CUaFvRr0ONheQZlTS8tfYVCysstKdCQUZyzAoOyjqg_yBkKt383T_eeS85X3yk8gIrSiscEyccOcIfVDjSqxBezxcsAww_LkPvsiw3jYXIl06MSDu9aDeAMPlITHrSZk_AYnaZ6pic_Fda3e9ZWV1b1UmfzTcokav29oVxwLz_2D_nlkFKzpQlZNoCzU6iRxTbN5LOfNUh0oGfzYGxxnIrlou2-rdYoFee2-nF8',
-  ],
-  selectedThumbnailIndex: 0,
-};
 
 export default function VideoManagement({
   config,
-  videoId,
+  metadata,
 }: VideoManagementProps) {
-  const [videoData, setVideoData] = useState<VideoData>(mockVideoData);
-  const [title, setTitle] = useState(videoData.title);
-  const [description, setDescription] = useState(videoData.description);
-  const [selectedThumbnailIndex, setSelectedThumbnailIndex] = useState(
-    videoData.selectedThumbnailIndex
-  );
+  const [videoData, setVideoData] = useState<Video>(metadata);
+  const [selectedThumbnailIndex, setSelectedThumbnailIndex] = useState(0);
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTitle(e.target.value);
+    setVideoData((prev) => ({
+      ...prev,
+      title: e.target.value,
+    }));
   };
 
   const handleDescriptionChange = (
     e: React.ChangeEvent<HTMLTextAreaElement>
   ) => {
-    setDescription(e.target.value);
+    setVideoData((prev) => ({
+      ...prev,
+      description: e.target.value,
+    }));
   };
 
   const handleThumbnailSelect = (index: number) => {
     setSelectedThumbnailIndex(index);
   };
 
-  const handleSubmit = async () => {
-    // Mock API call - replace with actual implementation
-    console.log('Saving video changes:', {
-      videoId,
-      title,
-      description,
-      selectedThumbnailIndex,
-    });
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
-    // Update local state
-    setVideoData((prev) => ({
-      ...prev,
-      title,
-      description,
-      selectedThumbnailIndex,
-    }));
+    console.log('Saving video changes');
+    throw new Error('Not implemented yet');
   };
 
   const CheckCircleIcon = () => (
@@ -133,7 +92,7 @@ export default function VideoManagement({
                 }
                 id="video-title"
                 type="text"
-                value={title}
+                value={videoData.title}
                 onChange={handleTitleChange}
                 placeholder="e.g., Introduction to Theming"
                 onFocus={(e) => {
@@ -166,7 +125,7 @@ export default function VideoManagement({
                 }
                 id="video-description"
                 rows={4}
-                value={description}
+                value={videoData.description}
                 onChange={handleDescriptionChange}
                 placeholder="A brief summary of the video content."
                 onFocus={(e) => {
@@ -198,7 +157,7 @@ export default function VideoManagement({
                     Filename:
                   </span>
                   <span style={{ color: config.colors.textPrimary }}>
-                    {videoData.metadata.filename}
+                    {videoData.fileName}
                   </span>
                 </div>
                 <div className="flex justify-between text-sm">
@@ -209,7 +168,7 @@ export default function VideoManagement({
                     Filesize:
                   </span>
                   <span style={{ color: config.colors.textPrimary }}>
-                    {videoData.metadata.filesize}
+                    {videoData.fileSize}
                   </span>
                 </div>
                 <div className="flex justify-between text-sm">
@@ -220,7 +179,7 @@ export default function VideoManagement({
                     Duration:
                   </span>
                   <span style={{ color: config.colors.textPrimary }}>
-                    {videoData.metadata.duration}
+                    {Math.round(videoData.duration)} s
                   </span>
                 </div>
               </div>
@@ -235,34 +194,41 @@ export default function VideoManagement({
                 Thumbnail
               </label>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                {videoData.thumbnails.map((thumbnail, index) => (
-                  <div
-                    key={index}
-                    className="relative group cursor-pointer border-2 rounded-lg transition-all"
-                    style={{
-                      borderColor:
-                        selectedThumbnailIndex === index
-                          ? config.colors.primary
-                          : 'transparent',
-                    }}
-                    onClick={() => handleThumbnailSelect(index)}
-                  >
-                    <img
-                      alt={`Thumbnail ${index + 1}`}
-                      className="w-full h-24 object-cover rounded-md"
-                      src={thumbnail}
-                    />
+                {Object.values(ThumbnailType).map((type, index) => {
+                  if (type === ThumbnailType.CUSTOM) return undefined;
+                  return (
                     <div
-                      className={`absolute inset-0 bg-black/50 flex items-center justify-center transition-opacity ${
-                        selectedThumbnailIndex === index
-                          ? 'opacity-100'
-                          : 'opacity-0 group-hover:opacity-100'
-                      }`}
+                      key={index}
+                      className="relative group cursor-pointer border-2 rounded-lg transition-all"
+                      style={{
+                        borderColor:
+                          selectedThumbnailIndex === index
+                            ? config.colors.primary
+                            : 'transparent',
+                      }}
+                      onClick={() => handleThumbnailSelect(index)}
                     >
-                      <CheckCircleIcon />
+                      <img
+                        alt={`Thumbnail ${index + 1}`}
+                        className="w-full h-full object-cover rounded-md"
+                        src={getVideoThumbnailUrl(
+                          videoData.id,
+                          ThumbnailSize.SMALL,
+                          type as ThumbnailType
+                        )}
+                      />
+                      <div
+                        className={`absolute inset-0 bg-black/50 flex items-center justify-center transition-opacity ${
+                          selectedThumbnailIndex === index
+                            ? 'opacity-100'
+                            : 'opacity-0 group-hover:opacity-100'
+                        }`}
+                      >
+                        <CheckCircleIcon />
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
 
                 {/* Upload New Thumbnail Placeholder */}
                 <div
