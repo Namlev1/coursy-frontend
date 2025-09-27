@@ -73,7 +73,6 @@ export default function VideosManagement({
             >
               <div className="flex-shrink-0 mr-4">
                 <Image
-                  // src={`${API_BASE_URL}/api/videos/${video.id}/thumbnail?size=${ThumbnailSize.SMALL}`}
                   src={getVideoThumbnailUrl(video.id, ThumbnailSize.SMALL)}
                   alt="Video thumbnail"
                   width={320}
@@ -97,7 +96,8 @@ export default function VideosManagement({
                 </p>
               </div>
 
-              <button
+              <Link
+                href={'/dashboard/courses/' + params.courseId + '/' + video.id}
                 onClick={() => handleEditEpisode(video.id)}
                 className="ml-4 p-2 rounded-full hover:opacity-80 transition-all"
                 style={{
@@ -115,7 +115,7 @@ export default function VideosManagement({
                 aria-label={`Edit ${video.title}`}
               >
                 <EditIcon />
-              </button>
+              </Link>
             </li>
           ))}
         </ul>
