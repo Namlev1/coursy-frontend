@@ -1,10 +1,12 @@
 'use client';
 
 import { PlatformConfig } from '@/types/platformConfig';
-import { Video } from '@/types/video';
+import { ThumbnailSize, Video } from '@/types/video';
 import { UUID } from 'node:crypto';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
+import Image from 'next/image';
+import { getVideoThumbnailUrl } from '@/api/client';
 
 interface VideosManagementProps {
   config: PlatformConfig;
@@ -70,15 +72,13 @@ export default function VideosManagement({
               }}
             >
               <div className="flex-shrink-0 mr-4">
-                <img
+                <Image
+                  // src={`${API_BASE_URL}/api/videos/${video.id}/thumbnail?size=${ThumbnailSize.SMALL}`}
+                  src={getVideoThumbnailUrl(video.id, ThumbnailSize.SMALL)}
                   alt="Video thumbnail"
+                  width={320}
+                  height={180}
                   className="size-14 rounded-lg object-cover"
-                  src={video.thumbnail}
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    target.src =
-                      'https://via.placeholder.com/56x56?text=Episode';
-                  }}
                 />
               </div>
 

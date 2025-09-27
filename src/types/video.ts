@@ -13,3 +13,16 @@ export interface Video {
   description: string;
   thumbnail: string;
 }
+
+export enum ThumbnailType {
+  TEN,
+  TWENTY_FIVE,
+  FIFTY,
+  CUSTOM,
+}
+
+export enum ThumbnailSize {
+  SMALL = 'SMALL',
+  MEDIUM = 'MEDIUM',
+  LARGE = 'LARGE',
+}
