@@ -74,6 +74,7 @@ export default function CourseGridSection({
               description={course.description}
               imageUrl={course.imageUrl}
               onViewCourse={() => console.log(`Viewing course: ${course.name}`)}
+              courseId={course.id}
             />
           ))}
         </div>

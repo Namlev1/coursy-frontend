@@ -1,9 +1,13 @@
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+
 interface CourseCardProps {
   name: string;
   description: string;
   imageUrl: string;
   onViewCourse?: () => void;
   className?: string;
+  courseId: string;
 }
 
 export default function CourseCard({
@@ -12,7 +16,10 @@ export default function CourseCard({
   imageUrl,
   onViewCourse,
   className = '',
+  courseId,
 }: CourseCardProps) {
+  const pathname = usePathname();
+
   const handleClick = () => {
     if (onViewCourse) {
       onViewCourse();
@@ -33,15 +40,12 @@ export default function CourseCard({
       <div className="flex flex-1 flex-col p-4">
         <h3 className="text-base font-bold text-slate-800">{name}</h3>
         <p className="mt-1 flex-grow text-sm text-slate-600">{description}</p>
-        <button
-          className="mt-4 w-full rounded-full bg-blue-100 py-2 px-4 text-sm font-semibold text-indigo-600 hover:bg-indigo-100 transition-colors"
-          onClick={(e) => {
-            e.stopPropagation();
-            handleClick();
-          }}
+        <Link
+          className="mt-4 w-full rounded-full bg-blue-100 py-2 px-4 text-sm font-semibold text-indigo-600 hover:bg-indigo-100 transition-colors text-center"
+          href={pathname + '/' + courseId}
         >
           View Course
-        </button>
+        </Link>
       </div>
     </div>
   );
