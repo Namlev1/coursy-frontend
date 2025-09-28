@@ -6,7 +6,6 @@ export const getRedisClient = async (): Promise<RedisClientType> => {
   if (!client) {
     client = createClient({
       url: process.env.REDIS_URL || 'redis://localhost:6379',
-      // password: process.env.REDIS_PASSWORD || 'redis'
     });
 
     client.on('error', (err) => {
@@ -21,11 +20,4 @@ export const getRedisClient = async (): Promise<RedisClientType> => {
   }
 
   return client;
-};
-
-export const disconnectRedis = async (): Promise<void> => {
-  if (client) {
-    await client.destroy();
-    client = null;
-  }
 };

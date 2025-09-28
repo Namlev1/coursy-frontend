@@ -2,6 +2,10 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import { ThumbnailSize, ThumbnailType, Video } from '@/types/video';
 import { Course } from '@/types/course';
+import { UUID } from 'node:crypto';
+import { PlatformConfig } from '@/types/platformConfig';
+
+// TODO refactor error handling
 
 export const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8080';
@@ -62,6 +66,17 @@ export async function fetchVideosByCourseId(
   try {
     const response = await apiClient.get<Video[]>(
       `/api/videos/course/${courseId}`
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function fetchConfig(platformId: UUID) {
+  try {
+    const response = await apiClient.get<PlatformConfig>(
+      `/api/platforms/${platformId}/config`
     );
     return response.data;
   } catch (error) {

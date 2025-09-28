@@ -2,6 +2,8 @@ import { Inter } from 'next/font/google';
 import React from 'react';
 import { ReduxProvider } from '@/store/providers';
 import StoreHydration from '@/components/StoreHydration';
+import { getCachedConfig } from '@/lib/configCache';
+import { ConfigProvider } from '@/components/ConfigProvider';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -14,6 +16,8 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const config = await getCachedConfig();
+
   return (
     <html lang="en">
       <head>
@@ -28,14 +32,16 @@ export default async function RootLayout({
         <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
       </head>
       <body className={`${inter.className} bg-white`}>
-        <ReduxProvider>
-          <StoreHydration />
-          <div className="relative flex size-full min-h-screen flex-col group/design-root overflow-x-hidden">
-            <div className="layout-container flex h-full grow flex-col">
-              {children}
+        <ConfigProvider config={config}>
+          <ReduxProvider>
+            <StoreHydration />
+            <div className="relative flex size-full min-h-screen flex-col group/design-root overflow-x-hidden">
+              <div className="layout-container flex h-full grow flex-col">
+                {children}
+              </div>
             </div>
-          </div>
-        </ReduxProvider>
+          </ReduxProvider>
+        </ConfigProvider>
       </body>
     </html>
   );
