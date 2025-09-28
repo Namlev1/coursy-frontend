@@ -3,13 +3,10 @@
 import React from 'react';
 import Link from 'next/link';
 import { useAppSelector } from '@/store/hooks/redux';
-import { PlatformConfig } from '@/types/platformConfig';
+import { useConfig } from '@/components/ConfigProvider';
 
-interface NavbarUserProps {
-  config: PlatformConfig;
-}
-
-export default function NavbarUser({ config }: NavbarUserProps) {
+export default function NavbarUser() {
+  const config = useConfig();
   const authState = useAppSelector((state) => state.auth);
   const colors = config.colors;
 

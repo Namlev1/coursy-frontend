@@ -2,12 +2,10 @@ import fetchPageTemplate, { PageType } from '@/types/pageTemplate';
 import { PageHeaderSection } from '@/components/sections/header/PageHeaderSection';
 import DashboardContentGrid from '@/components/sections/dashboard/home/DashboardContentGrid';
 import DashboardContentRows from '@/components/sections/dashboard/home/DashboardContentRows';
-import { getCachedConfig } from '@/lib/configCache';
 
 export default async function DashboardPage() {
   const pageTemplate = await fetchPageTemplate(PageType.Dashboard);
   const layout = pageTemplate.props?.layout;
-  const config = await getCachedConfig();
 
   const pageHeader = pageTemplate.sections.find(
     (it) => it.type == 'page-header'
@@ -26,16 +24,15 @@ export default async function DashboardPage() {
             <PageHeaderSection
               title={pageHeader?.props['title']}
               subtitle={pageHeader?.props['subtitle']}
-              config={config}
             />
           )}
 
           {/*content*/}
           <div>
             {layout == 'grid' ? (
-              <DashboardContentGrid content={content} config={config} />
+              <DashboardContentGrid content={content} />
             ) : (
-              <DashboardContentRows content={content} config={config} />
+              <DashboardContentRows content={content} />
             )}
           </div>
         </div>

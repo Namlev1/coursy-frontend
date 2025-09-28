@@ -1,18 +1,18 @@
 'use client';
 
 import React from 'react';
-import { PlatformConfig } from '@/types/platformConfig';
 import { Course } from '@/types/course';
 import Icon from '@mdi/react';
 import { mdiArrowRight } from '@mdi/js';
 import { useRouter } from 'next/navigation';
+import { useConfig } from '@/components/ConfigProvider';
 
 interface CourseTableProps {
   courses: Course[];
-  config: PlatformConfig;
 }
 
-export default function CourseTable({ courses, config }: CourseTableProps) {
+export default function CourseTable({ courses }: CourseTableProps) {
+  const config = useConfig();
   const router = useRouter();
 
   const handleManageClick = (courseId: string) => {

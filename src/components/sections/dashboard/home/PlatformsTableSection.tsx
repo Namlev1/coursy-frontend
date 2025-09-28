@@ -1,5 +1,5 @@
 import React from 'react';
-import { PlatformConfig } from '@/types/platformConfig';
+import { useConfig } from '@/components/ConfigProvider';
 
 interface Platform {
   id: string;
@@ -9,13 +9,13 @@ interface Platform {
 
 interface PlatformsTableProps {
   platforms: Platform[];
-  config: PlatformConfig;
 }
 
 export default function PlatformsTableSection({
   platforms = [],
-  config,
 }: PlatformsTableProps) {
+  const config = useConfig();
+
   return (
     <div className="overflow-hidden rounded-lg bg-white shadow">
       <div className="flex items-center justify-between px-4 py-5 sm:px-6">

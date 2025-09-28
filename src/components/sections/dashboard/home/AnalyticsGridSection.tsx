@@ -1,5 +1,5 @@
 import React from 'react';
-import { PlatformConfig } from '@/types/platformConfig';
+import { useConfig } from '@/components/ConfigProvider';
 
 interface AnalyticsCard {
   title: string;
@@ -13,14 +13,13 @@ interface AnalyticsCard {
 interface AnalyticsGridSectionProps {
   title: string;
   analytics: AnalyticsCard[];
-  config: PlatformConfig;
 }
 
 export default function AnalyticsGridSection({
   title,
   analytics,
-  config,
 }: AnalyticsGridSectionProps) {
+  const config = useConfig();
   const getChangeIcon = () => (
     <svg
       fill="currentColor"

@@ -1,11 +1,9 @@
-import { getCachedConfig } from '@/lib/configCache';
 import fetchPageTemplate, { PageType } from '@/types/pageTemplate';
 import { SectionComponents } from '@/components/sections';
 import { getPlatformId } from '@/lib/headerUtils';
 
 export default async function CoursesPage() {
   const platformId = await getPlatformId();
-  const config = await getCachedConfig();
   const pageTemplate = await fetchPageTemplate(PageType.Courses);
 
   return (
@@ -24,11 +22,7 @@ export default async function CoursesPage() {
 
             return (
               <div key={index} className={'px-8 sm:px-12 lg:px-16'}>
-                <Component
-                  {...section.props}
-                  config={config}
-                  platformId={platformId}
-                />
+                <Component {...section.props} platformId={platformId} />
               </div>
             );
           })}

@@ -4,7 +4,6 @@ import CreatePlatformWidget from './CreatePlatformWidget';
 import YourPlatformsWidget from './YourPlatformsWidget';
 import React from 'react';
 import SubscriptionPlanSection from '@/components/sections/dashboard/home/SubscriptionPlanSection';
-import { PlatformConfig } from '@/types/platformConfig';
 
 const mockPlatforms = [
   { id: '1', name: 'Innovate & Learn' },
@@ -15,12 +14,10 @@ const mockPlatforms = [
 interface DashboardPlatformSectionProps {
   platforms?: Array<{ id: string; name: string }>;
   subscriptionWidget?: React.ReactNode;
-  config: PlatformConfig;
 }
 
 export default function DashboardPlatformSection({
   platforms = mockPlatforms,
-  config,
 }: DashboardPlatformSectionProps) {
   return (
     <main className="flex-1 bg-gray-50">
@@ -38,10 +35,7 @@ export default function DashboardPlatformSection({
               {/* Your Platforms Widget */}
               <YourPlatformsWidget platforms={platforms} />
 
-              <SubscriptionPlanSection
-                planName={'Enterprise'}
-                config={config}
-              />
+              <SubscriptionPlanSection planName={'Enterprise'} />
             </div>
           </div>
         </div>

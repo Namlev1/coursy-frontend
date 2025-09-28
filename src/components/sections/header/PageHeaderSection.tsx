@@ -1,16 +1,13 @@
-import { PlatformConfig } from '@/types/platformConfig';
+import { useConfig } from '@/components/ConfigProvider';
 
 interface PageHeaderSectionProps {
   title: string;
   subtitle?: string;
-  config: PlatformConfig;
 }
 
-export function PageHeaderSection({
-  title,
-  subtitle,
-  config,
-}: PageHeaderSectionProps) {
+export function PageHeaderSection({ title, subtitle }: PageHeaderSectionProps) {
+  const config = useConfig();
+
   return (
     <div>
       <h1

@@ -1,15 +1,12 @@
 import { PageSection } from '@/types/pageTemplate';
 import { SectionComponents } from '@/components/sections';
-import { PlatformConfig } from '@/types/platformConfig';
 
 interface DashboardContentRowsProps {
   content: PageSection[];
-  config: PlatformConfig;
 }
 
 export default function DashboardContentRows({
   content,
-  config,
 }: DashboardContentRowsProps) {
   return (
     <div>
@@ -22,7 +19,7 @@ export default function DashboardContentRows({
           return null;
         }
 
-        return <Component key={index} {...section.props} config={config} />;
+        return <Component key={index} {...section.props} />;
       })}
     </div>
   );

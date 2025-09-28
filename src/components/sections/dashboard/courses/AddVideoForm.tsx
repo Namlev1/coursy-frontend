@@ -1,14 +1,11 @@
 'use client';
 import { useState } from 'react';
-import { PlatformConfig } from '@/types/platformConfig';
 import apiClient from '@/api/client';
 import { useParams, useRouter } from 'next/navigation';
+import { useConfig } from '@/components/ConfigProvider';
 
-interface AddVideoFormProps {
-  config: PlatformConfig;
-}
-
-export default function AddVideoForm({ config }: AddVideoFormProps) {
+export default function AddVideoForm() {
+  const config = useConfig();
   const params = useParams();
   const router = useRouter();
   const [title, setTitle] = useState('');

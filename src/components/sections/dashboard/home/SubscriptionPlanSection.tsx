@@ -1,17 +1,13 @@
 import React from 'react';
-import { PlatformConfig } from '@/types/platformConfig';
 
 interface SubscriptionPlanProps {
   planName: string;
-  config: PlatformConfig;
 }
 
 export default function SubscriptionPlanSection({
   planName,
-  config,
 }: SubscriptionPlanProps) {
   const usagePercentage = 75;
-  console.log(config.colors);
 
   return (
     <div className="rounded-lg bg-white p-6 shadow">

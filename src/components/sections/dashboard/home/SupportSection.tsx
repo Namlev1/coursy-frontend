@@ -1,12 +1,11 @@
 import React from 'react';
-import { PlatformConfig } from '@/types/platformConfig';
+import { useConfig } from '@/components/ConfigProvider';
 
 interface SupportSectionProps {
   title?: string;
   description?: string;
   buttonText?: string;
   onContactSupport: () => void;
-  config: PlatformConfig;
 }
 
 export default function SupportSection({
@@ -14,8 +13,8 @@ export default function SupportSection({
   description = 'Our support team is here to assist you.',
   buttonText = 'Contact Support',
   onContactSupport,
-  config,
 }: SupportSectionProps) {
+  const config = useConfig();
   const lighterColor = `${config.colors.primary}1A`; // 10% opacity for background
 
   return (

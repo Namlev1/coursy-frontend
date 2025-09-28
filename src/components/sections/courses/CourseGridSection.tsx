@@ -5,19 +5,14 @@ import CoursesSearchBar from '@/components/sections/courses/CoursesSearchBar';
 import CoursesFilterButtons from '@/components/sections/courses/CoursesFilterButtons';
 import apiClient from '@/api/client';
 import axios from 'axios';
-import { PlatformConfig } from '@/types/platformConfig';
 import { Course } from '@/types/course';
 import CourseCard from '@/components/sections/courses/CourseCard';
 
 interface CourseGridProps {
-  config: PlatformConfig;
   platformId: string;
 }
 
-export default function CourseGridSection({
-  config,
-  platformId,
-}: CourseGridProps) {
+export default function CourseGridSection({ platformId }: CourseGridProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeFilter, setActiveFilter] = useState('All Courses');
 

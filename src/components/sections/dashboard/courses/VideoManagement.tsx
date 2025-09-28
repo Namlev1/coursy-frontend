@@ -1,18 +1,15 @@
 'use client';
 import { FormEvent, useState } from 'react';
-import { PlatformConfig } from '@/types/platformConfig';
 import { ThumbnailSize, ThumbnailType, Video } from '@/types/video';
 import { getVideoThumbnailUrl } from '@/api/client';
+import { useConfig } from '@/components/ConfigProvider';
 
 interface VideoManagementProps {
-  config: PlatformConfig;
   metadata: Video;
 }
 
-export default function VideoManagement({
-  config,
-  metadata,
-}: VideoManagementProps) {
+export default function VideoManagement({ metadata }: VideoManagementProps) {
+  const config = useConfig();
   const [videoData, setVideoData] = useState<Video>(metadata);
   const [selectedThumbnailIndex, setSelectedThumbnailIndex] = useState(0);
 

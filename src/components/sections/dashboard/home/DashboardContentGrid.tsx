@@ -1,16 +1,15 @@
 import { PageSection } from '@/types/pageTemplate';
 import { SectionComponents } from '@/components/sections';
-import { PlatformConfig } from '@/types/platformConfig';
+import { useConfig } from '@/components/ConfigProvider';
 
 interface DashboardContentGridProps {
   content: PageSection[];
-  config: PlatformConfig;
 }
 
 export default function DashboardContentGrid({
   content,
-  config,
 }: DashboardContentGridProps) {
+  const config = useConfig();
   const midpoint = Math.ceil(content.length / 2);
   const firstHalf = content.slice(0, midpoint);
   const secondHalf = content.slice(midpoint);

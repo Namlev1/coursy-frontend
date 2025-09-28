@@ -1,4 +1,3 @@
-import { getCachedConfig } from '@/lib/configCache';
 import { PageHeaderSection } from '@/components/sections/header/PageHeaderSection';
 import CourseTable from '@/components/sections/dashboard/courses/CourseTable';
 import { API_BASE_URL } from '@/api/client';
@@ -27,7 +26,6 @@ async function fetchCourses(platformId: string): Promise<Course[]> {
 }
 
 export default async function CoursesDashboardPage() {
-  const config = await getCachedConfig();
   const platformId = await getPlatformId();
   const courses = await fetchCourses(platformId);
 
@@ -37,9 +35,8 @@ export default async function CoursesDashboardPage() {
         <PageHeaderSection
           title={'Course Management'}
           subtitle={"Manage your organization's courses"}
-          config={config}
         />
-        <CourseTable courses={courses} config={config} />
+        <CourseTable courses={courses} />
       </div>
     </div>
   );

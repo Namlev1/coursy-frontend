@@ -1,16 +1,9 @@
 'use client';
 
 import React from 'react';
-import { PlatformConfig } from '@/types/platformConfig';
 import { useAppSelector } from '@/store/hooks/redux';
 
-interface OrganizationDetailsProps {
-  config: PlatformConfig;
-}
-
-export default function OrganizationDetailsSection({
-  config,
-}: OrganizationDetailsProps) {
+export default function OrganizationDetailsSection() {
   // todo pull user data from redux
   const user = useAppSelector((state) => state.auth.user);
 

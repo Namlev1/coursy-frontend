@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { PlatformConfig } from '@/types/platformConfig';
+import { useConfig } from '@/components/ConfigProvider';
 
 interface ActionButton {
   label: string;
@@ -12,14 +12,14 @@ interface ActionButton {
 interface QuickActionsSectionProps {
   title: string;
   actions: ActionButton[];
-  config: PlatformConfig;
 }
 
 export default function QuickActionsSection({
   title,
   actions,
-  config,
 }: QuickActionsSectionProps) {
+  const config = useConfig();
+
   const getPlusIcon = () => (
     <svg
       className="mr-2 -ml-1"

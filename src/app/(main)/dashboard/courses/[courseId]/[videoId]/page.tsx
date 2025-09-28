@@ -1,4 +1,3 @@
-import { getCachedConfig } from '@/lib/configCache';
 import VideoManagement from '@/components/sections/dashboard/courses/VideoManagement';
 import { Video } from '@/types/video';
 import { API_BASE_URL } from '@/api/client';
@@ -26,14 +25,13 @@ interface ManageVideoPageProps {
 export default async function ManageVideoPage({
   params: { videoId },
 }: ManageVideoPageProps) {
-  const config = await getCachedConfig();
   const metadata = await fetchMetadata(videoId);
 
   return (
     <div className="relative flex size-full min-h-screen flex-col group/design-root overflow-x-hidden">
       <div className="layout-container flex h-full grow flex-col px-8 sm:px-12 lg:px-16">
         <div className="mx-auto w-full">
-          <VideoManagement config={config} metadata={metadata} />
+          <VideoManagement metadata={metadata} />
         </div>
       </div>
     </div>

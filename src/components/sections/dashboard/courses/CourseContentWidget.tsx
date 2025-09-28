@@ -1,12 +1,11 @@
 'use client';
 
 import React from 'react';
-import { PlatformConfig } from '@/types/platformConfig';
 import { ThumbnailSize, Video } from '@/types/video';
 import { getVideoThumbnailUrl } from '@/api/client';
+import { useConfig } from '@/components/ConfigProvider';
 
 interface CourseContentWidgetProps {
-  config: PlatformConfig;
   videos: Video[];
   current: number;
   setCurrent: (index: number) => void;
@@ -14,12 +13,12 @@ interface CourseContentWidgetProps {
 }
 
 export default function CourseContentWidget({
-  config,
   videos,
   current,
   setCurrent,
   isPreview = false,
 }: CourseContentWidgetProps) {
+  const config = useConfig();
   const handleVideoClick = (index: number) => {
     if (isPreview && index !== current) {
       return;

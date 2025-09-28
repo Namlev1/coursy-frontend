@@ -1,23 +1,20 @@
 'use client';
 
-import { PlatformConfig } from '@/types/platformConfig';
 import { ThumbnailSize, Video } from '@/types/video';
 import { UUID } from 'node:crypto';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import Image from 'next/image';
 import { getVideoThumbnailUrl } from '@/api/client';
+import { useConfig } from '@/components/ConfigProvider';
 
 interface VideosManagementProps {
-  config: PlatformConfig;
   videos: Video[];
   courseId: string;
 }
 
-export default function VideosManagement({
-  config,
-  videos,
-}: VideosManagementProps) {
+export default function VideosManagement({ videos }: VideosManagementProps) {
+  const config = useConfig();
   const params = useParams();
 
   const handleEditEpisode = (id: UUID) => {

@@ -1,22 +1,21 @@
 'use client';
 
 import { useState } from 'react';
-import { PlatformConfig } from '@/types/platformConfig';
 import { Course } from '@/types/course';
+import { useConfig } from '@/components/ConfigProvider';
 
 interface CourseFormProps {
-  config: PlatformConfig;
   course: Course;
   onTitleChange?: (title: string) => void;
   onDescriptionChange?: (description: string) => void;
 }
 
 export default function CourseForm({
-  config,
   course,
   onTitleChange,
   onDescriptionChange,
 }: CourseFormProps) {
+  const config = useConfig();
   const [title, setTitle] = useState(course.name);
   const [description, setDescription] = useState(course.description);
 
