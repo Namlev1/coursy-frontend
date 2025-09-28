@@ -1,10 +1,10 @@
 'use client';
 
-import PreviewCoursePlayer from '@/components/sections/dashboard/courses/PreviewCoursePlayer';
 import CourseContentWidget from '@/components/sections/dashboard/courses/CourseContentWidget';
 import { PlatformConfig } from '@/types/platformConfig';
 import { Video } from '@/types/video';
 import { useState } from 'react';
+import CoursePlayer from '@/components/sections/dashboard/courses/CoursePlayer';
 
 interface CourseSectionProps {
   config: PlatformConfig;
@@ -16,7 +16,7 @@ export default function CourseSection({ config, videos }: CourseSectionProps) {
   return (
     <>
       <div className="lg:col-span-2">
-        <PreviewCoursePlayer config={config} />
+        <CoursePlayer config={config} videos={videos} current={current} />
       </div>
       <div className="lg:col-span-1">
         <CourseContentWidget

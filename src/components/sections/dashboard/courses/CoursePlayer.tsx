@@ -2,8 +2,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import ReactPlayer from 'react-player';
 import {
-  BookOpen,
-  Clock,
   Maximize,
   Pause,
   Play,
@@ -14,63 +12,23 @@ import {
   VolumeX,
 } from 'lucide-react';
 import { getMasterPlaylistUrl } from '@/api/client';
-
-interface Timestamp {
-  time: number;
-  label: string;
-  description?: string;
-}
+import { Video } from '@/types/video';
 
 interface CoursePlayerProps {
-  title?: string;
-  description?: string;
+  videos: Video[];
+  current: number;
+  isPreview?: boolean;
+
   videoUrl?: string;
   duration?: number;
   watchedTime?: number;
-  timestamps?: Timestamp[];
-  onProgress?: (progress: {
-    played: number;
-    playedSeconds: number;
-    loaded: number;
-    loadedSeconds: number;
-  }) => void;
   onComplete?: () => void;
 }
 
-const videoId = 'b2c395c3-95c9-4bab-9a1e-aafc85f57f47';
-
 const CoursePlayer: React.FC<CoursePlayerProps> = ({
-  title = 'Mastering Digital Marketing',
-  description = 'This comprehensive course covers all aspects of digital marketing, from SEO and content marketing to social media and email campaigns. Learn to create effective strategies and measure your success.',
-  // videoUrl = '/videos/file_example.mp4',
-  videoUrl = getMasterPlaylistUrl(videoId),
-  // videoUrl = 'https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8',
-  // videoUrl = 'https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_fmp4/master.m3u8',
-  duration = 0,
+  videos,
+  current,
   watchedTime = 0,
-  timestamps = [
-    {
-      time: 30,
-      label: 'Introduction',
-      description: 'Course overview and objectives',
-    },
-    {
-      time: 120,
-      label: 'SEO Fundamentals',
-      description: 'Understanding search engine optimization',
-    },
-    {
-      time: 300,
-      label: 'Content Strategy',
-      description: 'Creating engaging content',
-    },
-    {
-      time: 480,
-      label: 'Social Media Marketing',
-      description: 'Leveraging social platforms',
-    },
-  ],
-  onProgress,
   onComplete,
 }) => {
   const playerRef = useRef<ReactPlayer>(null);
@@ -79,12 +37,14 @@ const CoursePlayer: React.FC<CoursePlayerProps> = ({
   const [muted, setMuted] = useState(false);
   const [played, setPlayed] = useState(0);
   const [playedSeconds, setPlayedSeconds] = useState(0);
-  const [videoDuration, setVideoDuration] = useState(duration);
   const [showTimestamps, setShowTimestamps] = useState(false);
   const [playbackRate, setPlaybackRate] = useState(1);
   const [showSettings, setShowSettings] = useState(false);
-  const [isFullscreen, setIsFullscreen] = useState(false);
   const [seeking, setSeeking] = useState(false);
+
+  const { title, description, id } = videos[current];
+  const videoUrl = getMasterPlaylistUrl(id);
+  const [videoDuration, setVideoDuration] = useState(0);
 
   // Resume from last watched position
   useEffect(() => {
@@ -100,7 +60,6 @@ const CoursePlayer: React.FC<CoursePlayerProps> = ({
     if (!seeking) {
       setPlayed(progress.played);
       setPlayedSeconds(progress.playedSeconds);
-      onProgress?.(progress);
     }
   };
 
@@ -131,11 +90,6 @@ const CoursePlayer: React.FC<CoursePlayerProps> = ({
     playerRef.current?.seekTo(newPlayed);
   };
 
-  const handleTimestampClick = (time: number) => {
-    playerRef.current?.seekTo(time, 'seconds');
-    setPlaying(true);
-  };
-
   const skipForward = () => {
     const newTime = Math.min(playedSeconds + 10, videoDuration);
     playerRef.current?.seekTo(newTime, 'seconds');
@@ -154,10 +108,6 @@ const CoursePlayer: React.FC<CoursePlayerProps> = ({
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = Math.floor(seconds % 60);
     return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
-  };
-
-  const getProgressPercentage = () => {
-    return videoDuration > 0 ? (playedSeconds / videoDuration) * 100 : 0;
   };
 
   return (
@@ -306,62 +256,7 @@ const CoursePlayer: React.FC<CoursePlayerProps> = ({
               {description}
             </p>
           </div>
-
-          <div className="ml-6 flex space-x-3">
-            <button
-              onClick={() => setShowTimestamps(!showTimestamps)}
-              className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors ${
-                showTimestamps
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
-              }`}
-            >
-              <Clock size={16} />
-              <span>Timestamps</span>
-            </button>
-          </div>
         </div>
-
-        {/* Timestamps Panel */}
-        {showTimestamps && (
-          <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3 flex items-center">
-              <BookOpen size={20} className="mr-2" />
-              Course Chapters
-            </h3>
-            <div className="space-y-2">
-              {timestamps.map((timestamp, index) => (
-                <button
-                  key={index}
-                  onClick={() => handleTimestampClick(timestamp.time)}
-                  className={`w-full text-left p-3 rounded-lg transition-colors hover:bg-gray-200 dark:hover:bg-gray-600 ${
-                    playedSeconds >= timestamp.time &&
-                    (index === timestamps.length - 1 ||
-                      playedSeconds < timestamps[index + 1]?.time)
-                      ? 'bg-blue-100 dark:bg-blue-900 border border-blue-300 dark:border-blue-700'
-                      : 'bg-white dark:bg-gray-800'
-                  }`}
-                >
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <div className="font-medium text-gray-900 dark:text-white">
-                        {timestamp.label}
-                      </div>
-                      {timestamp.description && (
-                        <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                          {timestamp.description}
-                        </div>
-                      )}
-                    </div>
-                    <span className="text-sm text-gray-500 dark:text-gray-400 font-mono">
-                      {formatTime(timestamp.time)}
-                    </span>
-                  </div>
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );
