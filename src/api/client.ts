@@ -1,6 +1,7 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import { ThumbnailSize, ThumbnailType } from '@/types/video';
+import { ThumbnailSize, ThumbnailType, Video } from '@/types/video';
+import { Course } from '@/types/course';
 
 export const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8080';
@@ -45,6 +46,28 @@ export const getVideoThumbnailUrl = (
 
   return `${baseUrl}?${params.toString()}`;
 };
+
+export async function fetchCourse(courseId: string): Promise<Course> {
+  try {
+    const response = await apiClient.get<Course>(`/api/courses/${courseId}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function fetchVideosByCourseId(
+  courseId: string
+): Promise<Video[]> {
+  try {
+    const response = await apiClient.get<Video[]>(
+      `/api/videos/course/${courseId}`
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
 
 export default apiClient;
 

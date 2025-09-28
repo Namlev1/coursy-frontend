@@ -2,23 +2,13 @@ import { getCachedConfig } from '@/lib/configCache';
 import { PageHeaderSection } from '@/components/sections/header/PageHeaderSection';
 import CourseForm from '@/components/sections/dashboard/courses/CourseForm';
 import VideosManagement from '@/components/sections/dashboard/courses/VideosManagement';
-import apiClient from '@/api/client';
-import { Course } from '@/types/course';
+import apiClient, { fetchCourse } from '@/api/client';
 import { Video } from '@/types/video';
 
 interface CourseManagementPageProps {
   params: {
     courseId: string;
   };
-}
-
-async function fetchCourse(courseId: string): Promise<Course> {
-  try {
-    const response = await apiClient.get<Course>(`/api/courses/${courseId}`);
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
 }
 
 async function fetchVideos(courseId: string): Promise<Video[]> {
