@@ -10,7 +10,7 @@ import {
   validateFirstName,
   validateLastName,
   validatePassword,
-} from '@/utils/signupValidation';
+} from '@/lib/validation/signupValidation';
 import { Role } from '@/types/enums';
 
 interface SignupFormCenteredSectionProps {

@@ -5,7 +5,7 @@ import React from 'react';
 import { usePathname } from 'next/navigation';
 import { NavItem } from '@/types/platformConfig';
 import { useAppSelector } from '@/store/hooks/redux';
-import { isAdminRole, isUserRole } from '@/utils/roleUtils';
+import { isAdminRole, isUserRole } from '@/lib/roleUtils';
 
 interface NavbarNavigationProps {
   navItems: NavItem[];

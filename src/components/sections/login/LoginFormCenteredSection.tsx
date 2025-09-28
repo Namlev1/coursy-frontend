@@ -4,7 +4,10 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { validateEmail, validatePassword } from '@/utils/loginValidation';
+import {
+  validateEmail,
+  validatePassword,
+} from '@/lib/validation/loginValidation';
 import Cookies from 'js-cookie';
 import { UserResponse } from '@/types/user';
 import apiClient from '@/api/client';

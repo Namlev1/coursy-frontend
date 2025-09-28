@@ -1,5 +1,5 @@
 import { cache } from 'react';
-import { getPlatformId } from '@/utils/headerUtils';
+import { getPlatformId } from '@/lib/headerUtils';
 
 export interface PageSection {
   type: string;

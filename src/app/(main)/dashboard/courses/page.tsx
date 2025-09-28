@@ -3,7 +3,7 @@ import { PageHeaderSection } from '@/components/sections/header/PageHeaderSectio
 import CourseTable from '@/components/sections/dashboard/courses/CourseTable';
 import { API_BASE_URL } from '@/api/client';
 import { Course } from '@/types/course';
-import { getPlatformId } from '@/utils/headerUtils';
+import { getPlatformId } from '@/lib/headerUtils';
 
 async function fetchCourses(platformId: string): Promise<Course[]> {
   const params = new URLSearchParams({

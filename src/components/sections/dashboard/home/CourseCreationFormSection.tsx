@@ -8,7 +8,7 @@ import {
   validateDescription,
   validateImageUrl,
   validateName,
-} from '@/utils/courseValidation';
+} from '@/lib/validation/courseValidation';
 import { useRouter } from 'next/navigation';
 
 interface CourseCreationFormSectionProps {
