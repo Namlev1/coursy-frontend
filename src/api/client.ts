@@ -47,3 +47,7 @@ export const getVideoThumbnailUrl = (
 };
 
 export default apiClient;
+
+export const getMasterPlaylistUrl = (videoId: string) => {
+  return `${API_BASE_URL}/api/videos/${videoId}/master.m3u8`;
+};

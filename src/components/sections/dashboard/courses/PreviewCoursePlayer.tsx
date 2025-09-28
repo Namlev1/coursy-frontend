@@ -13,6 +13,7 @@ import {
   Volume2,
   VolumeX,
 } from 'lucide-react';
+import { getMasterPlaylistUrl } from '@/api/client';
 
 interface Timestamp {
   time: number;
@@ -36,10 +37,15 @@ interface CoursePlayerProps {
   onComplete?: () => void;
 }
 
+const videoId = 'b2c395c3-95c9-4bab-9a1e-aafc85f57f47';
+
 const CoursePlayer: React.FC<CoursePlayerProps> = ({
   title = 'Mastering Digital Marketing',
   description = 'This comprehensive course covers all aspects of digital marketing, from SEO and content marketing to social media and email campaigns. Learn to create effective strategies and measure your success.',
-  videoUrl = '/videos/file_example.mp4',
+  // videoUrl = '/videos/file_example.mp4',
+  videoUrl = getMasterPlaylistUrl(videoId),
+  // videoUrl = 'https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8',
+  // videoUrl = 'https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_fmp4/master.m3u8',
   duration = 0,
   watchedTime = 0,
   timestamps = [
