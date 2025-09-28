@@ -1,7 +1,7 @@
 import { getRedisClient } from './redis';
 import { PlatformConfig } from '@/types/platformConfig';
 import { getPlatformId } from '@/lib/headerUtils';
-import { fetchConfig } from '@/api/apiClient';
+import { fetchConfig } from '@/lib/apiClient';
 
 const CACHE_TTL = 3600; // 1 hour in seconds
 const CACHE_KEY_PREFIX = 'platform:config:';
