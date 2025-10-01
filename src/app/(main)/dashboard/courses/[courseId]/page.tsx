@@ -1,24 +1,13 @@
 import { PageHeaderSection } from '@/components/sections/header/PageHeaderSection';
 import CourseForm from '@/components/sections/dashboard/courses/CourseForm';
 import VideosManagement from '@/components/sections/dashboard/courses/VideosManagement';
-import apiClient, { fetchCourse } from '@/api/client';
-import { Video } from '@/types/video';
+import { fetchCourse, fetchVideos } from '@/lib/apiClient';
+import { UUID } from 'node:crypto';
 
 interface CourseManagementPageProps {
   params: {
-    courseId: string;
+    courseId: UUID;
   };
-}
-
-async function fetchVideos(courseId: string): Promise<Video[]> {
-  try {
-    const response = await apiClient.get<Video[]>(
-      `/api/videos/course/${courseId}`
-    );
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
 }
 
 export default async function CourseManagementPage({

@@ -5,7 +5,7 @@ import { UUID } from 'node:crypto';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import Image from 'next/image';
-import { getVideoThumbnailUrl } from '@/api/client';
+import { getVideoThumbnailUrl } from '@/lib/apiClient';
 import { useConfig } from '@/components/ConfigProvider';
 
 interface VideosManagementProps {

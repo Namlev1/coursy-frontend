@@ -1,8 +1,8 @@
 'use client';
 import { useState } from 'react';
-import apiClient from '@/api/client';
 import { useParams, useRouter } from 'next/navigation';
 import { useConfig } from '@/components/ConfigProvider';
+import { postVideo } from '@/lib/apiClient';
 
 export default function AddVideoForm() {
   const config = useConfig();
@@ -65,14 +65,11 @@ export default function AddVideoForm() {
       formData.append('file', file);
       formData.append('course', params.courseId);
 
-      const response = await apiClient.post('/api/videos/upload', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
+      await postVideo(formData);
 
       router.push(`/dashboard/courses/${params.courseId}`);
     } catch (error) {
+      // todo show error in ui
       throw error;
     }
   };

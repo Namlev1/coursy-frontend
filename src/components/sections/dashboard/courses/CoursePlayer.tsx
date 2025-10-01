@@ -11,7 +11,7 @@ import {
   Volume2,
   VolumeX,
 } from 'lucide-react';
-import { getMasterPlaylistUrl } from '@/api/client';
+import { getMasterPlaylistUrl } from '@/lib/apiClient';
 import { Video } from '@/types/video';
 
 interface CoursePlayerProps {

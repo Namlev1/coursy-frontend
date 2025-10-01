@@ -1,31 +1,18 @@
 import VideoManagement from '@/components/sections/dashboard/courses/VideoManagement';
-import { Video } from '@/types/video';
-import { API_BASE_URL } from '@/api/client';
-
-async function fetchMetadata(videoId: string): Promise<Video> {
-  const response = await fetch(`${API_BASE_URL}/api/videos/${videoId}`, {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
-
-  if (!response.ok) {
-    throw new Error('Failed to fetch courses');
-  }
-  return await response.json();
-}
+import { fetchVideo } from '@/lib/apiClient';
+import { UUID } from 'node:crypto';
 
 interface ManageVideoPageProps {
   params: {
     courseId: string;
-    videoId: string;
+    videoId: UUID;
   };
 }
 
 export default async function ManageVideoPage({
   params: { videoId },
 }: ManageVideoPageProps) {
-  const metadata = await fetchMetadata(videoId);
+  const metadata = await fetchVideo(videoId);
 
   return (
     <div className="relative flex size-full min-h-screen flex-col group/design-root overflow-x-hidden">

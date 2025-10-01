@@ -3,13 +3,14 @@
 import React, { useEffect, useState } from 'react';
 import CoursesSearchBar from '@/components/sections/courses/CoursesSearchBar';
 import CoursesFilterButtons from '@/components/sections/courses/CoursesFilterButtons';
-import apiClient from '@/api/client';
-import axios from 'axios';
 import { Course } from '@/types/course';
 import CourseCard from '@/components/sections/courses/CourseCard';
+import { DEFAULT_ERROR_MESSAGE } from '@/lib/apiClient/errors';
+import { fetchCourses } from '@/lib/apiClient';
+import { UUID } from 'node:crypto';
 
 interface CourseGridProps {
-  platformId: string;
+  platformId: UUID;
 }
 
 export default function CourseGridSection({ platformId }: CourseGridProps) {
@@ -18,32 +19,24 @@ export default function CourseGridSection({ platformId }: CourseGridProps) {
 
   const [courses, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  const fetchCourses = async () => {
-    try {
-      const response = await apiClient.get(`/api/courses/page/${platformId}`, {
-        params: {
-          page: 0,
-          pageSize: 20,
-        },
-      });
-      const courses: Course[] =
-        response.data._embedded?.courseResponseList || [];
-      setCourses(courses);
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        const message = error.response?.data || 'Failed to create course';
-        setError(message);
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
+  const [error, setError] = useState<string>('');
 
   useEffect(() => {
-    fetchCourses();
-  }, []);
+    const loadCourses = async () => {
+      try {
+        const courses = await fetchCourses(platformId);
+        setCourses(courses);
+      } catch (error) {
+        const message =
+          error instanceof Error ? error.message : DEFAULT_ERROR_MESSAGE;
+        setError(message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadCourses();
+  }, [platformId]);
 
   return (
     <div className="min-h-screen bg-slate-50 p-8">

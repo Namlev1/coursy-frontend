@@ -9,8 +9,8 @@ import {
   validatePassword,
 } from '@/lib/validation/loginValidation';
 import Cookies from 'js-cookie';
-import { UserResponse } from '@/types/user';
-import apiClient from '@/api/client';
+import { fetchUserData, loginUser } from '@/lib/apiClient';
+import { DEFAULT_ERROR_MESSAGE } from '@/lib/apiClient/errors';
 
 const JWT_EXPIRES_DAYS = 7;
 
@@ -34,10 +34,6 @@ interface FormErrors {
   general?: string;
 }
 
-interface LoginResponse {
-  token: string;
-}
-
 export default function LoginFormCenteredSection({
   logoUrl,
   logoText,
@@ -55,34 +51,6 @@ export default function LoginFormCenteredSection({
   const [touched, setTouched] = useState<Set<keyof FormData>>(new Set());
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // API calls
-  const loginUser = async (
-    email: string,
-    password: string
-  ): Promise<LoginResponse> => {
-    try {
-      const response = await apiClient.post<LoginResponse>('/api/auth/login', {
-        email: email.trim(),
-        password,
-      });
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
-  };
-
-  const fetchUserData = async (token: string): Promise<UserResponse> => {
-    try {
-      const response = await apiClient.get<UserResponse>('/api/users/me', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
-  };
   const handleInputChange =
     (field: keyof FormData) => (e: React.ChangeEvent<HTMLInputElement>) => {
       const value = e.target.value;
@@ -127,10 +95,8 @@ export default function LoginFormCenteredSection({
 
       router.push(loginLinkHref);
     } catch (error) {
-      console.error('Login error:', error);
       setErrors({
-        general:
-          'Unable to connect to the server. Please check your connection and try again.',
+        general: error instanceof Error ? error.message : DEFAULT_ERROR_MESSAGE,
       });
     } finally {
       setIsSubmitting(false);

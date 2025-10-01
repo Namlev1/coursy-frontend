@@ -22,11 +22,14 @@ function handleAxiosError(error: AxiosError): never {
         throw new Error(message);
     }
   } else if (error.request) {
-    throw new Error('Network error - please check your connection');
+    throw new Error(DEFAULT_ERROR_MESSAGE);
   } else {
     throw new Error('Request configuration error');
   }
 }
+
+export const DEFAULT_ERROR_MESSAGE =
+  'Network error - please check your connection';
 
 export function handleError(error: unknown): never {
   if (error instanceof AxiosError) {

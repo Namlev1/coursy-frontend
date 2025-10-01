@@ -2,14 +2,14 @@
 
 import React, { useState } from 'react';
 import { PlatformConfig } from '@/types/platformConfig';
-import apiClient from '@/api/client';
-import axios from 'axios';
+import { createCourse } from '@/lib/apiClient';
 import {
   validateDescription,
   validateImageUrl,
   validateName,
 } from '@/lib/validation/courseValidation';
 import { useRouter } from 'next/navigation';
+import { DEFAULT_ERROR_MESSAGE } from '@/lib/apiClient/errors';
 
 interface CourseCreationFormSectionProps {
   config: PlatformConfig;
@@ -46,31 +46,6 @@ export default function CourseCreationFormSection({
     borderColor: '#e2e8f0',
     backgroundColor: '#ffffff',
   } as React.CSSProperties;
-
-  // API calls
-  const createCourse = async (
-    name: string,
-    description: string,
-    imageUrl: string
-  ): Promise<void> => {
-    try {
-      await apiClient.post('/api/courses', {
-        name: name.trim(),
-        description: description.trim(),
-        imageUrl: imageUrl,
-      });
-      return;
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        const message = error.response?.data || 'Failed to create course';
-        setErrors({
-          general: message,
-        });
-        throw new Error(message);
-      }
-      throw error;
-    }
-  };
 
   const handleInputChange =
     (field: keyof FormData) => (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -147,14 +122,11 @@ export default function CourseCreationFormSection({
         formData.imageUrl
       );
 
-      // Success
-      console.log('Course created successfully!');
       router.push('/courses');
     } catch (error) {
       console.error('Course creation error:', error);
       setErrors({
-        general:
-          'Unable to connect to the server. Please check your connection and try again.',
+        general: error instanceof Error ? error.message : DEFAULT_ERROR_MESSAGE,
       });
     } finally {
       setIsSubmitting(false);

@@ -2,25 +2,14 @@
 
 import { FormEvent, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import apiClient from '@/api/client';
+import { postPlatform } from '@/lib/apiClient';
+import { PlatformRequest } from '@/types/platform';
+import { Colors } from 'picocolors/types';
+import { PlatformConfig } from '@/types/platformConfig';
 
 interface BasicInfo {
   name: string;
   description: string;
-}
-
-interface ThemeSettings {
-  courseListLayout: 'Grid' | 'List';
-  videoPlayerType: 'Minimal' | 'Advanced';
-}
-
-interface Colors {
-  primary: string;
-  secondary: string;
-  tertiary: string;
-  background: string;
-  textPrimary: string;
-  textSecondary: string;
 }
 
 export default function CreatePlatformWidget() {
@@ -31,44 +20,39 @@ export default function CreatePlatformWidget() {
     description: '',
   });
 
-  const [themeSettings, setThemeSettings] = useState<ThemeSettings>({
+  const [themeSettings, setThemeSettings] = useState<
+    Omit<PlatformConfig, 'navbarConfig' | 'footerItems'>
+  >({
     courseListLayout: 'Grid',
     videoPlayerType: 'Minimal',
-  });
-
-  const [colors, setColors] = useState<Colors>({
-    primary: '#1383eb',
-    secondary: '#f97316',
-    tertiary: '#8b5cf6',
-    background: '#f8fafc',
-    textPrimary: '#0f172a',
-    textSecondary: '#475569',
+    colors: {
+      primary: '#1383eb',
+      secondary: '#f97316',
+      tertiary: '#8b5cf6',
+      background: '#f8fafc',
+      textPrimary: '#0f172a',
+      textSecondary: '#475569',
+    },
   });
 
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     // Combine all states into the expected API format
-    const formData = {
+    const formData: PlatformRequest = {
       ...basicInfo,
-      theme: {
+      config: {
         ...themeSettings,
-        colors,
       },
     };
 
     try {
-      const response = await apiClient.post(
-        'http://localhost:8080/api/platforms',
-        formData
-      );
-      console.log('Form submitted successfully');
+      await postPlatform(formData);
       router.push('/dashboard');
     } catch (error) {
+      // todo show error in UI
       console.error('Error submitting form:', error);
     }
-
-    console.log('Form submitted:', formData);
   };
 
   // Handlers for each state
@@ -91,9 +75,12 @@ export default function CreatePlatformWidget() {
   };
 
   const handleColorChange = (colorType: keyof Colors, value: string) => {
-    setColors((prev) => ({
+    setThemeSettings((prev) => ({
       ...prev,
-      [colorType]: value,
+      colors: {
+        ...prev.colors,
+        [colorType]: value,
+      },
     }));
   };
 
@@ -220,7 +207,7 @@ export default function CreatePlatformWidget() {
                   <input
                     type="color"
                     id={`${key}-color`}
-                    value={colors[key]}
+                    value={themeSettings.colors[key]}
                     onChange={(e) => handleColorChange(key, e.target.value)}
                     className="h-10 w-10 rounded-full border-gray-300 p-0 cursor-pointer"
                   />

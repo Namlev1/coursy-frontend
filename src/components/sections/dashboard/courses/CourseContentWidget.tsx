@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { ThumbnailSize, Video } from '@/types/video';
-import { getVideoThumbnailUrl } from '@/api/client';
+import { getVideoThumbnailUrl } from '@/lib/apiClient';
 import { useConfig } from '@/components/ConfigProvider';
 
 interface CourseContentWidgetProps {

@@ -1,29 +1,7 @@
 import { PageHeaderSection } from '@/components/sections/header/PageHeaderSection';
 import CourseTable from '@/components/sections/dashboard/courses/CourseTable';
-import { API_BASE_URL } from '@/api/client';
-import { Course } from '@/types/course';
 import { getPlatformId } from '@/lib/headerUtils';
-
-async function fetchCourses(platformId: string): Promise<Course[]> {
-  const params = new URLSearchParams({
-    page: '0',
-    size: '20',
-  });
-  const response = await fetch(
-    `${API_BASE_URL}/api/courses/page/${platformId}?${params}`,
-    {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    }
-  );
-
-  if (!response.ok) {
-    throw new Error('Failed to fetch courses');
-  }
-  const json = await response.json();
-  return json['_embedded']?.courseResponseList || [];
-}
+import { fetchCourses } from '@/lib/apiClient';
 
 export default async function CoursesDashboardPage() {
   const platformId = await getPlatformId();
