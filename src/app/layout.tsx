@@ -1,5 +1,7 @@
+import './globals.css';
 import { Inter } from 'next/font/google';
 import React from 'react';
+import type { Metadata } from 'next';
 import { ReduxProvider } from '@/store/providers';
 import StoreHydration from '@/components/StoreHydration';
 import { getCachedConfig } from '@/lib/configCache';
@@ -11,6 +13,12 @@ const inter = Inter({
   display: 'swap',
 });
 
+export const metadata: Metadata = {
+  title: 'Coursy - customizable video course platforms',
+  description:
+    'Create and manage branded online learning platforms with ease. Multi-tenant SaaS solution for organizations to deliver video courses, track progress, and engage learners with customizable themes and comprehensive analytics.',
+};
+
 export default async function RootLayout({
   children,
 }: {
@@ -20,26 +28,14 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta charSet="utf-8" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin=""
-        />
-        <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-      </head>
+      {/*<head>*/}
+      {/*  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>*/}
+      {/*</head>*/}
       <body className={`${inter.className} bg-white`}>
         <ConfigProvider config={config}>
           <ReduxProvider>
             <StoreHydration />
-            <div className="relative flex size-full min-h-screen flex-col group/design-root overflow-x-hidden">
-              <div className="layout-container flex h-full grow flex-col">
-                {children}
-              </div>
-            </div>
+            <div className="flex min-h-screen flex-col">{children}</div>
           </ReduxProvider>
         </ConfigProvider>
       </body>
