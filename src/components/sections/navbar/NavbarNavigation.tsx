@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import React from 'react';
 import { usePathname } from 'next/navigation';
-import { NavItem } from '@/types/platformConfig';
+import { NavItem, NavItemAccess } from '@/types/platformConfig';
 import { useAppSelector } from '@/store/hooks/redux';
 import { isAdminRole, isUserRole } from '@/lib/roleUtils';
 
@@ -16,10 +16,11 @@ export default function NavbarNavigation({ navItems }: NavbarNavigationProps) {
 
   const navItemsToRender = navItems.filter((navItem) => {
     return (
-      navItem.access === 'public' ||
-      (navItem.access === 'authenticated' && authState.isAuthenticated) ||
-      (navItem.access === 'admin' && isAdminRole(authState.role)) ||
-      (navItem.access === 'user' && isUserRole(authState.role))
+      navItem.access === NavItemAccess.PUBLIC ||
+      (navItem.access === NavItemAccess.AUTHENTICATED &&
+        authState.isAuthenticated) ||
+      (navItem.access === NavItemAccess.ADMIN && isAdminRole(authState.role)) ||
+      (navItem.access === NavItemAccess.USER && isUserRole(authState.role))
     );
   });
 

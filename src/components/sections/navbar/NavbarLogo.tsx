@@ -1,6 +1,10 @@
+'use client';
+
 import Link from 'next/link';
 import React from 'react';
 import Image from 'next/image';
+import { ROUTES } from '@/lib/routes';
+import { useAppSelector } from '@/store/hooks/redux';
 
 interface NavbarLogoProps {
   logoUrl: string | null;
@@ -13,8 +17,14 @@ export default function NavbarLogo({
   logoText,
   isLogoVisible = true,
 }: NavbarLogoProps) {
+  const authState = useAppSelector((state) => state.auth);
   return (
-    <Link href="/public" className="flex items-center gap-2">
+    <Link
+      href={
+        authState.isAuthenticated ? ROUTES.DASHBOARD.path : ROUTES.HOME.path
+      }
+      className="flex items-center gap-2"
+    >
       {isLogoVisible && logoUrl && (
         <Image src={logoUrl} alt="Company logo" width={36} height={36} />
       )}

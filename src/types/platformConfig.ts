@@ -25,7 +25,14 @@ interface NavbarConfig {
 export interface NavItem {
   href: string;
   label: string;
-  access: 'public' | 'authenticated' | 'user' | 'admin';
+  access: NavItemAccess;
+}
+
+export enum NavItemAccess {
+  PUBLIC = 'public',
+  AUTHENTICATED = 'authenticated',
+  USER = 'user',
+  ADMIN = 'admin',
 }
 
 interface FooterItem {
