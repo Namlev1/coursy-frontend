@@ -64,7 +64,7 @@ export default function LoginFormCentered({
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting, touchedFields },
+    formState: { errors, isSubmitting, touchedFields, isValid },
     setError,
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
@@ -141,12 +141,10 @@ export default function LoginFormCentered({
                 className="flex w-full justify-center rounded-lg px-4 py-3 text-sm font-semibold leading-6 text-white shadow-sm hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-opacity"
                 type="submit"
                 style={{
-                  backgroundColor: isSubmitting
-                    ? '#9CA3AF'
-                    : config.colors.primary,
+                  backgroundColor: config.colors.primary,
                   outlineColor: config.colors.primary,
                 }}
-                disabled={isSubmitting}
+                disabled={isSubmitting || !isValid}
               >
                 {isSubmitting ? 'Creating account...' : submitText}
               </button>
