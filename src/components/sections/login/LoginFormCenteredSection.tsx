@@ -2,15 +2,15 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import {
-  validateEmail,
-  validatePassword,
-} from '@/lib/validation/loginValidation';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 import Cookies from 'js-cookie';
 import { fetchUserData, loginUser } from '@/lib/apiClient';
 import { DEFAULT_ERROR_MESSAGE } from '@/lib/apiClient/errors';
+import { VALIDATION_LIMITS } from '@/lib/validation/constants';
+import { ROUTES } from '@/lib/routes';
 
 const JWT_EXPIRES_DAYS = 7;
 
@@ -23,16 +23,34 @@ interface LoginFormCenteredSectionProps {
   loginLinkHref: string;
 }
 
-interface FormData {
-  email: string;
-  password: string;
-}
+const loginSchema = z.object({
+  email: z
+    .string()
+    .min(1, 'Email is required')
+    .min(
+      VALIDATION_LIMITS.EMAIL.MIN_LENGTH,
+      `Email must be at least ${VALIDATION_LIMITS.EMAIL.MIN_LENGTH} characters long`
+    )
+    .max(
+      VALIDATION_LIMITS.EMAIL.MAX_LENGTH,
+      `Email must be no more than ${VALIDATION_LIMITS.EMAIL.MAX_LENGTH} characters`
+    )
+    .email('Please enter a valid email address')
+    .transform((val) => val.trim()),
 
-interface FormErrors {
-  email?: string;
-  password?: string;
-  general?: string;
-}
+  password: z
+    .string()
+    .min(
+      VALIDATION_LIMITS.PASSWORD.MIN_LENGTH,
+      `Password must be at least ${VALIDATION_LIMITS.PASSWORD.MIN_LENGTH} characters`
+    )
+    .max(
+      VALIDATION_LIMITS.PASSWORD.MAX_LENGTH,
+      `Password cannot exceed ${VALIDATION_LIMITS.PASSWORD.MAX_LENGTH} characters`
+    ),
+});
+
+type LoginFormData = z.infer<typeof loginSchema>;
 
 export default function LoginFormCenteredSection({
   logoUrl,
@@ -43,47 +61,20 @@ export default function LoginFormCenteredSection({
   loginLinkHref,
 }: LoginFormCenteredSectionProps) {
   const router = useRouter();
-  const [formData, setFormData] = useState<FormData>({
-    email: '',
-    password: '',
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting, touchedFields },
+    setError,
+  } = useForm<LoginFormData>({
+    resolver: zodResolver(loginSchema),
+    mode: 'onBlur',
   });
-  const [errors, setErrors] = useState<FormErrors>({});
-  const [touched, setTouched] = useState<Set<keyof FormData>>(new Set());
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleInputChange =
-    (field: keyof FormData) => (e: React.ChangeEvent<HTMLInputElement>) => {
-      const value = e.target.value;
-      setFormData((prev) => ({ ...prev, [field]: value }));
-    };
-
-  const handleBlur = (field: keyof FormData) => () => {
-    setTouched((prev) => new Set(prev).add(field));
-
-    let error: string | undefined;
-    switch (field) {
-      case 'email':
-        error = validateEmail(formData.email);
-        break;
-      case 'password':
-        error = validatePassword(formData.password);
-        break;
-    }
-
-    setErrors((prev) => ({ ...prev, [field]: error }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    // Mark all fields as touched
-    setTouched(new Set(['email', 'password']));
-
-    setIsSubmitting(true);
-
+  const onSubmit = async (data: LoginFormData) => {
     try {
-      // Login user
-      const loginData = await loginUser(formData.email, formData.password);
+      const loginData = await loginUser(data.email, data.password);
 
       // Fetch user data
       const userData = await fetchUserData(loginData.token);
@@ -95,11 +86,9 @@ export default function LoginFormCenteredSection({
 
       router.push(loginLinkHref);
     } catch (error) {
-      setErrors({
-        general: error instanceof Error ? error.message : DEFAULT_ERROR_MESSAGE,
+      setError('root', {
+        message: error instanceof Error ? error.message : DEFAULT_ERROR_MESSAGE,
       });
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
@@ -109,7 +98,7 @@ export default function LoginFormCenteredSection({
         <div className="mb-8 text-center">
           <Link
             className="inline-flex items-center gap-3 text-2xl font-bold text-gray-900"
-            href="/public"
+            href={ROUTES.DASHBOARD.path}
           >
             {logoUrl && (
               <Image
@@ -130,13 +119,17 @@ export default function LoginFormCenteredSection({
         </div>
 
         <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm sm:p-8">
-          {errors.general && (
+          {errors.root && (
             <div className="mb-6 rounded-lg bg-red-50 border border-red-200 p-4 text-sm text-red-800">
-              {errors.general}
+              {errors.root.message}
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-6" noValidate>
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="space-y-6"
+            noValidate
+          >
             <div>
               <label
                 className="block text-sm font-medium leading-6 text-gray-900"
@@ -146,9 +139,10 @@ export default function LoginFormCenteredSection({
               </label>
               <div className="mt-2">
                 <input
+                  {...register('email')}
                   autoComplete="email"
                   className={`block w-full rounded-lg shadow-sm sm:text-sm h-12 px-4 transition-colors ${
-                    touched.has('email') && errors.email
+                    touchedFields.email && errors.email
                       ? 'border-red-300 focus:border-red-500 focus:ring-red-500'
                       : 'border-gray-300 focus:border-[var(--primary-500)] focus:ring-[var(--primary-500)]'
                   }`}
@@ -156,12 +150,11 @@ export default function LoginFormCenteredSection({
                   name="email"
                   placeholder="john.doe@acme.com"
                   type="email"
-                  value={formData.email}
-                  onChange={handleInputChange('email')}
-                  onBlur={handleBlur('email')}
                 />
-                {touched.has('email') && errors.email && (
-                  <p className="mt-2 text-sm text-red-600">{errors.email}</p>
+                {touchedFields.email && errors.email && (
+                  <p className="mt-2 text-sm text-red-600">
+                    {errors.email.message}
+                  </p>
                 )}
               </div>
             </div>
@@ -175,9 +168,10 @@ export default function LoginFormCenteredSection({
               </label>
               <div className="mt-2">
                 <input
+                  {...register('password')}
                   autoComplete="new-password"
                   className={`block w-full rounded-lg shadow-sm sm:text-sm h-12 px-4 transition-colors ${
-                    touched.has('password') && errors.password
+                    touchedFields.password && errors.password
                       ? 'border-red-300 focus:border-red-500 focus:ring-red-500'
                       : 'border-gray-300 focus:border-[var(--primary-500)] focus:ring-[var(--primary-500)]'
                   }`}
@@ -185,12 +179,11 @@ export default function LoginFormCenteredSection({
                   name="password"
                   placeholder="••••••••"
                   type="password"
-                  value={formData.password}
-                  onChange={handleInputChange('password')}
-                  onBlur={handleBlur('password')}
                 />
-                {touched.has('password') && errors.password && (
-                  <p className="mt-2 text-sm text-red-600">{errors.password}</p>
+                {touchedFields.password && errors.password && (
+                  <p className="mt-2 text-sm text-red-600">
+                    {errors.password.message}
+                  </p>
                 )}
               </div>
             </div>
