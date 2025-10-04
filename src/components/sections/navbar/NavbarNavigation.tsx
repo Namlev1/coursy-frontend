@@ -1,5 +1,4 @@
 'use client';
-
 import Link from 'next/link';
 import React from 'react';
 import { usePathname } from 'next/navigation';
@@ -17,18 +16,17 @@ export default function NavbarNavigation({ navItems }: NavbarNavigationProps) {
 
   const navItemsToRender = navItems.filter((navItem) => {
     return (
-      navItem.access == 'public' ||
-      (navItem.access == 'authenticated' && authState.isAuthenticated) ||
-      (navItem.access == 'admin' && isAdminRole(authState.role)) ||
-      (navItem.access == 'user' && isUserRole(authState.role))
+      navItem.access === 'public' ||
+      (navItem.access === 'authenticated' && authState.isAuthenticated) ||
+      (navItem.access === 'admin' && isAdminRole(authState.role)) ||
+      (navItem.access === 'user' && isUserRole(authState.role))
     );
   });
 
   return (
-    <nav className="hidden items-center gap-8 md:flex">
+    <nav className="hidden md:flex items-center gap-8">
       {navItemsToRender.map((item) => {
         const isActive = pathname === item.href;
-
         return (
           <Link
             key={item.label}

@@ -14,13 +14,11 @@ export default function NavbarLogo({
   isLogoVisible = true,
 }: NavbarLogoProps) {
   return (
-    <div className="flex items-center gap-4">
-      <Link href="/public" className="flex items-center gap-2">
-        {isLogoVisible && (
-          <Image src={logoUrl} alt={'Company logo'} width={36} height={36} />
-        )}
-        <h1 className="text-xl font-bold text-gray-900">{logoText}</h1>
-      </Link>
-    </div>
+    <Link href="/public" className="flex items-center gap-2">
+      {isLogoVisible && logoUrl && (
+        <Image src={logoUrl} alt="Company logo" width={36} height={36} />
+      )}
+      <h1 className="text-xl font-bold text-gray-900">{logoText}</h1>
+    </Link>
   );
 }

@@ -10,16 +10,18 @@ export default async function NavbarSection() {
 
   return (
     <header className="sticky top-0 z-10 w-full border-b border-gray-200 bg-white/80 backdrop-blur-md">
-      <div className="flex h-16 {/*max-w-7xl*/} items-center justify-between px-8 sm:px-12 lg:px-16">
-        <NavbarLogo
-          logoUrl={navbarConfig.logoUrl}
-          logoText={navbarConfig.logoText}
-          isLogoVisible={navbarConfig.isLogoVisible}
-        />
-
+      <div className="flex h-16 items-center px-8 sm:px-12 lg:px-16">
+        <div className="flex-1 flex justify-start">
+          <NavbarLogo
+            logoUrl={navbarConfig.logoUrl}
+            logoText={navbarConfig.logoText}
+            isLogoVisible={navbarConfig.isLogoVisible}
+          />
+        </div>
         <NavbarNavigation navItems={navbarConfig.navItems} />
-
-        <NavbarUser config={config} />
+        <div className="flex-1 flex justify-end">
+          <NavbarUser />
+        </div>
       </div>
     </header>
   );
