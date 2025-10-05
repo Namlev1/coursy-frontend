@@ -1,11 +1,13 @@
 export const VALIDATION_LIMITS = {
-  NAME: {
-    MIN_LENGTH: 5,
-    MAX_LENGTH: 50,
-  },
-  DESCRIPTION: {
-    MIN_LENGTH: 1,
-    MAX_LENGTH: 4000,
+  COURSE: {
+    NAME: {
+      MIN_LENGTH: 5,
+      MAX_LENGTH: 50,
+    },
+    DESCRIPTION: {
+      MIN_LENGTH: 1,
+      MAX_LENGTH: 4000,
+    },
   },
   PASSWORD: {
     MIN_LENGTH: 8,
@@ -22,6 +24,20 @@ export const VALIDATION_LIMITS = {
   EMAIL: {
     MIN_LENGTH: 6,
     MAX_LENGTH: 60,
+  },
+  PLATFORM: {
+    NAME: {
+      MIN_LENGTH: 2,
+      MAX_LENGTH: 50,
+    },
+    DESCRIPTION: {
+      MIN_LENGTH: 1,
+      MAX_LENGTH: 4000,
+    },
+    SUBDOMAIN: {
+      MIN_LENGTH: 1,
+      MAX_LENGTH: 63,
+    },
   },
 } as const;
 

@@ -3,14 +3,14 @@ import { createLengthValidator } from '@/lib/validation/validators';
 
 export const validateName = createLengthValidator(
   'Name',
-  VALIDATION_LIMITS.NAME.MIN_LENGTH,
-  VALIDATION_LIMITS.NAME.MAX_LENGTH
+  VALIDATION_LIMITS.COURSE.NAME.MIN_LENGTH,
+  VALIDATION_LIMITS.COURSE.NAME.MAX_LENGTH
 );
 
 export const validateDescription = createLengthValidator(
   'Description',
-  VALIDATION_LIMITS.DESCRIPTION.MIN_LENGTH,
-  VALIDATION_LIMITS.DESCRIPTION.MAX_LENGTH
+  VALIDATION_LIMITS.COURSE.DESCRIPTION.MIN_LENGTH,
+  VALIDATION_LIMITS.COURSE.DESCRIPTION.MAX_LENGTH
 );
 
 // TODO improve that when adding feature/upload-images

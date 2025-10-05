@@ -7,14 +7,35 @@ import { z } from 'zod';
 import { postPlatform } from '@/lib/apiClient';
 import { PlatformRequest } from '@/types/platform';
 import { CourseListLayout, VideoPlayerType } from '@/types/platformConfig';
-import { ROUTES } from '@/lib/routes';
+import { VALIDATION_LIMITS } from '@/lib/validation/constants';
 
 const platformSchema = z.object({
   name: z
     .string()
-    .min(1, 'Platform title is required')
-    .max(100, 'Title too long'),
-  description: z.string().max(500, 'Description too long').optional(),
+    .min(
+      VALIDATION_LIMITS.PLATFORM.NAME.MIN_LENGTH,
+      'Platform title is required'
+    )
+    .max(VALIDATION_LIMITS.PLATFORM.NAME.MAX_LENGTH, 'Title too long'),
+  subdomain: z
+    .string()
+    .min(
+      VALIDATION_LIMITS.PLATFORM.SUBDOMAIN.MIN_LENGTH,
+      'Subdomain is required'
+    )
+    .max(VALIDATION_LIMITS.PLATFORM.SUBDOMAIN.MAX_LENGTH, 'Subdomain too long')
+    .regex(/^[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?$/, 'Invalid subdomain format')
+    .transform((val) => val.toLowerCase().trim()),
+  description: z
+    .string()
+    .min(
+      VALIDATION_LIMITS.PLATFORM.DESCRIPTION.MIN_LENGTH,
+      'Description is required'
+    )
+    .max(
+      VALIDATION_LIMITS.PLATFORM.DESCRIPTION.MAX_LENGTH,
+      'Description too long'
+    ),
   courseListLayout: z.enum(CourseListLayout),
   videoPlayerType: z.enum(VideoPlayerType),
   colors: z.object({
@@ -42,6 +63,7 @@ export default function CreatePlatformWidget() {
     mode: 'onBlur',
     defaultValues: {
       name: '',
+      subdomain: '',
       description: '',
       courseListLayout: CourseListLayout.GRID,
       videoPlayerType: VideoPlayerType.MINIMAL,
@@ -60,6 +82,7 @@ export default function CreatePlatformWidget() {
     try {
       const formData: PlatformRequest = {
         name: data.name,
+        subdomain: data.subdomain,
         description: data.description || '',
         config: {
           courseListLayout: data.courseListLayout,
@@ -76,7 +99,7 @@ export default function CreatePlatformWidget() {
       };
 
       await postPlatform(formData);
-      router.push(ROUTES.DASHBOARD.path);
+      router.push('/dashboard');
     } catch (error) {
       setError('root', {
         message:
@@ -150,6 +173,37 @@ export default function CreatePlatformWidget() {
                 </p>
               )}
             </div>
+          </div>
+
+          {/* Subdomain */}
+          <div>
+            <label
+              htmlFor="subdomain"
+              className="block text-sm font-medium leading-6 text-gray-900"
+            >
+              Subdomain
+            </label>
+            <div className="mt-2 flex rounded-md shadow-sm">
+              <input
+                type="text"
+                id="subdomain"
+                {...register('subdomain')}
+                placeholder="your-platform-name"
+                className={`block w-full min-w-0 flex-1 rounded-none rounded-l-md border-0 py-1.5 text-gray-900 ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6 ${
+                  errors.subdomain && touchedFields.subdomain
+                    ? 'ring-red-300 focus:ring-red-500'
+                    : 'ring-gray-300 focus:ring-blue-600'
+                }`}
+              />
+              <span className="inline-flex items-center rounded-r-md border border-l-0 border-gray-300 bg-gray-50 px-3 text-gray-500 sm:text-sm">
+                .coursy.com
+              </span>
+            </div>
+            {errors.subdomain && touchedFields.subdomain && (
+              <p className="mt-1 text-sm text-red-600">
+                {errors.subdomain.message}
+              </p>
+            )}
           </div>
 
           {/* Description */}
@@ -254,8 +308,46 @@ export default function CreatePlatformWidget() {
             </div>
           </div>
 
+          {/* Visualization Preview */}
+          <div className="space-y-4">
+            <h4 className="text-base font-semibold leading-7 text-gray-900">
+              Visualization
+            </h4>
+            <p className="mt-1 text-sm text-gray-500">
+              Preview the look and feel of your new course platform.
+            </p>
+
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {[1, 2, 3].map((i) => (
+                <div
+                  key={i}
+                  className="rounded-lg border border-gray-200 bg-white"
+                >
+                  <div
+                    className="h-40 w-full rounded-t-lg bg-cover bg-center"
+                    style={{
+                      backgroundImage:
+                        "url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400&h=300&fit=crop')",
+                    }}
+                  />
+                  <div className="p-4">
+                    <div className="mb-2 h-5 w-3/4 rounded bg-gray-200"></div>
+                    <div className="h-4 w-1/2 rounded bg-gray-200"></div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
           {/* Action Buttons */}
           <div className="mt-8 flex justify-end gap-x-3 border-t border-gray-900/10 pt-6">
+            <button
+              type="button"
+              onClick={() => router.push('/dashboard')}
+              className="text-sm font-semibold leading-6 text-gray-900"
+            >
+              Cancel
+            </button>
             <button
               type="submit"
               disabled={isSubmitting}

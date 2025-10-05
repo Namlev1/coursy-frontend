@@ -5,6 +5,7 @@ export interface PlatformRequest {
   name: string;
   description: string;
   config: PlatformConfig;
+  subdomain: string;
 }
 
 export interface PlatformResponse {
@@ -12,4 +13,5 @@ export interface PlatformResponse {
   name: string;
   description: string;
   config: PlatformConfig;
+  subdomain: string;
 }
