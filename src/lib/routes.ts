@@ -24,6 +24,10 @@ export const ROUTES = {
     path: '/courses',
     private: false,
   },
+  NEW_PLATFORM: {
+    path: '/dashboard/platforms/new',
+    private: true,
+  },
 } as const satisfies Record<string, Route>;
 
 export const PRIVATE_ROUTES = Object.values(ROUTES)

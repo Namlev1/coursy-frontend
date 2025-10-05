@@ -1,12 +1,9 @@
 'use client';
 
-interface Platform {
-  id: string;
-  name: string;
-}
+import { PlatformResponse } from '@/types/platform';
 
 interface YourPlatformsWidgetProps {
-  platforms?: Platform[];
+  platforms?: PlatformResponse[];
 }
 
 export default function YourPlatformsWidget({

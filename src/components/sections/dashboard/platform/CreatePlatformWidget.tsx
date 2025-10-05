@@ -43,6 +43,13 @@ export default function CreatePlatformWidget() {
       ...basicInfo,
       config: {
         ...themeSettings,
+        navbarConfig: {
+          logoUrl: null,
+          logoText: '',
+          isLogoVisible: false,
+          navItems: [],
+        },
+        footerItems: [],
       },
     };
 

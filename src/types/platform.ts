@@ -4,7 +4,7 @@ import { UUID } from 'node:crypto';
 export interface PlatformRequest {
   name: string;
   description: string;
-  config: Omit<PlatformConfig, 'navbarConfig' | 'footerItems'>;
+  config: PlatformConfig;
 }
 
 export interface PlatformResponse {

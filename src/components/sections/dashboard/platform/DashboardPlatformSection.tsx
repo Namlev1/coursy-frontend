@@ -1,24 +1,11 @@
-'use client';
-
 import CreatePlatformWidget from './CreatePlatformWidget';
 import YourPlatformsWidget from './YourPlatformsWidget';
 import React from 'react';
 import SubscriptionPlanSection from '@/components/sections/dashboard/home/SubscriptionPlanSection';
+import { getUserPlatforms } from '@/lib/apiClient';
 
-const mockPlatforms = [
-  { id: '1', name: 'Innovate & Learn' },
-  { id: '2', name: 'Marketing Masters' },
-  { id: '3', name: 'Sales Academy' },
-];
-
-interface DashboardPlatformSectionProps {
-  platforms?: Array<{ id: string; name: string }>;
-  subscriptionWidget?: React.ReactNode;
-}
-
-export default function DashboardPlatformSection({
-  platforms = mockPlatforms,
-}: DashboardPlatformSectionProps) {
+export default async function DashboardPlatformSection() {
+  const platforms = await getUserPlatforms();
   return (
     <main className="flex-1 bg-gray-50">
       <div className="mx-auto">

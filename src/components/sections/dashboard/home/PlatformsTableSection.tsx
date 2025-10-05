@@ -1,6 +1,8 @@
 import React from 'react';
 import { getCachedConfig } from '@/lib/configCache';
 import { getUserPlatforms } from '@/lib/apiClient';
+import Link from 'next/link';
+import { ROUTES } from '@/lib/routes';
 
 export default async function PlatformsTableSection() {
   const config = await getCachedConfig();
@@ -12,16 +14,16 @@ export default async function PlatformsTableSection() {
         <h3 className="text-lg font-semibold leading-6 text-gray-900">
           Platforms
         </h3>
-        <button
-          // onClick={onCreatePlatform}
+        <Link
           className="rounded-lg px-4 py-2 text-sm font-semibold text-white shadow-sm hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 transition-opacity"
           style={{
             backgroundColor: config.colors.primary,
             outlineColor: config.colors.primary,
           }}
+          href={ROUTES.NEW_PLATFORM.path}
         >
           Create Platform
-        </button>
+        </Link>
       </div>
       <div className="border-t border-gray-200">
         {platforms.length > 0 ? (
