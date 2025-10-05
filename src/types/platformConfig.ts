@@ -2,11 +2,11 @@ export interface PlatformConfig {
   colors: Colors;
   navbarConfig: NavbarConfig;
   footerItems: FooterItem[];
-  courseListLayout: 'Grid' | 'List' | 'Table' | 'Album';
-  videoPlayerType: 'Minimal' | 'Advanced' | 'Branded' | 'Cinema';
+  courseListLayout: CourseListLayout;
+  videoPlayerType: VideoPlayerType;
 }
 
-interface Colors {
+export interface Colors {
   primary: string;
   secondary: string;
   tertiary: string;
@@ -15,7 +15,7 @@ interface Colors {
   textSecondary: string;
 }
 
-interface NavbarConfig {
+export interface NavbarConfig {
   logoUrl: string | null;
   logoText: string;
   isLogoVisible: boolean;
@@ -35,8 +35,22 @@ export enum NavItemAccess {
   ADMIN = 'admin',
 }
 
-interface FooterItem {
+export interface FooterItem {
   href: string;
   label: string;
   order: number;
+}
+
+export enum CourseListLayout {
+  GRID = 'Grid',
+  LIST = 'List',
+  TABLE = 'Table',
+  ALBUM = 'Album',
+}
+
+export enum VideoPlayerType {
+  MINIMAL = 'Minimal',
+  ADVANCED = 'Advanced',
+  BRANDED = 'Branded',
+  CINEMA = 'Cinema',
 }

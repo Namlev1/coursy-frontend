@@ -1,95 +1,98 @@
 'use client';
 
-import { FormEvent, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 import { postPlatform } from '@/lib/apiClient';
 import { PlatformRequest } from '@/types/platform';
-import { Colors } from 'picocolors/types';
-import { PlatformConfig } from '@/types/platformConfig';
+import { CourseListLayout, VideoPlayerType } from '@/types/platformConfig';
+import { ROUTES } from '@/lib/routes';
 
-interface BasicInfo {
-  name: string;
-  description: string;
-}
+const platformSchema = z.object({
+  name: z
+    .string()
+    .min(1, 'Platform title is required')
+    .max(100, 'Title too long'),
+  description: z.string().max(500, 'Description too long').optional(),
+  courseListLayout: z.enum(CourseListLayout),
+  videoPlayerType: z.enum(VideoPlayerType),
+  colors: z.object({
+    primary: z.string().regex(/^#[0-9A-Fa-f]{6}$/, 'Invalid color'),
+    secondary: z.string().regex(/^#[0-9A-Fa-f]{6}$/, 'Invalid color'),
+    tertiary: z.string().regex(/^#[0-9A-Fa-f]{6}$/, 'Invalid color'),
+    background: z.string().regex(/^#[0-9A-Fa-f]{6}$/, 'Invalid color'),
+    textPrimary: z.string().regex(/^#[0-9A-Fa-f]{6}$/, 'Invalid color'),
+    textSecondary: z.string().regex(/^#[0-9A-Fa-f]{6}$/, 'Invalid color'),
+  }),
+});
+
+type PlatformFormData = z.infer<typeof platformSchema>;
 
 export default function CreatePlatformWidget() {
   const router = useRouter();
 
-  const [basicInfo, setBasicInfo] = useState<BasicInfo>({
-    name: '',
-    description: '',
-  });
-
-  const [themeSettings, setThemeSettings] = useState<
-    Omit<PlatformConfig, 'navbarConfig' | 'footerItems'>
-  >({
-    courseListLayout: 'Grid',
-    videoPlayerType: 'Minimal',
-    colors: {
-      primary: '#1383eb',
-      secondary: '#f97316',
-      tertiary: '#8b5cf6',
-      background: '#f8fafc',
-      textPrimary: '#0f172a',
-      textSecondary: '#475569',
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting, touchedFields },
+    setError,
+  } = useForm<PlatformFormData>({
+    resolver: zodResolver(platformSchema),
+    mode: 'onBlur',
+    defaultValues: {
+      name: '',
+      description: '',
+      courseListLayout: CourseListLayout.GRID,
+      videoPlayerType: VideoPlayerType.MINIMAL,
+      colors: {
+        primary: '#1383eb',
+        secondary: '#f97316',
+        tertiary: '#8b5cf6',
+        background: '#f8fafc',
+        textPrimary: '#0f172a',
+        textSecondary: '#475569',
+      },
     },
   });
 
-  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    // Combine all states into the expected API format
-    const formData: PlatformRequest = {
-      ...basicInfo,
-      config: {
-        ...themeSettings,
-        navbarConfig: {
-          logoUrl: null,
-          logoText: '',
-          isLogoVisible: false,
-          navItems: [],
-        },
-        footerItems: [],
-      },
-    };
-
+  const onSubmit = async (data: PlatformFormData) => {
     try {
+      const formData: PlatformRequest = {
+        name: data.name,
+        description: data.description || '',
+        config: {
+          courseListLayout: data.courseListLayout,
+          videoPlayerType: data.videoPlayerType,
+          colors: data.colors,
+          navbarConfig: {
+            logoUrl: null,
+            logoText: '',
+            isLogoVisible: false,
+            navItems: [],
+          },
+          footerItems: [],
+        },
+      };
+
       await postPlatform(formData);
-      router.push('/dashboard');
+      router.push(ROUTES.DASHBOARD.path);
     } catch (error) {
-      // todo show error in UI
-      console.error('Error submitting form:', error);
+      setError('root', {
+        message:
+          error instanceof Error ? error.message : 'Failed to create platform',
+      });
     }
   };
 
-  // Handlers for each state
-  const handleBasicInfoChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    setBasicInfo((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  const handleThemeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setThemeSettings((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  const handleColorChange = (colorType: keyof Colors, value: string) => {
-    setThemeSettings((prev) => ({
-      ...prev,
-      colors: {
-        ...prev.colors,
-        [colorType]: value,
-      },
-    }));
-  };
+  const colorFields = [
+    { key: 'primary' as const, label: 'Primary' },
+    { key: 'secondary' as const, label: 'Secondary' },
+    { key: 'tertiary' as const, label: 'Tertiary' },
+    { key: 'background' as const, label: 'Background' },
+    { key: 'textPrimary' as const, label: 'Text Primary' },
+    { key: 'textSecondary' as const, label: 'Text Secondary' },
+  ];
 
   return (
     <div className="overflow-hidden rounded-lg bg-white shadow">
@@ -103,7 +106,24 @@ export default function CreatePlatformWidget() {
       </div>
 
       <div className="border-t border-gray-200 p-6">
-        <form onSubmit={onSubmit} className="space-y-8">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="space-y-8"
+          noValidate
+        >
+          {/* Global Error */}
+          {errors.root && (
+            <div className="rounded-md bg-red-50 p-4">
+              <div className="flex">
+                <div className="ml-3">
+                  <h3 className="text-sm font-medium text-red-800">
+                    {errors.root.message}
+                  </h3>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Platform Title */}
           <div>
             <label
@@ -116,13 +136,19 @@ export default function CreatePlatformWidget() {
               <input
                 type="text"
                 id="name"
-                name="name"
-                value={basicInfo.name}
-                onChange={handleBasicInfoChange}
+                {...register('name')}
                 placeholder="e.g. Innovate & Learn"
-                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
-                required
+                className={`block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6 ${
+                  errors.name && touchedFields.name
+                    ? 'ring-red-300 focus:ring-red-500'
+                    : 'ring-gray-300 focus:ring-blue-600'
+                }`}
               />
+              {errors.name && touchedFields.name && (
+                <p className="mt-1 text-sm text-red-600">
+                  {errors.name.message}
+                </p>
+              )}
             </div>
           </div>
 
@@ -137,13 +163,20 @@ export default function CreatePlatformWidget() {
             <div className="mt-2">
               <textarea
                 id="description"
-                name="description"
-                value={basicInfo.description}
-                onChange={handleBasicInfoChange}
+                {...register('description')}
                 rows={3}
                 placeholder="A short description of your platform."
-                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                className={`block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6 ${
+                  errors.description && touchedFields.description
+                    ? 'ring-red-300 focus:ring-red-500'
+                    : 'ring-gray-300 focus:ring-blue-600'
+                }`}
               />
+              {errors.description && touchedFields.description && (
+                <p className="mt-1 text-sm text-red-600">
+                  {errors.description.message}
+                </p>
+              )}
             </div>
           </div>
 
@@ -159,13 +192,13 @@ export default function CreatePlatformWidget() {
               <div className="mt-2">
                 <select
                   id="courseListLayout"
-                  name="courseListLayout"
-                  value={themeSettings.courseListLayout}
-                  onChange={handleThemeChange}
+                  {...register('courseListLayout')}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                 >
                   <option value="Grid">Grid</option>
                   <option value="List">List</option>
+                  <option value="Table">Table</option>
+                  <option value="Album">Album</option>
                 </select>
               </div>
             </div>
@@ -180,13 +213,13 @@ export default function CreatePlatformWidget() {
               <div className="mt-2">
                 <select
                   id="videoPlayerType"
-                  name="videoPlayerType"
-                  value={themeSettings.videoPlayerType}
-                  onChange={handleThemeChange}
+                  {...register('videoPlayerType')}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                 >
                   <option value="Minimal">Minimal</option>
                   <option value="Advanced">Advanced</option>
+                  <option value="Branded">Branded</option>
+                  <option value="Cinema">Cinema</option>
                 </select>
               </div>
             </div>
@@ -202,24 +235,16 @@ export default function CreatePlatformWidget() {
             </p>
 
             <div className="mt-4 grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-3">
-              {[
-                { key: 'primary' as const, label: 'Primary' },
-                { key: 'secondary' as const, label: 'Secondary' },
-                { key: 'tertiary' as const, label: 'Tertiary' },
-                { key: 'background' as const, label: 'Background' },
-                { key: 'textPrimary' as const, label: 'Text Primary' },
-                { key: 'textSecondary' as const, label: 'Text Secondary' },
-              ].map(({ key, label }) => (
+              {colorFields.map(({ key, label }) => (
                 <div key={key} className="flex items-center gap-3">
                   <input
                     type="color"
-                    id={`${key}-color`}
-                    value={themeSettings.colors[key]}
-                    onChange={(e) => handleColorChange(key, e.target.value)}
+                    id={`colors.${key}`}
+                    {...register(`colors.${key}`)}
                     className="h-10 w-10 rounded-full border-gray-300 p-0 cursor-pointer"
                   />
                   <label
-                    htmlFor={`${key}-color`}
+                    htmlFor={`colors.${key}`}
                     className="block text-sm font-medium text-gray-900"
                   >
                     {label}
@@ -233,9 +258,10 @@ export default function CreatePlatformWidget() {
           <div className="mt-8 flex justify-end gap-x-3 border-t border-gray-900/10 pt-6">
             <button
               type="submit"
-              className="rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 transition-colors"
+              disabled={isSubmitting}
+              className="rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Create Platform
+              {isSubmitting ? 'Creating...' : 'Create Platform'}
             </button>
           </div>
         </form>
