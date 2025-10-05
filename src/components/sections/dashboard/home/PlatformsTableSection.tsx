@@ -1,5 +1,5 @@
 import React from 'react';
-import { useConfig } from '@/components/ConfigProvider';
+import { getCachedConfig } from '@/lib/configCache';
 
 interface Platform {
   id: string;
@@ -11,10 +11,10 @@ interface PlatformsTableProps {
   platforms: Platform[];
 }
 
-export default function PlatformsTableSection({
+export default async function PlatformsTableSection({
   platforms = [],
 }: PlatformsTableProps) {
-  const config = useConfig();
+  const config = await getCachedConfig();
 
   return (
     <div className="overflow-hidden rounded-lg bg-white shadow">

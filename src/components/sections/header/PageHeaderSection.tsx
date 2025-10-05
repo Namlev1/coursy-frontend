@@ -1,12 +1,15 @@
-import { useConfig } from '@/components/ConfigProvider';
+import { getCachedConfig } from '@/lib/configCache';
 
 interface PageHeaderSectionProps {
   title: string;
   subtitle?: string;
 }
 
-export function PageHeaderSection({ title, subtitle }: PageHeaderSectionProps) {
-  const config = useConfig();
+export async function PageHeaderSection({
+  title,
+  subtitle,
+}: PageHeaderSectionProps) {
+  const config = await getCachedConfig();
 
   return (
     <div>

@@ -1,15 +1,15 @@
 import { PageSection } from '@/types/pageTemplate';
 import { SectionComponents } from '@/components/sections';
-import { useConfig } from '@/components/ConfigProvider';
+import { getCachedConfig } from '@/lib/configCache';
 
 interface DashboardContentGridProps {
   content: PageSection[];
 }
 
-export default function DashboardContentGrid({
+export default async function DashboardContentGrid({
   content,
 }: DashboardContentGridProps) {
-  const config = useConfig();
+  const config = await getCachedConfig();
   const midpoint = Math.ceil(content.length / 2);
   const firstHalf = content.slice(0, midpoint);
   const secondHalf = content.slice(midpoint);

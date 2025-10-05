@@ -1,5 +1,5 @@
 import React from 'react';
-import { useConfig } from '@/components/ConfigProvider';
+import { getCachedConfig } from '@/lib/configCache';
 
 interface SupportSectionProps {
   title?: string;
@@ -8,13 +8,13 @@ interface SupportSectionProps {
   onContactSupport: () => void;
 }
 
-export default function SupportSection({
+export default async function SupportSection({
   title = 'Need Help?',
   description = 'Our support team is here to assist you.',
   buttonText = 'Contact Support',
   onContactSupport,
 }: SupportSectionProps) {
-  const config = useConfig();
+  const config = await getCachedConfig();
   const lighterColor = `${config.colors.primary}1A`; // 10% opacity for background
 
   return (
