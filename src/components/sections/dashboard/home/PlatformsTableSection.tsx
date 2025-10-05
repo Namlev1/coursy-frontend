@@ -1,20 +1,10 @@
 import React from 'react';
 import { getCachedConfig } from '@/lib/configCache';
+import { getUserPlatforms } from '@/lib/apiClient';
 
-interface Platform {
-  id: string;
-  name: string;
-  url: string;
-}
-
-interface PlatformsTableProps {
-  platforms: Platform[];
-}
-
-export default async function PlatformsTableSection({
-  platforms = [],
-}: PlatformsTableProps) {
+export default async function PlatformsTableSection() {
   const config = await getCachedConfig();
+  const platforms = await getUserPlatforms();
 
   return (
     <div className="overflow-hidden rounded-lg bg-white shadow">
@@ -63,13 +53,13 @@ export default async function PlatformsTableSection({
                   </td>
                   <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
                     <a
-                      href={`https://${platform.url}`}
+                      // href={`https://${platform.url}`}
                       className="hover:opacity-80 transition-opacity"
                       style={{ color: config.colors.primary }}
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      {platform.url}
+                      TODO url
                     </a>
                   </td>
                   <td className="whitespace-nowrap px-6 py-4 text-right text-sm font-medium">

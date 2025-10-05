@@ -4,7 +4,6 @@ import React from 'react';
 import { useAppSelector } from '@/store/hooks/redux';
 
 export default function OrganizationDetailsSection() {
-  // todo pull user data from redux
   const user = useAppSelector((state) => state.auth.user);
 
   const getStatusColor = (status: string) => {

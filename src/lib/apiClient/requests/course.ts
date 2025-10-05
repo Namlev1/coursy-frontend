@@ -1,11 +1,12 @@
 import { Course } from '@/types/course';
-import apiClient from '../apiClient';
+import { getApiClient } from '../apiClient';
 import { handleError } from '@/lib/apiClient/errors';
 import { UUID } from 'node:crypto';
 
 export async function fetchCourse(courseId: string): Promise<Course> {
   try {
-    const response = await apiClient.get<Course>(`/api/courses/${courseId}`);
+    const client = await getApiClient();
+    const response = await client.get<Course>(`/api/courses/${courseId}`);
     return response.data;
   } catch (error) {
     handleError(error);
@@ -18,7 +19,8 @@ export async function fetchCourses(
   pageSize: number = 20
 ): Promise<Course[]> {
   try {
-    const response = await apiClient.get(`/api/courses/page/${platformId}`, {
+    const client = await getApiClient();
+    const response = await client.get(`/api/courses/page/${platformId}`, {
       params: {
         page: page,
         pageSize: pageSize,
@@ -37,7 +39,8 @@ export async function createCourse(
   imageUrl: string
 ) {
   try {
-    return await apiClient.post<void>('/api/courses', {
+    const client = await getApiClient();
+    return await client.post<void>('/api/courses', {
       name: name.trim(),
       description: description.trim(),
       imageUrl: imageUrl,

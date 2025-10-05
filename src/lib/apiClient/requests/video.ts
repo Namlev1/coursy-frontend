@@ -1,11 +1,12 @@
 import { UUID } from 'node:crypto';
 import { Video } from '@/types/video';
-import apiClient from '../apiClient';
+import { getApiClient } from '../apiClient';
 import { handleError } from '@/lib/apiClient/errors';
 
 export async function fetchVideos(courseId: UUID): Promise<Video[]> {
   try {
-    const response = await apiClient.get<Video[]>(
+    const client = await getApiClient();
+    const response = await client.get<Video[]>(
       `/api/videos/course/${courseId}`
     );
     return response.data;
@@ -16,7 +17,8 @@ export async function fetchVideos(courseId: UUID): Promise<Video[]> {
 
 export async function postVideo(formData: FormData): Promise<void> {
   try {
-    await apiClient.post<void>('/api/videos/upload', formData, {
+    const client = await getApiClient();
+    await client.post<void>('/api/videos/upload', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
@@ -27,7 +29,8 @@ export async function postVideo(formData: FormData): Promise<void> {
 }
 export async function fetchVideo(videoId: UUID): Promise<Video> {
   try {
-    const response = await apiClient.get<Video>(`/api/videos/${videoId}`);
+    const client = await getApiClient();
+    const response = await client.get<Video>(`/api/videos/${videoId}`);
     return response.data;
   } catch (error) {
     handleError(error);
