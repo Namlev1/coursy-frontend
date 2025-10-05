@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import { NavItem, NavItemAccess } from '@/types/platformConfig';
 import { useAppSelector } from '@/store/hooks/redux';
 import { isAdminRole, isUserRole } from '@/lib/roleUtils';
+import { ROUTES } from '@/lib/routes';
 
 interface NavbarNavigationProps {
   navItems: NavItem[];
@@ -24,10 +25,17 @@ export default function NavbarNavigation({ navItems }: NavbarNavigationProps) {
     );
   });
 
+  const isActiveRoute = (pathname: string, navItemHref: string) => {
+    if (navItemHref !== ROUTES.HOME.path) {
+      return pathname.startsWith(navItemHref);
+    }
+    return pathname === navItemHref;
+  };
+
   return (
     <nav className="hidden md:flex items-center gap-8">
       {navItemsToRender.map((item) => {
-        const isActive = pathname === item.href;
+        const isActive = isActiveRoute(pathname, item.href);
         return (
           <Link
             key={item.label}
