@@ -28,9 +28,6 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      {/*<head>*/}
-      {/*  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>*/}
-      {/*</head>*/}
       <body className={`${inter.className} bg-white`}>
         <ConfigProvider config={config}>
           <ReduxProvider>

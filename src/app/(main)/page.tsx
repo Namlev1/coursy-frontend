@@ -5,7 +5,7 @@ export default async function HomePage() {
   const pageTemplate = await fetchPageTemplate(PageType.Home);
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col flex-1 height-max">
       {pageTemplate.sections
         .sort((a, b) => a.order - b.order)
         .map((section, index) => {

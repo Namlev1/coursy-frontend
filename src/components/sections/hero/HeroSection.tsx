@@ -20,14 +20,14 @@ export default async function HeroSection({
 
   return (
     <section
-      className="flex-1 flex items-center justify-center bg-cover bg-center relative"
+      className="flex-1 flex items-center justify-center bg-cover bg-center relative flex-1"
       style={{ backgroundImage: `url("${backgroundImage}")` }}
     >
       {/* Overlay */}
-      <div className="absolute inset-0 bg-black/50" />
+      <div className="absolute inset-0 bg-black/50 flex-1" />
 
       {/* Content */}
-      <div className="container mx-auto px-4 py-32 relative text-center max-w-3xl">
+      <div className="container mx-auto px-4 py-32 relative text-center max-w-3xl flex-1">
         <h1 className="text-white text-6xl font-extrabold leading-tight mb-6">
           {title}
         </h1>
