@@ -7,7 +7,22 @@ interface ErrorResponse {
 
 function extractErrorResponse(error: AxiosError): ErrorResponse {
   const status = error.response?.status || 0;
-  const message = error.response?.data as string;
+  const responseData = error.response?.data;
+
+  let message = DEFAULT_ERROR_MESSAGE;
+
+  // Handle different types of response data
+  if (typeof responseData === 'string') {
+    message = responseData;
+  } else if (responseData && typeof responseData === 'object') {
+    // Try to extract message from common fields
+    message =
+      (responseData as any).message ||
+      (responseData as any).error ||
+      (responseData as any).msg ||
+      JSON.stringify(responseData); // Fallback: stringify the object
+  }
+
   return { status, message };
 }
 

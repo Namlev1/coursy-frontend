@@ -10,6 +10,7 @@ import {
 } from '@/lib/validation/courseValidation';
 import { useRouter } from 'next/navigation';
 import { DEFAULT_ERROR_MESSAGE } from '@/lib/apiClient/errors';
+import { ROUTES } from '@/lib/routes';
 
 interface CourseCreationFormSectionProps {
   config: PlatformConfig;
@@ -116,13 +117,13 @@ export default function CourseCreationFormSection({
     setIsSubmitting(true);
 
     try {
-      await createCourse(
+      const { id } = await createCourse(
         formData.name,
         formData.description,
         formData.imageUrl
       );
 
-      router.push('/courses');
+      router.push(`${ROUTES.COURSES_MANAGEMENT.path}/${id}`);
     } catch (error) {
       console.error('Course creation error:', error);
       setErrors({

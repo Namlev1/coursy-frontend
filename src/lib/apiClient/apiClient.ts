@@ -2,6 +2,7 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { API_BASE_URL } from '@/lib/apiClient/urls';
+import { isJwtExpired } from '@/lib/jwt';
 
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
@@ -31,12 +32,13 @@ export async function getServerApiClient() {
   const { cookies } = await import('next/headers');
   const cookieStore = await cookies();
   const token = cookieStore.get('jwt')?.value;
+  const isExpired = token ? isJwtExpired(token) : true;
 
   const serverClient = axios.create({
     baseURL: API_BASE_URL,
     headers: {
       'Content-Type': 'application/json',
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...(isExpired ? {} : { Authorization: `Bearer ${token}` }),
     },
   });
 

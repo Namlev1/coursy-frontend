@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { Duration } from 'luxon';
 import { ThumbnailSize, Video } from '@/types/video';
 import { getVideoThumbnailUrl } from '@/lib/apiClient';
 import { useConfig } from '@/components/ConfigProvider';
@@ -115,7 +116,9 @@ export default function CourseContentWidget({
                       : config.colors.textSecondary,
                   }}
                 >
-                  {Math.round(video.duration)} s
+                  {Duration.fromObject({ seconds: video.duration }).toFormat(
+                    video.duration >= 3600 ? 'h:mm:ss' : 'm:ss'
+                  )}
                 </p>
               </div>
             </div>

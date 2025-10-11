@@ -4,6 +4,7 @@ import CourseContentWidget from '@/components/sections/dashboard/courses/CourseC
 import { Video } from '@/types/video';
 import { useState } from 'react';
 import CoursePlayer from '@/components/sections/dashboard/courses/CoursePlayer';
+import { useAppSelector } from '@/store/hooks/redux';
 
 interface CourseSectionProps {
   videos: Video[];
@@ -11,6 +12,7 @@ interface CourseSectionProps {
 
 export default function CourseSection({ videos }: CourseSectionProps) {
   const [current, setCurrent] = useState<number>(0);
+  const { isAuthenticated } = useAppSelector((state) => state.auth);
   return (
     <>
       <div className="lg:col-span-2">
@@ -21,7 +23,7 @@ export default function CourseSection({ videos }: CourseSectionProps) {
           videos={videos}
           current={current}
           setCurrent={setCurrent}
-          isPreview={false}
+          isPreview={!isAuthenticated}
         />
       </div>
     </>

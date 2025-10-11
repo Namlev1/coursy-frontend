@@ -2,10 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { isPrivateRoute, ROUTES } from '@/lib/routes';
 import { getJwt, isJwtExpired } from '@/lib/jwt';
 
-function redirectToLogin(
-  request: NextRequest,
-  pathname: string,
-) {
+function redirectToLogin(request: NextRequest, pathname: string) {
   const loginUrl = new URL(ROUTES.LOGIN.path, request.url);
   loginUrl.searchParams.set('redirect', pathname);
   return NextResponse.redirect(loginUrl, {

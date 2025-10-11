@@ -31,8 +31,10 @@ export default async function RootLayout({
       <body className={`${inter.className} bg-white`}>
         <ConfigProvider config={config}>
           <ReduxProvider>
+            {/*<ThemeProvider theme={theme}>*/}
             <StoreHydration />
             <div className="flex min-h-screen flex-col">{children}</div>
+            {/*</ThemeProvider>*/}
           </ReduxProvider>
         </ConfigProvider>
       </body>

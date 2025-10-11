@@ -25,6 +25,6 @@ export function isJwtExpired(token: string): boolean {
     }
     return false;
   } catch {
-    return true; // Invalid token format
+    return true;
   }
 }

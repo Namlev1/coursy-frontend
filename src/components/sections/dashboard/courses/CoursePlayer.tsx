@@ -1,6 +1,7 @@
 'use client';
 import React, { useEffect, useRef, useState } from 'react';
-import ReactPlayer from 'react-player';
+// import ReactPlayer from 'react-player';
+import type ReactPlayerType from 'react-player';
 import {
   Maximize,
   Pause,
@@ -13,6 +14,16 @@ import {
 } from 'lucide-react';
 import { getMasterPlaylistUrl } from '@/lib/apiClient';
 import { Video } from '@/types/video';
+import dynamic from 'next/dynamic';
+
+const ReactPlayer = dynamic(() => import('react-player'), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-full flex items-center justify-center bg-black">
+      <div className="text-white">Loading player...</div>
+    </div>
+  ),
+});
 
 interface CoursePlayerProps {
   videos: Video[];
@@ -31,7 +42,7 @@ const CoursePlayer: React.FC<CoursePlayerProps> = ({
   watchedTime = 0,
   onComplete,
 }) => {
-  const playerRef = useRef<ReactPlayer>(null);
+  const playerRef = useRef<ReactPlayerType>(null);
   const [playing, setPlaying] = useState(false);
   const [volume, setVolume] = useState(0.8);
   const [muted, setMuted] = useState(false);

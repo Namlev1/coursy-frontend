@@ -40,11 +40,12 @@ export async function createCourse(
 ) {
   try {
     const client = await getApiClient();
-    return await client.post<void>('/api/courses', {
+    const response = await client.post<Course>('/api/courses', {
       name: name.trim(),
       description: description.trim(),
       imageUrl: imageUrl,
     });
+    return response.data;
   } catch (error) {
     handleError(error);
   }

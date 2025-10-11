@@ -1,8 +1,10 @@
 import { SectionComponents } from '@/components/sections';
 import fetchPageTemplate, { PageType } from '@/types/pageTemplate';
+import { getCachedConfig } from '@/lib/configCache';
 
 export default async function CourseCreationPage() {
   const pageTemplate = await fetchPageTemplate(PageType.CourseCreation);
+  const config = await getCachedConfig();
 
   return (
     <div className="relative flex size-full min-h-screen flex-col group/design-root overflow-x-hidden">
@@ -20,7 +22,7 @@ export default async function CourseCreationPage() {
 
             return (
               <div key={index} className={'px-8 sm:px-12 lg:px-16'}>
-                <Component {...section.props} />
+                <Component {...section.props} config={config} />
               </div>
             );
           })}

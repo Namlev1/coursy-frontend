@@ -32,3 +32,12 @@ export async function fetchUserData(token: string): Promise<UserResponse> {
     handleError(error);
   }
 }
+
+export async function logoutUser() {
+  try {
+    const client = await getApiClient();
+    await client.post<void>('/api/auth/logout');
+  } catch (error) {
+    handleError(error);
+  }
+}

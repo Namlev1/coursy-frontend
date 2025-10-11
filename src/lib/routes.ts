@@ -28,6 +28,14 @@ export const ROUTES = {
     path: '/dashboard/platforms/new',
     private: true,
   },
+  NEW_COURSE: {
+    path: '/dashboard/courses/new',
+    private: true,
+  },
+  COURSES_MANAGEMENT: {
+    path: '/dashboard/courses',
+    private: true,
+  },
 } as const satisfies Record<string, Route>;
 
 export const PRIVATE_ROUTES = Object.values(ROUTES)

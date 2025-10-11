@@ -72,8 +72,8 @@ export default function VideosManagement({ videos }: VideosManagementProps) {
                 <Image
                   src={getVideoThumbnailUrl(video.id, ThumbnailSize.SMALL)}
                   alt="Video thumbnail"
-                  width={320}
-                  height={180}
+                  width={160}
+                  height={150}
                   className="size-14 rounded-lg object-cover"
                 />
               </div>
