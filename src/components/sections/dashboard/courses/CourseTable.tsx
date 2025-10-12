@@ -19,14 +19,6 @@ export default function CourseTable({ courses }: CourseTableProps) {
     router.push('/dashboard/courses/' + courseId);
   };
 
-  const getContentDescription = (course: Course) => {
-    /*    if (course.videoCount) {
-      return `${course.videoCount} Videos`;
-    }
-    return `${course.episodeCount} Episodes`;*/
-    return 'description xd';
-  };
-
   return (
     <div className="w-full">
       <div className="overflow-x-auto">
@@ -52,7 +44,7 @@ export default function CourseTable({ courses }: CourseTableProps) {
                     style={{ color: config.colors.textSecondary }}
                     scope="col"
                   >
-                    Episodes / Videos
+                    Description
                   </th>
                   <th className="relative px-6 py-4" scope="col">
                     <span className="sr-only">Manage</span>
@@ -75,7 +67,7 @@ export default function CourseTable({ courses }: CourseTableProps) {
                       className="whitespace-nowrap px-6 py-4 text-sm"
                       style={{ color: config.colors.textSecondary }}
                     >
-                      {getContentDescription(course)}
+                      {course.description}
                     </td>
                     <td className="whitespace-nowrap px-6 py-4 text-right text-sm font-medium">
                       <button

@@ -170,6 +170,7 @@ export default function SignupFormCenteredSection({
     setIsSubmitting(true);
     setErrors({});
 
+    // TODO: if on host, send to host. If on platform, send to platform.
     try {
       const response = await fetch(
         'http://localhost:8080/api/users/host/register',
@@ -183,7 +184,7 @@ export default function SignupFormCenteredSection({
             lastName: formData.lastName.trim(),
             email: formData.email.trim(),
             password: formData.password,
-            roleName: Role.ROLE_TENANT,
+            roleName: Role.ROLE_PLATFORM_USER,
           }),
         }
       );

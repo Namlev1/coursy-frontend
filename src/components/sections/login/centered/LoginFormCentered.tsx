@@ -15,7 +15,8 @@ import LoginHeader from '@/components/sections/login/centered/LoginHeader';
 import FormInput from '@/components/sections/login/centered/FormInput';
 import ErrorAlert from '@/components/sections/login/centered/ErrorAlert';
 
-const JWT_EXPIRES_DAYS = 7;
+const JWT_EXPIRES_DAYS = 15 / 1440; // 15 minut
+const REFRESH_EXPIRES_DAYS = 1; // 1 dzień
 
 interface LoginFormCenteredProps extends LoginCenteredProps {
   config: PlatformConfig;
@@ -81,7 +82,12 @@ export default function LoginFormCentered({
 
       // Store token and update Redux state
       Cookies.set('jwt', loginData.token, { expires: JWT_EXPIRES_DAYS });
-      Cookies.set('userData', encodedUserData, { expires: JWT_EXPIRES_DAYS });
+      Cookies.set('refreshToken', loginData.refreshToken, {
+        expires: REFRESH_EXPIRES_DAYS,
+      });
+      Cookies.set('userData', encodedUserData, {
+        expires: REFRESH_EXPIRES_DAYS,
+      });
 
       router.push(loginLinkHref);
     } catch (error) {

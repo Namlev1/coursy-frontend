@@ -21,6 +21,7 @@ export default function NavbarUser() {
   const handleLogout = async () => {
     await logoutUser();
     Cookies.remove('jwt');
+    Cookies.remove('refreshToken');
     Cookies.remove('userData');
     dispatch(logout());
     router.refresh();
