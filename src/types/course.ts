@@ -8,11 +8,11 @@ export interface Course {
 }
 
 export interface UserCourse {
-  id?: UUID;
+  id: UUID | null;
   userId: UUID;
   courseId: UUID;
   progress: ProgressStatus;
-  finishedDay: string;
+  finishedDay: string | null;
   currentVideo: UUID;
 }
 

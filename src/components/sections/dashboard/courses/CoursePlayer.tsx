@@ -12,12 +12,16 @@ import {
   Volume2,
   VolumeX,
 } from 'lucide-react';
-import { getMasterPlaylistUrl } from '@/lib/apiClient';
+import { addCourseToUser, getMasterPlaylistUrl } from '@/lib/apiClient';
 import { Video } from '@/types/video';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { ROUTES } from '@/lib/routes';
 import { PlatformConfig } from '@/types/platformConfig';
+import { User } from '@/types/user';
+import { ProgressStatus, UserCourse } from '@/types/course';
+import { UUID } from 'node:crypto';
+import { useParams, useRouter } from 'next/navigation';
 
 const ReactPlayer = dynamic(() => import('react-player'), {
   ssr: false,
@@ -38,6 +42,7 @@ interface CoursePlayerProps {
   watchedTime?: number;
   onComplete?: () => void;
   config: PlatformConfig;
+  user: User;
 }
 
 const CoursePlayer: React.FC<CoursePlayerProps> = ({
@@ -48,6 +53,7 @@ const CoursePlayer: React.FC<CoursePlayerProps> = ({
   isPreview,
   isAuthenticated,
   config,
+  user,
 }) => {
   const playerRef = useRef<ReactPlayerType>(null);
   const [playing, setPlaying] = useState(false);
@@ -59,10 +65,13 @@ const CoursePlayer: React.FC<CoursePlayerProps> = ({
   const [playbackRate, setPlaybackRate] = useState(1);
   const [showSettings, setShowSettings] = useState(false);
   const [seeking, setSeeking] = useState(false);
+  const params = useParams();
+  const courseId = params.courseId as UUID;
 
   const { title, description, id } = videos[current];
   const videoUrl = getMasterPlaylistUrl(id);
   const [videoDuration, setVideoDuration] = useState(0);
+  const router = useRouter();
 
   // Resume from last watched position
   useEffect(() => {
@@ -70,6 +79,20 @@ const CoursePlayer: React.FC<CoursePlayerProps> = ({
       playerRef.current.seekTo(watchedTime, 'seconds');
     }
   }, [watchedTime]);
+
+  const handleCourseAdded = async () => {
+    const userId = user.id;
+    const dto: UserCourse = {
+      userId,
+      courseId,
+      progress: ProgressStatus.NOT_STARTED,
+      currentVideo: videos[current].id,
+      id: null,
+      finishedDay: null,
+    };
+    const res = await addCourseToUser(dto);
+    router.refresh();
+  };
 
   const handlePlay = () => setPlaying(true);
   const handlePause = () => setPlaying(false);
@@ -287,9 +310,9 @@ const CoursePlayer: React.FC<CoursePlayerProps> = ({
         ) : (
           isPreview && (
             <button
-              // TODO implement
               className="flex min-w-[84px] items-center justify-center rounded-md h-10 px-4 text-white text-sm font-bold shadow-sm transition-all hover:opacity-90"
               style={{ backgroundColor: config.colors.primary }}
+              onClick={handleCourseAdded}
             >
               Add course to your learning
             </button>

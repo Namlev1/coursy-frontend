@@ -39,7 +39,7 @@ export default function CourseSection({
   };
 
   const [current, setCurrent] = useState<number>(findFirst());
-  const { isAuthenticated, role } = useAppSelector((state) => state.auth);
+  const { isAuthenticated, role, user } = useAppSelector((state) => state.auth);
 
   return (
     <>
@@ -50,6 +50,7 @@ export default function CourseSection({
           isAuthenticated={isAuthenticated}
           isPreview={isPreview()}
           config={config}
+          user={user}
         />
       </div>
       <div className="lg:col-span-1">

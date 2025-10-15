@@ -78,3 +78,16 @@ export async function fetchCurrentUserCourses(): Promise<UserCourse[]> {
     handleError(error);
   }
 }
+
+export async function addCourseToUser(userCourse: UserCourse) {
+  try {
+    const client = await getApiClient();
+    const response = await client.post<UserCourse>(
+      '/api/courses/user-courses',
+      userCourse
+    );
+    return response.data;
+  } catch (error) {
+    handleError(error);
+  }
+}

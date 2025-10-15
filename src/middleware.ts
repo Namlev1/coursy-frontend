@@ -42,47 +42,36 @@ async function refreshAccessToken(refreshToken: string): Promise<{
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  const isPrivate = isPrivateRoute(pathname);
-
-  // Publiczne ścieżki - przepuść
-  if (!isPrivate) {
-    return NextResponse.next();
-  }
-
   const jwt = getJwt(request);
   const refreshToken = request.cookies.get('refreshToken')?.value;
+  const jwtInvalid = !jwt || isJwtExpired(jwt);
 
-  // Brak JWT - sprawdź czy możemy odświeżyć
-  if (!jwt || isJwtExpired(jwt)) {
-    // Brak refresh tokenu - redirect do login
-    if (!refreshToken) {
-      return redirectToLogin(request, pathname);
-    }
-
-    // Spróbuj odświeżyć token
+  // JWT nieważny i mamy refreshToken → odśwież
+  if (jwtInvalid && refreshToken) {
     const tokens = await refreshAccessToken(refreshToken);
 
     if (!tokens) {
-      // Refresh się nie powiódł - redirect do login
       return redirectToLogin(request, pathname);
     }
 
     const response = NextResponse.next();
-
     response.cookies.set('jwt', tokens.token, {
-      maxAge: 15 * 60, // 15 minut
+      maxAge: 15 * 60,
       path: '/',
     });
-
     response.cookies.set('refreshToken', tokens.refreshToken, {
-      maxAge: 60 * 60 * 24, // 24 godziny
+      maxAge: 60 * 60 * 24,
       path: '/',
     });
-
     return response;
   }
 
-  // JWT jest ważny - kontynuuj normalnie
+  // JWT nieważny, brak refreshToken i prywatna ścieżka → redirect
+  if (jwtInvalid && isPrivateRoute(pathname)) {
+    return redirectToLogin(request, pathname);
+  }
+
+  // JWT ważny lub publiczna ścieżka → kontynuuj
   return NextResponse.next();
 }
 
