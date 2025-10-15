@@ -15,6 +15,9 @@ import {
 import { getMasterPlaylistUrl } from '@/lib/apiClient';
 import { Video } from '@/types/video';
 import dynamic from 'next/dynamic';
+import Link from 'next/link';
+import { ROUTES } from '@/lib/routes';
+import { PlatformConfig } from '@/types/platformConfig';
 
 const ReactPlayer = dynamic(() => import('react-player'), {
   ssr: false,
@@ -28,12 +31,13 @@ const ReactPlayer = dynamic(() => import('react-player'), {
 interface CoursePlayerProps {
   videos: Video[];
   current: number;
-  isPreview?: boolean;
-
+  isPreview: boolean;
+  isAuthenticated: boolean;
   videoUrl?: string;
   duration?: number;
   watchedTime?: number;
   onComplete?: () => void;
+  config: PlatformConfig;
 }
 
 const CoursePlayer: React.FC<CoursePlayerProps> = ({
@@ -41,6 +45,9 @@ const CoursePlayer: React.FC<CoursePlayerProps> = ({
   current,
   watchedTime = 0,
   onComplete,
+  isPreview,
+  isAuthenticated,
+  config,
 }) => {
   const playerRef = useRef<ReactPlayerType>(null);
   const [playing, setPlaying] = useState(false);
@@ -268,6 +275,26 @@ const CoursePlayer: React.FC<CoursePlayerProps> = ({
             </p>
           </div>
         </div>
+        {/*TODO fix it*/}
+        {!isAuthenticated ? (
+          <Link
+            href={ROUTES.LOGIN.path}
+            className="flex min-w-[84px] items-center justify-center rounded-md h-10 px-4 text-white text-sm font-bold shadow-sm transition-all hover:opacity-90"
+            style={{ backgroundColor: config.colors.primary }}
+          >
+            Login to acces course
+          </Link>
+        ) : (
+          isPreview && (
+            <button
+              // TODO implement
+              className="flex min-w-[84px] items-center justify-center rounded-md h-10 px-4 text-white text-sm font-bold shadow-sm transition-all hover:opacity-90"
+              style={{ backgroundColor: config.colors.primary }}
+            >
+              Add course to your learning
+            </button>
+          )
+        )}
       </div>
     </div>
   );

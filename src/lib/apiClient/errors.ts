@@ -50,5 +50,5 @@ export function handleError(error: unknown): never {
   if (error instanceof AxiosError) {
     handleAxiosError(error);
   }
-  throw new Error('An unexpected error occurred');
+  throw error;
 }

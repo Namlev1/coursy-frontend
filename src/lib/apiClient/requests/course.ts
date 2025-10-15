@@ -1,7 +1,8 @@
-import { Course } from '@/types/course';
+import { Course, UserCourse } from '@/types/course';
 import { getApiClient } from '../apiClient';
 import { handleError } from '@/lib/apiClient/errors';
 import { UUID } from 'node:crypto';
+import { AxiosError } from 'axios';
 
 export async function fetchCourse(courseId: string): Promise<Course> {
   try {
@@ -45,6 +46,33 @@ export async function createCourse(
       description: description.trim(),
       imageUrl: imageUrl,
     });
+    return response.data;
+  } catch (error) {
+    handleError(error);
+  }
+}
+
+export async function fetchCurrentUserCourseByCourse(
+  courseId: UUID
+): Promise<UserCourse | null> {
+  try {
+    const client = await getApiClient();
+    const response = await client.get(
+      `/api/courses/user-courses/me/course/${courseId}`
+    );
+    return response.data;
+  } catch (error) {
+    if (error instanceof AxiosError && error.status === 404) {
+      return null;
+    }
+    handleError(error);
+  }
+}
+
+export async function fetchCurrentUserCourses(): Promise<UserCourse[]> {
+  try {
+    const client = await getApiClient();
+    const response = await client.get('/api/courses/user-courses/me');
     return response.data;
   } catch (error) {
     handleError(error);

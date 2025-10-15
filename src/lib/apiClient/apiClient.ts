@@ -117,17 +117,48 @@ function handleLogout() {
   }
 }
 
+async function refreshAccessTokenServer(refreshToken: string): Promise<{
+  token: string;
+  refreshToken: string;
+} | null> {
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/auth/refresh`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ refreshToken }),
+    });
+
+    if (!response.ok) {
+      return null;
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Server refresh token failed:', error);
+    return null;
+  }
+}
+
 export async function getServerApiClient() {
   const { cookies } = await import('next/headers');
   const cookieStore = await cookies();
-  const token = cookieStore.get('jwt')?.value;
-  const isExpired = token ? isJwtExpired(token) : true;
+
+  let token = cookieStore.get('jwt')?.value;
+  const refreshToken = cookieStore.get('refreshToken')?.value;
+
+  // Jeśli token wygasł lub nie istnieje, spróbuj odświeżyć
+  if ((!token || isJwtExpired(token)) && refreshToken) {
+    const res = await refreshAccessTokenServer(refreshToken);
+    token = res?.token;
+  }
 
   const serverClient = axios.create({
     baseURL: API_BASE_URL,
     headers: {
       'Content-Type': 'application/json',
-      ...(isExpired ? {} : { Authorization: `Bearer ${token}` }),
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
     },
   });
 
