@@ -2,6 +2,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 // import ReactPlayer from 'react-player';
 import type ReactPlayerType from 'react-player';
+import screenfull from 'screenfull';
 import {
   Maximize,
   Pause,
@@ -98,6 +99,14 @@ const CoursePlayer: React.FC<CoursePlayerProps> = ({
     router.refresh();
   };
 
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const handleFullscreen = () => {
+    if (containerRef.current && screenfull.isEnabled) {
+      screenfull.request(containerRef.current);
+    }
+  };
+
   const handlePlay = () => setPlaying(true);
   const handlePause = () => setPlaying(false);
 
@@ -158,7 +167,10 @@ const CoursePlayer: React.FC<CoursePlayerProps> = ({
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-md">
       {/* Video Player */}
-      <div className="relative aspect-video bg-black rounded-t-lg overflow-hidden group">
+      <div
+        className="relative aspect-video bg-black rounded-t-lg overflow-hidden group"
+        ref={containerRef}
+      >
         <ReactPlayer
           ref={playerRef}
           url={videoUrl}
@@ -283,7 +295,11 @@ const CoursePlayer: React.FC<CoursePlayerProps> = ({
                 )}
               </div>
 
-              <button className="text-white hover:text-blue-400 transition-colors">
+              {/*TODO tutaj fullscreen*/}
+              <button
+                className="text-white hover:text-blue-400 transition-colors"
+                onClick={handleFullscreen}
+              >
                 <Maximize size={20} />
               </button>
             </div>
