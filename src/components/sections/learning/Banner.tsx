@@ -1,11 +1,19 @@
 import { getCachedConfig } from '@/lib/configCache';
+import { ProgressStatus, UserCourse } from '@/types/course';
 
-export default async function Banner() {
+interface BannerProps {
+  userCourses: UserCourse[];
+}
+
+export default async function Banner({ userCourses }: BannerProps) {
   const config = await getCachedConfig();
   const { colors } = config;
 
-  const completedCourses = 3;
-  const totalCourses = 5;
+  const completedCourses = userCourses.reduce((count, course) => {
+    if (course.progress === ProgressStatus.COMPLETED) count++;
+    return count;
+  }, 0);
+  const totalCourses = userCourses.length;
   const progressPercentage = (completedCourses / totalCourses) * 100;
 
   return (
