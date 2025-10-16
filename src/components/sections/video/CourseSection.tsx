@@ -32,7 +32,6 @@ export default function CourseSection({
       const index = videos.findIndex(
         (video) => video.id === userCourse.currentVideo
       );
-      console.log(index);
       if (index !== -1) {
         return index;
       }

@@ -12,8 +12,12 @@ import {
   Volume2,
   VolumeX,
 } from 'lucide-react';
-import { addCourseToUser, getMasterPlaylistUrl } from '@/lib/apiClient';
-import { Video } from '@/types/video';
+import {
+  addCourseToUser,
+  getMasterPlaylistUrl,
+  getVideoThumbnailUrl,
+} from '@/lib/apiClient';
+import { ThumbnailSize, Video } from '@/types/video';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { ROUTES } from '@/lib/routes';
@@ -178,6 +182,7 @@ const CoursePlayer: React.FC<CoursePlayerProps> = ({
               },
             },
           }}
+          light={getVideoThumbnailUrl(id, ThumbnailSize.LARGE)}
         />
 
         {/* Custom Controls Overlay */}
