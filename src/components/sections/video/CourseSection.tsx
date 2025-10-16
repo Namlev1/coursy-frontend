@@ -6,8 +6,9 @@ import { useState } from 'react';
 import CoursePlayer from '@/components/sections/dashboard/courses/CoursePlayer';
 import { useAppSelector } from '@/store/hooks/redux';
 import { Role } from '@/types/enums';
-import { UserCourse } from '@/types/course';
+import { ProgressStatus, UserCourse } from '@/types/course';
 import { PlatformConfig } from '@/types/platformConfig';
+import { updateUserCourse } from '@/lib/apiClient';
 
 interface CourseSectionProps {
   videos: Video[];
@@ -31,6 +32,7 @@ export default function CourseSection({
       const index = videos.findIndex(
         (video) => video.id === userCourse.currentVideo
       );
+      console.log(index);
       if (index !== -1) {
         return index;
       }
@@ -40,6 +42,22 @@ export default function CourseSection({
 
   const [current, setCurrent] = useState<number>(findFirst());
   const { isAuthenticated, role, user } = useAppSelector((state) => state.auth);
+
+  const changeVideo = async (index: number) => {
+    let progress;
+    if (index === videos.length - 1) {
+      progress = ProgressStatus.COMPLETED;
+    } else {
+      progress = ProgressStatus.IN_PROGRESS;
+    }
+    const dto: UserCourse = {
+      ...userCourse,
+      currentVideo: videos[index].id,
+      progress,
+    };
+    await updateUserCourse(userCourse?.id, dto);
+    setCurrent(index);
+  };
 
   return (
     <>
@@ -57,7 +75,7 @@ export default function CourseSection({
         <CourseContentWidget
           videos={videos}
           current={current}
-          setCurrent={setCurrent}
+          setCurrent={changeVideo}
           isPreview={isPreview()}
         />
       </div>

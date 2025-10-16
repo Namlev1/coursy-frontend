@@ -91,3 +91,19 @@ export async function addCourseToUser(userCourse: UserCourse) {
     handleError(error);
   }
 }
+
+export async function updateUserCourse(
+  userCourseId: UUID,
+  userCourse: UserCourse
+) {
+  try {
+    const client = await getApiClient();
+    const response = await client.put<UserCourse>(
+      `/api/courses/user-courses/${userCourseId}`,
+      userCourse
+    );
+    return response.data;
+  } catch (error) {
+    handleError(error);
+  }
+}
