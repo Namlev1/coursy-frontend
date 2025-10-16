@@ -9,6 +9,7 @@ import { Role } from '@/types/enums';
 import { ProgressStatus, UserCourse } from '@/types/course';
 import { PlatformConfig } from '@/types/platformConfig';
 import { updateUserCourse } from '@/lib/apiClient';
+import dayjs from 'dayjs';
 
 interface CourseSectionProps {
   videos: Video[];
@@ -53,6 +54,10 @@ export default function CourseSection({
       ...userCourse,
       currentVideo: videos[index].id,
       progress,
+      finishedDay:
+        progress === ProgressStatus.COMPLETED
+          ? dayjs().format('YYYY-MM-DD')
+          : null,
     };
     await updateUserCourse(userCourse?.id, dto);
     setCurrent(index);
