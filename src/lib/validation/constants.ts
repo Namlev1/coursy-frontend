@@ -38,6 +38,18 @@ export const VALIDATION_LIMITS = {
       MIN_LENGTH: 1,
       MAX_LENGTH: 63,
     },
+    HERO_TITLE: {
+      MIN_LENGTH: 1,
+      MAX_LENGTH: 63,
+    },
+    HERO_SUBTITLE: {
+      MIN_LENGTH: 1,
+      MAX_LENGTH: 4000,
+    },
+    CTA_TEXT: {
+      MIN_LENGTH: 1,
+      MAX_LENGTH: 63,
+    },
   },
 } as const;
 

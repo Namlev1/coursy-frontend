@@ -5,11 +5,11 @@ import { PlatformFormData } from '@/components/sections/dashboard/platform/Creat
 import Link from 'next/link';
 import { ROUTES } from '@/lib/routes';
 
-interface MockedNavbarConfig {
+interface MockedNavbarProps {
   formData: PlatformFormData;
 }
 
-export default function MockedNavbar({ formData }: MockedNavbarConfig) {
+export default function MockedNavbar({ formData }: MockedNavbarProps) {
   const [logoUrl, setLogoUrl] = useState<string>('');
 
   useEffect(() => {

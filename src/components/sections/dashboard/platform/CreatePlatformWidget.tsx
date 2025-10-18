@@ -52,6 +52,36 @@ const platformSchema = z.object({
   }),
   heroImage: z.instanceof(FileList),
   logoImage: z.instanceof(FileList),
+  heroTitle: z
+    .string()
+    .min(
+      VALIDATION_LIMITS.PLATFORM.HERO_TITLE.MIN_LENGTH,
+      'Hero title is required'
+    )
+    .max(
+      VALIDATION_LIMITS.PLATFORM.HERO_TITLE.MAX_LENGTH,
+      'Hero title too long'
+    ),
+  heroSubtitle: z
+    .string()
+    .min(
+      VALIDATION_LIMITS.PLATFORM.HERO_SUBTITLE.MIN_LENGTH,
+      'Hero subtitle is required'
+    )
+    .max(
+      VALIDATION_LIMITS.PLATFORM.HERO_SUBTITLE.MAX_LENGTH,
+      'Hero subtitle too long'
+    ),
+  ctaText: z
+    .string()
+    .min(
+      VALIDATION_LIMITS.PLATFORM.CTA_TEXT.MIN_LENGTH,
+      'Call-to-action text is required'
+    )
+    .max(
+      VALIDATION_LIMITS.PLATFORM.CTA_TEXT.MAX_LENGTH,
+      'Call-to-action text too long'
+    ),
 });
 
 export type PlatformFormData = z.infer<typeof platformSchema>;
@@ -239,6 +269,90 @@ export default function CreatePlatformWidget() {
               {errors.description && touchedFields.description && (
                 <p className="mt-1 text-sm text-red-600">
                   {errors.description.message}
+                </p>
+              )}
+            </div>
+          </div>
+
+          {/* Hero Title */}
+          <div>
+            <label
+              htmlFor="heroTitle"
+              className="block text-sm font-medium leading-6 text-gray-900"
+            >
+              Hero Title
+            </label>
+            <div className="mt-2">
+              <input
+                type="text"
+                id="heroTitle"
+                {...register('heroTitle')}
+                placeholder="e.g. Welcome to Coursy"
+                className={`block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6 ${
+                  errors.heroTitle && touchedFields.heroTitle
+                    ? 'ring-red-300 focus:ring-red-500'
+                    : 'ring-gray-300 focus:ring-blue-600'
+                }`}
+              />
+              {errors.heroTitle && touchedFields.heroTitle && (
+                <p className="mt-1 text-sm text-red-600">
+                  {errors.heroTitle.message}
+                </p>
+              )}
+            </div>
+          </div>
+
+          {/* Hero Subtitle */}
+          <div>
+            <label
+              htmlFor="heroSubtitle"
+              className="block text-sm font-medium leading-6 text-gray-900"
+            >
+              Hero Subtitle
+            </label>
+            <div className="mt-2">
+              <textarea
+                id="heroSubtitle"
+                {...register('heroSubtitle')}
+                rows={3}
+                placeholder="A short heroSubtitle of your platform."
+                className={`block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6 ${
+                  errors.heroSubtitle && touchedFields.heroSubtitle
+                    ? 'ring-red-300 focus:ring-red-500'
+                    : 'ring-gray-300 focus:ring-blue-600'
+                }`}
+              />
+              {errors.heroSubtitle && touchedFields.heroSubtitle && (
+                <p className="mt-1 text-sm text-red-600">
+                  {errors.heroSubtitle.message}
+                </p>
+              )}
+            </div>
+          </div>
+
+          {/* Call To Action */}
+          <div>
+            <label
+              htmlFor="ctaText"
+              className="block text-sm font-medium leading-6 text-gray-900"
+            >
+              Call To Action
+            </label>
+            <div className="mt-2">
+              <input
+                type="text"
+                id="ctaText"
+                {...register('ctaText')}
+                placeholder="e.g. Welcome to Coursy"
+                className={`block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6 ${
+                  errors.ctaText && touchedFields.ctaText
+                    ? 'ring-red-300 focus:ring-red-500'
+                    : 'ring-gray-300 focus:ring-blue-600'
+                }`}
+              />
+              {errors.ctaText && touchedFields.ctaText && (
+                <p className="mt-1 text-sm text-red-600">
+                  {errors.ctaText.message}
                 </p>
               )}
             </div>

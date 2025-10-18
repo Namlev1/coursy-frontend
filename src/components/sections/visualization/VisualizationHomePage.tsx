@@ -1,6 +1,7 @@
 import { PlatformFormData } from '@/components/sections/dashboard/platform/CreatePlatformWidget';
 import MockedNavbar from '@/components/sections/visualization/mockComponents/MockNavbar';
 import { useEffect, useRef, useState } from 'react';
+import MockHeroSection from '@/components/sections/visualization/mockComponents/MockHero';
 
 interface VisualizationHomePageProps {
   formData: PlatformFormData;
@@ -49,6 +50,7 @@ export default function VisualizationHomePage({
         }}
       >
         <MockedNavbar formData={formData} />
+        <MockHeroSection formData={formData} />
       </div>
       <div className="p-4 border-t border-gray-200">
         <p className="mb-2 h-5 w-3/4 rounded">Home page</p>
