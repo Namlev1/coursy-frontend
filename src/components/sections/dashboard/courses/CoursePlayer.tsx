@@ -1,6 +1,5 @@
 'use client';
 import React, { useEffect, useRef, useState } from 'react';
-// import ReactPlayer from 'react-player';
 import type ReactPlayerType from 'react-player';
 import screenfull from 'screenfull';
 import {

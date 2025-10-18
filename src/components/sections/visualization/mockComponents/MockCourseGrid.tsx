@@ -3,8 +3,8 @@
 import React from 'react';
 import CoursesSearchBar from '@/components/sections/courses/CoursesSearchBar';
 import { Course } from '@/types/course';
-import CourseCard from '@/components/sections/courses/CourseCard';
 import { PlatformFormData } from '@/components/sections/dashboard/platform/CreatePlatformWidget';
+import Link from 'next/link';
 
 interface MockCourseGridProps {
   formData: PlatformFormData;
@@ -68,14 +68,41 @@ export default function MockCourseGrid({ formData }: MockCourseGridProps) {
         {/* Course Grid */}
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {courses.map((course) => (
-            <CourseCard
+            <div
               key={course.id}
-              name={course.name}
-              description={course.description}
-              imageUrl={course.imageUrl}
-              onViewCourse={() => {}}
-              courseId={course.id}
-            />
+              className={`group flex cursor-pointer flex-col overflow-hidden rounded-2xl bg-white shadow-md transition-all hover:shadow-xl hover:-translate-y-1`}
+            >
+              <div className="h-40 w-full overflow-hidden">
+                <div
+                  className="h-full w-full bg-cover bg-center transition-transform duration-300 group-hover:scale-110"
+                  style={{ backgroundImage: `url("${course.imageUrl}")` }}
+                />
+              </div>
+              <div className="flex flex-1 flex-col p-4">
+                <h3 className="text-base font-bold text-slate-800">
+                  {course.name}
+                </h3>
+                <p className="mt-1 flex-grow text-sm text-slate-600">
+                  {course.description}
+                </p>
+                <Link
+                  className="mt-4 w-full rounded-full py-2 px-4 text-sm font-semibold transition-colors text-center"
+                  style={{
+                    backgroundColor: `${formData.colors.primary}15`, // 15 is ~10% opacity in hex
+                    color: formData.colors.primary,
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = `${formData.colors.primary}25`;
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = `${formData.colors.primary}15`;
+                  }}
+                  href={'/#'}
+                >
+                  View Course
+                </Link>
+              </div>
+            </div>
           ))}
         </div>
       </div>
