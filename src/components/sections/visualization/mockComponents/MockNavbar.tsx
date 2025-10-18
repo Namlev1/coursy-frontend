@@ -1,4 +1,6 @@
-import React from 'react';
+'use client';
+
+import React, { useEffect, useState } from 'react';
 import { PlatformFormData } from '@/components/sections/dashboard/platform/CreatePlatformWidget';
 import Link from 'next/link';
 import { ROUTES } from '@/lib/routes';
@@ -8,12 +10,31 @@ interface MockedNavbarConfig {
 }
 
 export default function MockedNavbar({ formData }: MockedNavbarConfig) {
+  const [logoUrl, setLogoUrl] = useState<string>('');
+
+  useEffect(() => {
+    const file = formData.logoImage?.[0];
+    if (file) {
+      const url = URL.createObjectURL(file);
+      setLogoUrl(url);
+      return () => URL.revokeObjectURL(url);
+    } else {
+      setLogoUrl('');
+    }
+  }, [formData.logoImage]);
+
   return (
     <div className="sticky top-0 z-10 w-full border-b border-gray-200 bg-white/80 backdrop-blur-md">
       <div className="flex h-16 items-center px-8 sm:px-12 lg:px-16">
         <div className="flex-1 flex justify-start">
           {/*Navbar logo*/}
-          {/*  <Image /!*src={logoUrl}*!/ alt="Company logo" width={36} height={36} />*/}
+          {logoUrl && (
+            <img
+              src={logoUrl}
+              alt="Company logo"
+              className="h-9 w-9 object-cover rounded"
+            />
+          )}
         </div>
         {/*Navbar items*/}
         <div className="hidden md:flex items-center gap-8">

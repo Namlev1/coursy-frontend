@@ -11,6 +11,7 @@ import { VALIDATION_LIMITS } from '@/lib/validation/constants';
 import VisualizationHomePage from '@/components/sections/visualization/VisualizationHomePage';
 import VisualizationCourseList from '@/components/sections/visualization/VisualizationCourseList';
 import VisualizationVideoPlayer from '@/components/sections/visualization/VisualizationVideoPlayer';
+import ImageUploadField from '@/components/sections/dashboard/platform/ImageUploadField';
 
 const platformSchema = z.object({
   name: z
@@ -49,6 +50,8 @@ const platformSchema = z.object({
     textPrimary: z.string().regex(/^#[0-9A-Fa-f]{6}$/, 'Invalid color'),
     textSecondary: z.string().regex(/^#[0-9A-Fa-f]{6}$/, 'Invalid color'),
   }),
+  heroImage: z.instanceof(FileList),
+  logoImage: z.instanceof(FileList),
 });
 
 export type PlatformFormData = z.infer<typeof platformSchema>;
@@ -81,8 +84,9 @@ export default function CreatePlatformWidget() {
       },
     },
   });
-  
+
   const formData = watch();
+  console.log(formData);
 
   const onSubmit = async (data: PlatformFormData) => {
     try {
@@ -238,6 +242,24 @@ export default function CreatePlatformWidget() {
                 </p>
               )}
             </div>
+          </div>
+
+          {/* Image Uploads */}
+          <div className="grid grid-cols-1 gap-y-8 sm:grid-cols-2 sm:gap-x-6">
+            <ImageUploadField
+              id="heroImage"
+              label="Hero Image"
+              maxSize="10MB"
+              register={register}
+              errors={errors}
+            />
+            <ImageUploadField
+              id="logoImage"
+              label="Logo"
+              maxSize="2MB"
+              register={register}
+              errors={errors}
+            />
           </div>
 
           {/* Layout Options */}
