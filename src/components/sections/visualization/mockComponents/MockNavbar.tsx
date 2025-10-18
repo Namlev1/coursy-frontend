@@ -2,14 +2,16 @@
 
 import React, { useEffect, useState } from 'react';
 import { PlatformFormData } from '@/components/sections/dashboard/platform/CreatePlatformWidget';
-import Link from 'next/link';
-import { ROUTES } from '@/lib/routes';
 
 interface MockedNavbarProps {
   formData: PlatformFormData;
+  selected: number;
 }
 
-export default function MockedNavbar({ formData }: MockedNavbarProps) {
+export default function MockedNavbar({
+  formData,
+  selected,
+}: MockedNavbarProps) {
   const [logoUrl, setLogoUrl] = useState<string>('');
 
   useEffect(() => {
@@ -38,31 +40,40 @@ export default function MockedNavbar({ formData }: MockedNavbarProps) {
         </div>
         {/*Navbar items*/}
         <div className="hidden md:flex items-center gap-8">
-          <h2 className="text-sm transition-colors hover:text-primary-600 text-primary-600 font-semibold">
+          <button
+            className={`text-sm transition-colors hover:text-primary-600 text-primary-600 ${selected === 1 ? 'font-semibold' : ''}`}
+            onClick={(e) => e.preventDefault()}
+          >
             Home
-          </h2>
-          <h2 className="text-sm font-medium transition-colors hover:text-primary-600 text-gray-500">
+          </button>
+          <button
+            className={`text-sm transition-colors hover:text-primary-600 text-primary-600 ${selected === 2 ? 'font-semibold' : ''}`}
+            onClick={(e) => e.preventDefault()}
+          >
             Courses
-          </h2>
-          <h2 className="text-sm font-medium transition-colors hover:text-primary-600 text-gray-500">
-            Courses
-          </h2>
+          </button>
+          <button
+            className={`text-sm transition-colors hover:text-primary-600 text-primary-600 ${selected === 3 ? 'font-semibold' : ''}`}
+            onClick={(e) => e.preventDefault()}
+          >
+            Contact
+          </button>
         </div>
         <div className="flex-1 flex justify-end">
-          <Link
-            href={ROUTES.LOGIN.path}
+          <button
             className="hidden sm:flex min-w-[84px] items-center justify-center rounded-md h-10 px-4 text-sm font-bold transition-colors hover:bg-gray-100"
             style={{ color: formData.colors.textPrimary }}
+            onClick={(e) => e.preventDefault()}
           >
             Login
-          </Link>
-          <Link
-            href={ROUTES.SIGNUP.path}
+          </button>
+          <button
             className="flex min-w-[84px] items-center justify-center rounded-md h-10 px-4 text-white text-sm font-bold shadow-sm transition-all hover:opacity-90"
             style={{ backgroundColor: formData.colors.primary }}
+            onClick={(e) => e.preventDefault()}
           >
             Get Started
-          </Link>
+          </button>
         </div>
       </div>
     </div>

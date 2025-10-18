@@ -38,13 +38,13 @@ export default function MockHeroSection({ formData }: MockHeroSection) {
           {formData.heroSubtitle}
         </p>
 
-        <a
-          href="#"
+        <button
           className="inline-flex items-center justify-center rounded-md h-12 px-6 text-white text-base font-bold shadow-lg hover:scale-105 transition-transform"
           style={{ backgroundColor: formData.colors.primary }}
+          onClick={(e) => e.preventDefault()}
         >
           <span className="truncate">{formData.ctaText}</span>
-        </a>
+        </button>
       </div>
     </section>
   );

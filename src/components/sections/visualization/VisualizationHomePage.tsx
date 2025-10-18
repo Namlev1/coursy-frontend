@@ -49,7 +49,7 @@ export default function VisualizationHomePage({
           left: 0,
         }}
       >
-        <MockedNavbar formData={formData} />
+        <MockedNavbar formData={formData} selected={1} />
         <MockHeroSection formData={formData} />
       </div>
       <div className="p-4 border-t border-gray-200">
