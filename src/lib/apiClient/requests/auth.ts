@@ -1,4 +1,4 @@
-import { LoginResponse } from '@/types/auth';
+import { LoginResponse, RegisterDto } from '@/types/auth';
 import { getApiClient } from '../apiClient';
 import { handleError } from '@/lib/apiClient/errors';
 import { UserResponse } from '@/types/user';
@@ -37,6 +37,18 @@ export async function logoutUser() {
   try {
     const client = await getApiClient();
     await client.post<void>('/api/auth/logout');
+  } catch (error) {
+    handleError(error);
+  }
+}
+
+export async function registerUser(dto: RegisterDto, platformId?: string) {
+  try {
+    const client = await getApiClient();
+    const url = platformId
+      ? `/api/platforms/${platformId}/users/register`
+      : '/api/users/host/register';
+    await client.post<void>(url, dto);
   } catch (error) {
     handleError(error);
   }

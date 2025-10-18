@@ -12,6 +12,10 @@ import {
   validatePassword,
 } from '@/lib/validation/signupValidation';
 import { Role } from '@/types/enums';
+import { PlatformConfig } from '@/types/platformConfig';
+import { RegisterDto } from '@/types/auth';
+import { registerUser } from '@/lib/apiClient';
+import { UUID } from 'node:crypto';
 
 interface SignupFormCenteredSectionProps {
   logoUrl: string;
@@ -21,6 +25,8 @@ interface SignupFormCenteredSectionProps {
   submitText: string;
   loginLinkText: string;
   loginLinkHref: string;
+  config: PlatformConfig;
+  platformId: UUID;
 }
 
 interface FormData {
@@ -48,6 +54,8 @@ export default function SignupFormCenteredSection({
   submitText,
   loginLinkText,
   loginLinkHref,
+  config,
+  platformId,
 }: SignupFormCenteredSectionProps) {
   const router = useRouter();
   const [formData, setFormData] = useState<FormData>({
@@ -170,47 +178,18 @@ export default function SignupFormCenteredSection({
     setIsSubmitting(true);
     setErrors({});
 
-    // TODO: if on host, send to host. If on platform, send to platform.
     try {
-      const response = await fetch(
-        'http://localhost:8080/api/users/host/register',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            firstName: formData.firstName.trim(),
-            lastName: formData.lastName.trim(),
-            email: formData.email.trim(),
-            password: formData.password,
-            roleName: Role.ROLE_PLATFORM_USER,
-          }),
-        }
-      );
+      const isHost = platformId === '4e1c791d-c481-4f9a-9eff-b701c2875c5f';
+      const dto: RegisterDto = {
+        firstName: formData.firstName.trim(),
+        lastName: formData.lastName.trim(),
+        email: formData.email.trim(),
+        password: formData.password,
+        roleName: isHost ? Role.ROLE_TENANT : Role.ROLE_PLATFORM_USER,
+      };
 
-      if (!response.ok) {
-        const message = await response.text();
-        switch (response.status) {
-          case 400:
-            setErrors({ general: message });
-            break;
+      await registerUser(dto);
 
-          case 409: // CONFLICT - Email already exists
-            setErrors({ email: message || 'This email is already registered' });
-            break;
-
-          default:
-            setErrors({
-              general: message || 'Registration failed. Please try again.',
-            });
-        }
-        return;
-      }
-
-      console.log('Registration successful!');
-
-      // todo login user, redirect to dashboard
       router.push(loginLinkHref);
     } catch (error) {
       console.error('Registration error:', error);
@@ -420,7 +399,7 @@ export default function SignupFormCenteredSection({
                   backgroundColor:
                     isSubmitting || !isFormValid
                       ? '#9CA3AF'
-                      : 'var(--color-primary)',
+                      : config.colors.primary,
                 }}
                 disabled={isSubmitting}
               >

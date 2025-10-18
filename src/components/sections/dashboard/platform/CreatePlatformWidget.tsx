@@ -8,6 +8,9 @@ import { postPlatform } from '@/lib/apiClient';
 import { PlatformRequest } from '@/types/platform';
 import { CourseListLayout, VideoPlayerType } from '@/types/platformConfig';
 import { VALIDATION_LIMITS } from '@/lib/validation/constants';
+import VisualizationHomePage from '@/components/sections/visualization/VisualizationHomePage';
+import VisualizationCourseList from '@/components/sections/visualization/VisualizationCourseList';
+import VisualizationVideoPlayer from '@/components/sections/visualization/VisualizationVideoPlayer';
 
 const platformSchema = z.object({
   name: z
@@ -48,7 +51,7 @@ const platformSchema = z.object({
   }),
 });
 
-type PlatformFormData = z.infer<typeof platformSchema>;
+export type PlatformFormData = z.infer<typeof platformSchema>;
 
 export default function CreatePlatformWidget() {
   const router = useRouter();
@@ -58,6 +61,7 @@ export default function CreatePlatformWidget() {
     handleSubmit,
     formState: { errors, isSubmitting, touchedFields },
     setError,
+    watch,
   } = useForm<PlatformFormData>({
     resolver: zodResolver(platformSchema),
     mode: 'onBlur',
@@ -77,6 +81,8 @@ export default function CreatePlatformWidget() {
       },
     },
   });
+  
+  const formData = watch();
 
   const onSubmit = async (data: PlatformFormData) => {
     try {
@@ -318,24 +324,9 @@ export default function CreatePlatformWidget() {
             </p>
 
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {[1, 2, 3].map((i) => (
-                <div
-                  key={i}
-                  className="rounded-lg border border-gray-200 bg-white"
-                >
-                  <div
-                    className="h-40 w-full rounded-t-lg bg-cover bg-center"
-                    style={{
-                      backgroundImage:
-                        "url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400&h=300&fit=crop')",
-                    }}
-                  />
-                  <div className="p-4">
-                    <div className="mb-2 h-5 w-3/4 rounded bg-gray-200"></div>
-                    <div className="h-4 w-1/2 rounded bg-gray-200"></div>
-                  </div>
-                </div>
-              ))}
+              <VisualizationHomePage formData={formData} />
+              <VisualizationCourseList formData={formData} />
+              <VisualizationVideoPlayer formData={formData} />
             </div>
           </div>
 

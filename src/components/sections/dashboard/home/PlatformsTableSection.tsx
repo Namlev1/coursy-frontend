@@ -79,14 +79,16 @@ export default async function PlatformsTableSection() {
           </table>
         ) : (
           <div className="px-6 py-8 text-center">
-            <p className="text-sm text-gray-500">No platforms created yet.</p>
-            <button
-              // onClick={onCreatePlatform}
-              className="mt-4 rounded-lg px-4 py-2 text-sm font-semibold text-white shadow-sm hover:opacity-90 transition-opacity"
+            <p className="text-sm text-gray-500 mb-4">
+              No platforms created yet.
+            </p>
+            <Link
+              className="rounded-lg px-4 py-2 text-sm font-semibold text-white shadow-sm hover:opacity-90 transition-opacity"
               style={{ backgroundColor: config.colors.primary }}
+              href={ROUTES.NEW_PLATFORM.path}
             >
               Create Your First Platform
-            </button>
+            </Link>
           </div>
         )}
       </div>

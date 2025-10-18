@@ -1,8 +1,12 @@
 import { SectionComponents } from '@/components/sections';
 import fetchPageTemplate, { PageType } from '@/types/pageTemplate';
+import { getCachedConfig } from '@/lib/configCache';
+import { getPlatformId } from '@/lib/headerUtils';
 
 export default async function SignupPage() {
   const pageTemplate = await fetchPageTemplate(PageType.Signup);
+  const config = await getCachedConfig();
+  const platformId = await getPlatformId();
 
   return (
     <div>
@@ -17,7 +21,14 @@ export default async function SignupPage() {
             return null;
           }
 
-          return <Component key={index} {...section.props} />;
+          return (
+            <Component
+              key={index}
+              {...section.props}
+              config={config}
+              platformId={platformId}
+            />
+          );
         })}
     </div>
   );

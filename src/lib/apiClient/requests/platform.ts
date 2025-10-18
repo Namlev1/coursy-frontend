@@ -19,6 +19,7 @@ export async function getUserPlatforms(): Promise<PlatformResponse[]> {
     const response = await client.get<PlatformResponse[]>('/api/platforms');
     return response.data;
   } catch (error) {
+    console.log('here');
     handleError(error);
   }
 }
