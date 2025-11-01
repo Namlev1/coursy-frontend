@@ -7,6 +7,8 @@ import { useParams } from 'next/navigation';
 import Image from 'next/image';
 import { getVideoThumbnailUrl } from '@/lib/apiClient';
 import { useConfig } from '@/components/ConfigProvider';
+import { Menu, Transition } from '@headlessui/react';
+import React, { Fragment } from 'react';
 
 interface VideosManagementProps {
   videos: Video[];
@@ -42,13 +44,65 @@ export default function VideosManagement({ videos }: VideosManagementProps) {
         >
           Episodes
         </h3>
-        <Link
-          href={'/dashboard/courses/' + params.courseId + '/add'}
-          className="text-white text-sm font-bold py-2 px-4 rounded-lg hover:opacity-90 transition-opacity"
-          style={{ backgroundColor: config.colors.primary }}
-        >
-          Add Episode
-        </Link>
+        <Menu as={'div'}>
+          <Menu.Button
+            className="text-white text-sm font-bold py-2 px-4 rounded-lg hover:opacity-90 transition-opacity"
+            style={{ backgroundColor: config.colors.primary }}
+          >
+            Add content
+          </Menu.Button>
+
+          <Transition
+            as={Fragment}
+            enter="transition ease-out duration-100"
+            enterFrom="transform opacity-0 scale-95"
+            enterTo="transform opacity-100 scale-100"
+            leave="transition ease-in duration-75"
+            leaveFrom="transform opacity-100 scale-100"
+            leaveTo="transform opacity-0 scale-95"
+          >
+            <Menu.Items className="absolute right-0 mt-2 w-48 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
+              <div className="py-1">
+                <Menu.Item>
+                  {({ active }) => (
+                    <Link
+                      href={
+                        '/dashboard/courses/' + params.courseId + '/add/video'
+                      }
+                      className={`${active ? 'bg-gray-100' : ''} flex items-center px-4 py-2 text-sm text-gray-700`}
+                    >
+                      Video
+                    </Link>
+                  )}
+                </Menu.Item>
+                <Menu.Item>
+                  {({ active }) => (
+                    <Link
+                      href={
+                        '/dashboard/courses/' + params.courseId + '/add/text'
+                      }
+                      className={`${active ? 'bg-gray-100' : ''} flex items-center px-4 py-2 text-sm text-gray-700`}
+                    >
+                      Text content
+                    </Link>
+                  )}
+                </Menu.Item>
+                <Menu.Item>
+                  {({ active }) => (
+                    <Link
+                      href={
+                        '/dashboard/courses/' + params.courseId + '/add/quiz'
+                      }
+                      className={`${active ? 'bg-gray-100' : ''} flex items-center px-4 py-2 text-sm text-gray-700`}
+                    >
+                      Quiz
+                    </Link>
+                  )}
+                </Menu.Item>
+              </div>
+            </Menu.Items>
+          </Transition>
+        </Menu>
       </div>
 
       {(videos.length > 0 && (
@@ -121,7 +175,9 @@ export default function VideosManagement({ videos }: VideosManagementProps) {
           className="text-center py-8"
           style={{ color: config.colors.textSecondary }}
         >
-          <p>No videos yet. Click &#34;Add Video&#34; to get started.</p>
+          <p>
+            No course content yet. Click &#34;Add content&#34; to get started.
+          </p>
         </div>
       )}
     </div>

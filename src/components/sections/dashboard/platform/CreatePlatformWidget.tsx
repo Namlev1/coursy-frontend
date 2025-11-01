@@ -373,7 +373,7 @@ export default function CreatePlatformWidget() {
                 id="heroSubtitle"
                 {...register('heroSubtitle')}
                 rows={3}
-                placeholder="Text that appears under hero title"
+                placeholder="TextContent that appears under hero title"
                 className={`block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6 ${
                   errors.heroSubtitle && touchedFields.heroSubtitle
                     ? 'ring-red-300 focus:ring-red-500'
