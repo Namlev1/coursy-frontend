@@ -12,3 +12,25 @@ export async function addText(text: TextContent) {
     handleError(error);
   }
 }
+
+export async function updateText(text: TextContent) {
+  try {
+    const client = await getApiClient();
+    const response = await client.put<UserCourse>('/api/content/texts', text);
+    return response.data;
+  } catch (error) {
+    handleError(error);
+  }
+}
+
+export async function fetchTextContent(textId: string) {
+  try {
+    const client = await getApiClient();
+    const response = await client.get<TextContent>(
+      `/api/content/texts/${textId}`
+    );
+    return response.data;
+  } catch (error) {
+    handleError(error);
+  }
+}
