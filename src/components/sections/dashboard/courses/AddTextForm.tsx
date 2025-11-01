@@ -1,17 +1,23 @@
 'use client';
 
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useParams, useRouter } from 'next/navigation';
 import { useConfig } from '@/components/ConfigProvider';
-import { addText } from '@/lib/apiClient/requests/text';
+import { addText } from '@/lib/apiClient/requests/textContent';
+import { UUID } from 'node:crypto';
+import { TiptapEditor } from '@/app/(main)/dashboard/courses/[courseId]/add/text/tipTap';
 
 const textSchema = z.object({
   title: z
     .string()
     .min(1, 'Title is required')
     .min(3, 'Title must be at least 3 characters'),
+  content: z
+    .string()
+    .min(1, 'Content is required')
+    .min(10, 'Content must be at least 10 characters'),
 });
 
 type TextFormData = z.infer<typeof textSchema>;
@@ -24,19 +30,22 @@ export default function AddTextForm() {
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
   } = useForm<TextFormData>({
     resolver: zodResolver(textSchema),
+    defaultValues: {
+      title: '',
+      content: '',
+    },
   });
 
   const onSubmit = async (data: TextFormData) => {
-    // todo validate
     try {
       const textDto = {
         title: data.title,
         content: data.content,
-        course: params.courseId as string,
-        id: null,
+        course: params.courseId as UUID,
       };
       await addText(textDto);
       router.push(`/dashboard/courses/${params.courseId}`);
@@ -59,7 +68,7 @@ export default function AddTextForm() {
         <div>
           <label
             className="block text-sm font-medium mb-2"
-            htmlFor="video-title"
+            htmlFor="text-title"
             style={{ color: config.colors.textPrimary }}
           >
             Title
@@ -75,7 +84,7 @@ export default function AddTextForm() {
                 '--tw-ring-color': config.colors.primary,
               } as React.CSSProperties
             }
-            id="video-title"
+            id="text-title"
             type="text"
             placeholder="e.g., Introduction to Theming"
             onFocus={(e) => {
@@ -89,6 +98,34 @@ export default function AddTextForm() {
             <p className="mt-1 text-sm text-red-600">{errors.title.message}</p>
           )}
         </div>
+
+        {/* Content Field with Tiptap */}
+        <div>
+          <label
+            className="block text-sm font-medium mb-2"
+            htmlFor="text-content"
+            style={{ color: config.colors.textPrimary }}
+          >
+            Content
+          </label>
+          <Controller
+            name="content"
+            control={control}
+            render={({ field }) => (
+              <TiptapEditor
+                value={field.value}
+                onChange={field.onChange}
+                config={config}
+              />
+            )}
+          />
+          {errors.content && (
+            <p className="mt-1 text-sm text-red-600">
+              {errors.content.message}
+            </p>
+          )}
+        </div>
+
         {/* Submit Button */}
         <div className="flex justify-end pt-4">
           <button
@@ -108,7 +145,7 @@ export default function AddTextForm() {
               e.currentTarget.style.opacity = '1';
             }}
           >
-            Add Video
+            Add Text Content
           </button>
         </div>
       </form>
