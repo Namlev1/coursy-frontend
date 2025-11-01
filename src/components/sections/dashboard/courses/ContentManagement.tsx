@@ -1,6 +1,6 @@
 'use client';
 
-import { ThumbnailSize, Video } from '@/types/video';
+import { ThumbnailSize } from '@/types/video';
 import { UUID } from 'node:crypto';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
@@ -9,19 +9,62 @@ import { getVideoThumbnailUrl } from '@/lib/apiClient';
 import { useConfig } from '@/components/ConfigProvider';
 import { Menu, Transition } from '@headlessui/react';
 import React, { Fragment } from 'react';
+import { ContentDto } from '@/types/content';
+import TextSnippetIcon from '@mui/icons-material/TextSnippet';
+import QuizIcon from '@mui/icons-material/Quiz';
+import { MaterialType } from '@/types/enums/MaterialType';
 
-interface VideosManagementProps {
-  videos: Video[];
+interface ContentManagementProps {
+  content: ContentDto[];
   courseId: string;
 }
 
-export default function VideosManagement({ videos }: VideosManagementProps) {
+function getIcon(contentItem: ContentDto) {
+  switch (contentItem.type) {
+    case MaterialType.VIDEO:
+      return (
+        <Image
+          src={getVideoThumbnailUrl(contentItem?.videoId, ThumbnailSize.SMALL)}
+          alt="Video thumbnail"
+          width={160}
+          height={150}
+          className="size-14 rounded-lg object-cover"
+        />
+      );
+    case MaterialType.TEXT:
+      return <TextSnippetIcon fontSize={'large'} />;
+    case MaterialType.QUIZ:
+      return <QuizIcon fontSize={'large'} />;
+  }
+}
+
+function getContentDescription(contentItem: ContentDto) {
+  switch (contentItem.type) {
+    case MaterialType.VIDEO:
+      return `Video - Duration: ${contentItem.videoDuration} seconds`;
+    case MaterialType.TEXT:
+      return 'Text Content';
+    case MaterialType.QUIZ:
+      return 'Quiz';
+  }
+}
+
+function getEditUrl(contentItem: ContentDto, courseId: UUID) {
+  switch (contentItem.type) {
+    case MaterialType.VIDEO:
+      return `/dashboard/courses/${courseId}/video/${contentItem.videoId}`;
+    case MaterialType.TEXT:
+      return `/dashboard/courses/${courseId}/text/${contentItem.textId}`;
+    case MaterialType.QUIZ:
+      return `/dashboard/courses/${courseId}/quiz/${contentItem.quizId}`;
+    default:
+      return '#';
+  }
+}
+
+export default function ContentManagement({ content }: ContentManagementProps) {
   const config = useConfig();
   const params = useParams();
-
-  const handleEditEpisode = (id: UUID) => {
-    console.log(`Editing episode ${id}`);
-  };
 
   const EditIcon = () => (
     <svg
@@ -42,7 +85,7 @@ export default function VideosManagement({ videos }: VideosManagementProps) {
           className="text-xl font-bold"
           style={{ color: config.colors.textPrimary }}
         >
-          Episodes
+          Content
         </h3>
         <Menu as={'div'}>
           <Menu.Button
@@ -105,11 +148,11 @@ export default function VideosManagement({ videos }: VideosManagementProps) {
         </Menu>
       </div>
 
-      {(videos.length > 0 && (
+      {(content.length > 0 && (
         <ul className="space-y-3">
-          {videos.map((video) => (
+          {content.map((contentItem) => (
             <li
-              key={video.id}
+              key={contentItem.id}
               className="flex items-center p-3 border rounded-lg hover:shadow-md transition-all duration-300"
               style={{
                 backgroundColor: config.colors.background,
@@ -122,34 +165,25 @@ export default function VideosManagement({ videos }: VideosManagementProps) {
                 e.currentTarget.style.borderColor = config.colors.secondary;
               }}
             >
-              <div className="flex-shrink-0 mr-4">
-                <Image
-                  src={getVideoThumbnailUrl(video.id, ThumbnailSize.SMALL)}
-                  alt="Video thumbnail"
-                  width={160}
-                  height={150}
-                  className="size-14 rounded-lg object-cover"
-                />
-              </div>
+              <div className="flex-shrink-0 mr-4">{getIcon(contentItem)}</div>
 
               <div className="flex-1 overflow-hidden">
                 <p
                   className="font-bold truncate"
                   style={{ color: config.colors.textPrimary }}
                 >
-                  {video.title}
+                  {contentItem.title}
                 </p>
                 <p
                   className="text-sm truncate"
                   style={{ color: config.colors.textSecondary }}
                 >
-                  {video.description}
+                  {getContentDescription(contentItem)}
                 </p>
               </div>
 
               <Link
-                href={'/dashboard/courses/' + params.courseId + '/' + video.id}
-                onClick={() => handleEditEpisode(video.id)}
+                href={getEditUrl(contentItem, params.courseId as UUID)}
                 className="ml-4 p-2 rounded-full hover:opacity-80 transition-all"
                 style={{
                   color: config.colors.textSecondary,
@@ -163,7 +197,7 @@ export default function VideosManagement({ videos }: VideosManagementProps) {
                   e.currentTarget.style.color = config.colors.textSecondary;
                   e.currentTarget.style.backgroundColor = 'transparent';
                 }}
-                aria-label={`Edit ${video.title}`}
+                aria-label={`Edit ${contentItem.title}`}
               >
                 <EditIcon />
               </Link>

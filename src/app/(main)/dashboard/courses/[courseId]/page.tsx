@@ -1,8 +1,9 @@
 import { PageHeaderSection } from '@/components/sections/header/PageHeaderSection';
 import CourseForm from '@/components/sections/dashboard/courses/CourseForm';
-import VideosManagement from '@/components/sections/dashboard/courses/VideosManagement';
-import { fetchCourse, fetchVideos } from '@/lib/apiClient';
+import ContentManagement from '@/components/sections/dashboard/courses/ContentManagement';
+import { fetchCourse } from '@/lib/apiClient';
 import { UUID } from 'node:crypto';
+import { fetchCourseContent } from '@/lib/apiClient/requests/content';
 
 interface CourseManagementPageProps {
   params: {
@@ -15,7 +16,7 @@ export default async function CourseManagementPage({
 }: CourseManagementPageProps) {
   const { courseId } = params;
   const course = await fetchCourse(courseId);
-  const videos = await fetchVideos(courseId);
+  const content = await fetchCourseContent(courseId);
 
   return (
     <div className="relative flex size-full min-h-screen flex-col group/design-root overflow-x-hidden">
@@ -25,7 +26,7 @@ export default async function CourseManagementPage({
         <div className="mx-auto w-full">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
             <CourseForm course={course} />
-            <VideosManagement videos={videos} courseId={courseId} />
+            <ContentManagement content={content} courseId={courseId} />
           </div>
         </div>
       </div>
