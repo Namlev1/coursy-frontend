@@ -167,6 +167,7 @@ export async function getServerApiClient() {
 
 export async function getApiClient() {
   if (typeof window !== 'undefined') {
+    console.log('here');
     return apiClient;
   } else {
     return await getServerApiClient();

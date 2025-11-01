@@ -6,7 +6,7 @@ import CoursesFilterButtons from '@/components/sections/courses/CoursesFilterBut
 import { Course } from '@/types/course';
 import CourseCard from '@/components/sections/courses/CourseCard';
 import { DEFAULT_ERROR_MESSAGE } from '@/lib/apiClient/errors';
-import { fetchCourses } from '@/lib/apiClient';
+import { fetchCourses, getCourseImageUrl } from '@/lib/apiClient';
 import { UUID } from 'node:crypto';
 
 interface CourseGridProps {
@@ -60,7 +60,7 @@ export default function CourseGridSection({ platformId }: CourseGridProps) {
               key={course.id}
               name={course.name}
               description={course.description}
-              imageUrl={course.imageUrl}
+              imageUrl={getCourseImageUrl(course.id)}
               onViewCourse={() => console.log(`Viewing course: ${course.name}`)}
               courseId={course.id}
             />

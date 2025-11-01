@@ -7,7 +7,7 @@ export async function fetchVideos(courseId: UUID): Promise<Video[]> {
   try {
     const client = await getApiClient();
     const response = await client.get<Video[]>(
-      `/api/videos/course/${courseId}`
+      `/api/content/videos/course/${courseId}`
     );
     return response.data;
   } catch (error) {
@@ -18,7 +18,7 @@ export async function fetchVideos(courseId: UUID): Promise<Video[]> {
 export async function postVideo(formData: FormData): Promise<void> {
   try {
     const client = await getApiClient();
-    await client.post<void>('/api/videos/upload', formData, {
+    await client.post<void>('/api/content/videos/upload', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
@@ -30,7 +30,7 @@ export async function postVideo(formData: FormData): Promise<void> {
 export async function fetchVideo(videoId: UUID): Promise<Video> {
   try {
     const client = await getApiClient();
-    const response = await client.get<Video>(`/api/videos/${videoId}`);
+    const response = await client.get<Video>(`/api/content/videos/${videoId}`);
     return response.data;
   } catch (error) {
     handleError(error);

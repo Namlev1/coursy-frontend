@@ -12,6 +12,8 @@ import VisualizationHomePage from '@/components/sections/visualization/Visualiza
 import VisualizationCourseList from '@/components/sections/visualization/VisualizationCourseList';
 import VisualizationVideoPlayer from '@/components/sections/visualization/VisualizationVideoPlayer';
 import ImageUploadField from '@/components/sections/dashboard/platform/ImageUploadField';
+import { PageSection, PageTemplate, PageType } from '@/types/pageTemplate';
+import { savePageTemplate } from '@/lib/apiClient/requests/pageTemplate';
 
 const platformSchema = z.object({
   name: z
@@ -116,10 +118,16 @@ export default function CreatePlatformWidget() {
   });
 
   const formData = watch();
-  console.log(formData);
 
   const onSubmit = async (data: PlatformFormData) => {
     try {
+      if (!data.logoImage?.[0] || !data.heroImage?.[0]) {
+        setError('root', {
+          message: 'Logo and hero images are required',
+        });
+        return;
+      }
+
       const formData: PlatformRequest = {
         name: data.name,
         subdomain: data.subdomain,
@@ -135,10 +143,63 @@ export default function CreatePlatformWidget() {
             navItems: [],
           },
           footerItems: [],
+          heroTitle: data.heroTitle,
+          heroSubtitle: data.heroSubtitle,
+          ctaText: data.ctaText,
         },
       };
 
-      await postPlatform(formData);
+      // Pass files separately
+      const platform = await postPlatform(
+        formData,
+        data.logoImage[0],
+        data.heroImage[0]
+      );
+
+      const dashboardTemplate: PageTemplate = {
+        props: { layout: 'rows' },
+        type: PageType.Dashboard,
+        title: `${data.name} - Dashboard`,
+        sections: [
+          {
+            order: 2,
+            props: {
+              title: 'Dashboard',
+              subtitle:
+                "Welcome back! Here's what's happening with your learning platform.",
+            },
+            type: 'page-header',
+          },
+          {
+            order: 3,
+            props: {
+              title: 'Quick Actions',
+              actions: [
+                {
+                  href: '/dashboard/courses/new',
+                  icon: 'plus',
+                  label: 'Create New Course',
+                  primary: true,
+                },
+                {
+                  href: '/dashboard/courses',
+                  label: 'Manage Courses',
+                  primary: false,
+                },
+                {
+                  href: '/analytics',
+                  label: 'View Analytics',
+                  primary: false,
+                },
+              ],
+            },
+            type: 'quick-actions',
+          },
+        ] as PageSection[],
+      };
+      console.log('platform', platform);
+      await savePageTemplate(dashboardTemplate, platform.id);
+
       router.push('/dashboard');
     } catch (error) {
       setError('root', {
@@ -151,10 +212,7 @@ export default function CreatePlatformWidget() {
   const colorFields = [
     { key: 'primary' as const, label: 'Primary' },
     { key: 'secondary' as const, label: 'Secondary' },
-    { key: 'tertiary' as const, label: 'Tertiary' },
-    { key: 'background' as const, label: 'Background' },
-    { key: 'textPrimary' as const, label: 'Text Primary' },
-    { key: 'textSecondary' as const, label: 'Text Secondary' },
+    { key: 'textPrimary' as const, label: 'Text' },
   ];
 
   return (
@@ -315,7 +373,7 @@ export default function CreatePlatformWidget() {
                 id="heroSubtitle"
                 {...register('heroSubtitle')}
                 rows={3}
-                placeholder="A short heroSubtitle of your platform."
+                placeholder="Text that appears under hero title"
                 className={`block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6 ${
                   errors.heroSubtitle && touchedFields.heroSubtitle
                     ? 'ring-red-300 focus:ring-red-500'
@@ -343,7 +401,7 @@ export default function CreatePlatformWidget() {
                 type="text"
                 id="ctaText"
                 {...register('ctaText')}
-                placeholder="e.g. Welcome to Coursy"
+                placeholder="e.g. Sign up now"
                 className={`block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6 ${
                   errors.ctaText && touchedFields.ctaText
                     ? 'ring-red-300 focus:ring-red-500'

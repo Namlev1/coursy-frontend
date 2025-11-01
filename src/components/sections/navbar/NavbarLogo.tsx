@@ -7,16 +7,11 @@ import { ROUTES } from '@/lib/routes';
 import { useAppSelector } from '@/store/hooks/redux';
 
 interface NavbarLogoProps {
-  logoUrl: string | null;
+  logoUrl: string;
   logoText: string;
-  isLogoVisible?: boolean;
 }
 
-export default function NavbarLogo({
-  logoUrl,
-  logoText,
-  isLogoVisible = true,
-}: NavbarLogoProps) {
+export default function NavbarLogo({ logoUrl, logoText }: NavbarLogoProps) {
   const authState = useAppSelector((state) => state.auth);
   return (
     <Link
@@ -25,9 +20,7 @@ export default function NavbarLogo({
       }
       className="flex items-center gap-2"
     >
-      {isLogoVisible && logoUrl && (
-        <Image src={logoUrl} alt="Company logo" width={36} height={36} />
-      )}
+      <Image src={logoUrl} alt="Company logo" width={36} height={36} />
       <h1 className="text-xl font-bold text-gray-900">{logoText}</h1>
     </Link>
   );

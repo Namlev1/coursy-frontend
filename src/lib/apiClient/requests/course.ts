@@ -37,15 +37,34 @@ export async function fetchCourses(
 export async function createCourse(
   name: string,
   description: string,
-  imageUrl: string
-) {
+  imageFile: File
+): Promise<Course> {
   try {
     const client = await getApiClient();
-    const response = await client.post<Course>('/api/courses', {
-      name: name.trim(),
-      description: description.trim(),
-      imageUrl: imageUrl,
+    const formData = new FormData();
+
+    formData.append(
+      'data',
+      new Blob(
+        [
+          JSON.stringify({
+            name: name.trim(),
+            description: description.trim(),
+          }),
+        ],
+        {
+          type: 'application/json',
+        }
+      )
+    );
+    formData.append('image', imageFile);
+
+    const response = await client.post<Course>('/api/courses', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
     });
+
     return response.data;
   } catch (error) {
     handleError(error);

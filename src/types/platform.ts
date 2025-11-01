@@ -6,9 +6,6 @@ export interface PlatformRequest {
   description: string;
   config: PlatformConfig;
   subdomain: string;
-  heroTitle: string;
-  heroSubtitle: string;
-  ctaText: string;
 }
 
 export interface PlatformResponse {

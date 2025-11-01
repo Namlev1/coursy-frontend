@@ -1,5 +1,7 @@
 import { getCachedConfig } from '@/lib/configCache';
 import { ProgressStatus, UserCourse } from '@/types/course';
+import { ROUTES } from '@/lib/routes';
+import Link from 'next/link';
 
 interface BannerProps {
   userCourses: UserCourse[];
@@ -30,31 +32,58 @@ export default async function Banner({ userCourses }: BannerProps) {
         >
           Overall Progress
         </p>
-        <h2
-          className="mb-2 text-2xl font-bold"
-          style={{ color: colors.textPrimary }}
-        >
-          Completed {completedCourses} of {totalCourses} courses
-        </h2>
-        <p
-          className="max-w-prose text-sm"
-          style={{ color: colors.textSecondary }}
-        >
-          Keep up the great work! You're making excellent progress towards your
-          learning goals.
-        </p>
-        <div
-          className="mt-4 h-2 w-full rounded-full"
-          style={{ backgroundColor: `${colors.textSecondary}40` }}
-        >
-          <div
-            className="h-2 rounded-full"
-            style={{
-              width: `${progressPercentage}%`,
-              backgroundColor: colors.primary,
-            }}
-          />
-        </div>
+        {totalCourses > 0 ? (
+          <>
+            <h2
+              className="mb-2 text-2xl font-bold"
+              style={{ color: colors.textPrimary }}
+            >
+              Completed {completedCourses} of {totalCourses} courses
+            </h2>
+            <p
+              className="max-w-prose text-sm"
+              style={{ color: colors.textSecondary }}
+            >
+              Keep up the great work! You're making excellent progress towards
+              your learning goals.
+            </p>
+            <div
+              className="mt-4 h-2 w-full rounded-full"
+              style={{ backgroundColor: `${colors.textSecondary}40` }}
+            >
+              <div
+                className="h-2 rounded-full"
+                style={{
+                  width: `${progressPercentage}%`,
+                  backgroundColor: colors.primary,
+                }}
+              />
+            </div>
+          </>
+        ) : (
+          <>
+            <h2
+              className="mb-2 text-2xl font-bold"
+              style={{ color: colors.textPrimary }}
+            >
+              No courses started.
+            </h2>
+            <p
+              className="max-w-prose text-sm"
+              style={{ color: colors.textSecondary }}
+            >
+              Start learning{' '}
+              <Link
+                href={ROUTES.COURSES.path}
+                style={{
+                  color: config.colors.secondary,
+                }}
+              >
+                here
+              </Link>
+            </p>
+          </>
+        )}
       </div>
       <div
         className="aspect-video w-full rounded-lg bg-cover bg-center bg-no-repeat md:w-1/3 md:max-w-xs"

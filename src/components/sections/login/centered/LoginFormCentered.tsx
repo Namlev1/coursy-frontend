@@ -14,6 +14,7 @@ import { PlatformConfig } from '@/types/platformConfig';
 import LoginHeader from '@/components/sections/login/centered/LoginHeader';
 import FormInput from '@/components/sections/login/centered/FormInput';
 import ErrorAlert from '@/components/sections/login/centered/ErrorAlert';
+import { Role } from '@/types/enums';
 
 const JWT_EXPIRES_DAYS = 15 / 1440; // 15 minut
 const REFRESH_EXPIRES_DAYS = 1; // 1 dzień
@@ -88,6 +89,12 @@ export default function LoginFormCentered({
       Cookies.set('userData', encodedUserData, {
         expires: REFRESH_EXPIRES_DAYS,
       });
+
+      console.log('userData.roleName', userData.roleName);
+      if (userData.roleName === Role.ROLE_PLATFORM_USER) {
+        router.push(ROUTES.MY_LEARNING.path);
+        return;
+      }
 
       router.push(loginLinkHref);
     } catch (error) {

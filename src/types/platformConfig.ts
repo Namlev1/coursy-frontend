@@ -4,6 +4,9 @@ export interface PlatformConfig {
   footerItems: FooterItem[];
   courseListLayout: CourseListLayout;
   videoPlayerType: VideoPlayerType;
+  heroTitle: string;
+  heroSubtitle: string;
+  ctaText: string;
 }
 
 export interface Colors {

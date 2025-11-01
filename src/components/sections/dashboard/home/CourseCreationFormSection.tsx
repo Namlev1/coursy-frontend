@@ -1,32 +1,37 @@
 'use client';
 
-import React, { useState } from 'react';
-import { PlatformConfig } from '@/types/platformConfig';
-import { createCourse } from '@/lib/apiClient';
-import {
-  validateDescription,
-  validateImageUrl,
-  validateName,
-} from '@/lib/validation/courseValidation';
 import { useRouter } from 'next/navigation';
-import { DEFAULT_ERROR_MESSAGE } from '@/lib/apiClient/errors';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { createCourse } from '@/lib/apiClient';
+import { VALIDATION_LIMITS } from '@/lib/validation/constants';
+import { PlatformConfig } from '@/types/platformConfig';
 import { ROUTES } from '@/lib/routes';
+import ImageUploadField from '@/components/sections/dashboard/platform/ImageUploadField';
+
+const courseSchema = z.object({
+  name: z
+    .string()
+    .min(VALIDATION_LIMITS.COURSE.NAME.MIN_LENGTH, 'Course name is required')
+    .max(VALIDATION_LIMITS.COURSE.NAME.MAX_LENGTH, 'Name too long'),
+  description: z
+    .string()
+    .min(
+      VALIDATION_LIMITS.COURSE.DESCRIPTION.MIN_LENGTH,
+      'Description is required'
+    )
+    .max(
+      VALIDATION_LIMITS.COURSE.DESCRIPTION.MAX_LENGTH,
+      'Description too long'
+    ),
+  image: typeof FileList !== 'undefined' ? z.instanceof(FileList) : z.any(),
+});
+
+export type CourseFormData = z.infer<typeof courseSchema>;
 
 interface CourseCreationFormSectionProps {
   config: PlatformConfig;
-}
-
-interface FormData {
-  name: string;
-  description: string;
-  imageUrl: string;
-}
-
-interface FormErrors {
-  name?: string;
-  description?: string;
-  imageUrl?: string;
-  general?: string;
 }
 
 export default function CourseCreationFormSection({
@@ -34,231 +39,163 @@ export default function CourseCreationFormSection({
 }: CourseCreationFormSectionProps) {
   const router = useRouter();
 
-  const [formData, setFormData] = useState<FormData>({
-    name: '',
-    description: '',
-    imageUrl: '',
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting, touchedFields },
+    setError,
+  } = useForm<CourseFormData>({
+    resolver: zodResolver(courseSchema),
+    mode: 'onBlur',
+    defaultValues: {
+      name: '',
+      description: '',
+    },
   });
-  const [errors, setErrors] = useState<FormErrors>({});
-  const [touched, setTouched] = useState<Set<keyof FormData>>(new Set());
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const inputStyle = {
-    borderColor: '#e2e8f0',
-    backgroundColor: '#ffffff',
-  } as React.CSSProperties;
-
-  const handleInputChange =
-    (field: keyof FormData) => (e: React.ChangeEvent<HTMLInputElement>) => {
-      const value = e.target.value;
-      setFormData((prev) => ({ ...prev, [field]: value }));
-
-      // Clear field error when user starts typing
-      if (errors[field]) {
-        setErrors((prev) => ({ ...prev, [field]: undefined }));
-      }
-    };
-
-  const handleTextareaChange =
-    (field: keyof FormData) => (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-      const value = e.target.value;
-      setFormData((prev) => ({ ...prev, [field]: value }));
-
-      // Clear field error when user starts typing
-      if (errors[field]) {
-        setErrors((prev) => ({ ...prev, [field]: undefined }));
-      }
-    };
-
-  const handleBlur = (field: keyof FormData) => () => {
-    setTouched((prev) => new Set(prev).add(field));
-
-    let error: string | undefined;
-    switch (field) {
-      case 'name':
-        error = validateName(formData.name);
-        break;
-      case 'description':
-        error = validateDescription(formData.description);
-        break;
-    }
-
-    setErrors((prev) => ({ ...prev, [field]: error }));
-  };
-
-  const validateForm = (): boolean => {
-    const newErrors: FormErrors = {};
-
-    const nameError = validateName(formData.name);
-    const descriptionError = validateDescription(formData.description);
-    const imageUrlError = validateImageUrl(formData.imageUrl);
-
-    if (nameError) newErrors.name = nameError;
-    if (descriptionError) newErrors.description = descriptionError;
-    if (imageUrlError) newErrors.imageUrl = imageUrlError;
-
-    setErrors(newErrors);
-    setTouched(new Set(['name', 'description', 'imageUrl']));
-
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    // Clear general error
-    setErrors((prev) => ({ ...prev, general: undefined }));
-
-    // Validate form
-    if (!validateForm()) {
-      return;
-    }
-
-    setIsSubmitting(true);
-
+  const onSubmit = async (data: CourseFormData) => {
     try {
+      if (!data.image?.[0]) {
+        setError('root', {
+          message: 'Course image is required',
+        });
+        return;
+      }
+
       const { id } = await createCourse(
-        formData.name,
-        formData.description,
-        formData.imageUrl
+        data.name,
+        data.description,
+        data.image[0]
       );
 
       router.push(`${ROUTES.COURSES_MANAGEMENT.path}/${id}`);
     } catch (error) {
-      console.error('Course creation error:', error);
-      setErrors({
-        general: error instanceof Error ? error.message : DEFAULT_ERROR_MESSAGE,
+      setError('root', {
+        message:
+          error instanceof Error ? error.message : 'Failed to create course',
       });
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} noValidate>
-      {/* General Error Display */}
-      {errors.general && (
-        <div className="mb-6 rounded-lg bg-red-50 border border-red-200 p-4 text-sm text-red-800">
-          {errors.general}
-        </div>
-      )}
+    <div className="overflow-hidden rounded-lg bg-white shadow">
+      <div className="px-4 py-5 sm:px-6">
+        <h3 className="text-lg font-semibold leading-7 text-gray-900">
+          Create a New Course
+        </h3>
+        <p className="mt-1 text-sm text-gray-500">
+          Configure the details for your new course.
+        </p>
+      </div>
 
-      {/* Course Information Card */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200">
-        <div className="p-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-6">
-            Course Information
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Course Name - Full Width */}
-            <div className="md:col-span-2">
-              <label
-                className="block text-sm font-medium text-gray-900 mb-1"
-                htmlFor="course-name"
-              >
-                Course name
-              </label>
-              <input
-                id="course-name"
-                type="text"
-                value={formData.name}
-                onChange={handleInputChange('name')}
-                onBlur={handleBlur('name')}
-                className={`w-full rounded-md border transition px-3 py-2 ${
-                  touched.has('name') && errors.name
-                    ? 'border-red-300 focus:border-red-500 focus:ring-red-500'
-                    : 'border-gray-300 focus:border-[var(--primary-500)] focus:ring-[var(--primary-500)]'
-                }`}
-                style={inputStyle}
-                placeholder="e.g., Introduction to Web Development"
-                required
-              />
-              {touched.has('name') && errors.name && (
-                <p className="mt-1 text-sm text-red-600">{errors.name}</p>
-              )}
+      <div className="border-t border-gray-200 p-6">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="space-y-8"
+          noValidate
+        >
+          {/* Global Error */}
+          {errors.root && (
+            <div className="rounded-md bg-red-50 p-4">
+              <div className="flex">
+                <div className="ml-3">
+                  <h3 className="text-sm font-medium text-red-800">
+                    {errors.root.message}
+                  </h3>
+                </div>
+              </div>
             </div>
+          )}
 
-            {/* Course Description - Full Width */}
-            <div className="md:col-span-2">
-              <label
-                className="block text-sm font-medium text-gray-900 mb-1"
-                htmlFor="course-description"
-              >
-                Course description
-              </label>
-              <textarea
-                id="course-description"
-                value={formData.description}
-                onChange={handleTextareaChange('description')}
-                onBlur={handleBlur('description')}
-                className={`w-full rounded-md border transition px-3 py-2 ${
-                  touched.has('description') && errors.description
-                    ? 'border-red-300 focus:border-red-500 focus:ring-red-500'
-                    : 'border-gray-300 focus:border-[var(--primary-500)] focus:ring-[var(--primary-500)]'
+          {/* Course Name */}
+          <div>
+            <label
+              htmlFor="name"
+              className="block text-sm font-medium leading-6 text-gray-900"
+            >
+              Course Name
+            </label>
+            <div className="mt-2">
+              <input
+                type="text"
+                id="name"
+                {...register('name')}
+                placeholder="e.g. Introduction to Web Development"
+                className={`block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6 ${
+                  errors.name && touchedFields.name
+                    ? 'ring-red-300 focus:ring-red-500'
+                    : 'ring-gray-300 focus:ring-blue-600'
                 }`}
-                style={inputStyle}
-                placeholder="A brief summary of what this course is about."
-                rows={4}
-                required
               />
-              {touched.has('description') && errors.description && (
+              {errors.name && touchedFields.name && (
                 <p className="mt-1 text-sm text-red-600">
-                  {errors.description}
+                  {errors.name.message}
                 </p>
               )}
             </div>
+          </div>
 
-            {/* Course Image - Full Width */}
-            <div className="md:col-span-2">
-              <label
-                className="block text-sm font-medium text-gray-900 mb-1"
-                htmlFor="course-description"
-              >
-                Course image
-              </label>
+          {/* Description */}
+          <div>
+            <label
+              htmlFor="description"
+              className="block text-sm font-medium leading-6 text-gray-900"
+            >
+              Description
+            </label>
+            <div className="mt-2">
               <textarea
-                id="course-image-url"
-                value={formData.imageUrl}
-                onChange={handleTextareaChange('imageUrl')}
-                onBlur={handleBlur('imageUrl')}
-                className={`w-full rounded-md border transition px-3 py-2 ${
-                  touched.has('imageUrl') && errors.imageUrl
-                    ? 'border-red-300 focus:border-red-500 focus:ring-red-500'
-                    : 'border-gray-300 focus:border-[var(--primary-500)] focus:ring-[var(--primary-500)]'
-                }`}
-                style={inputStyle}
-                placeholder="https://example.com/course-image.png"
+                id="description"
+                {...register('description')}
                 rows={4}
-                required
+                placeholder="A brief summary of what this course is about."
+                className={`block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6 ${
+                  errors.description && touchedFields.description
+                    ? 'ring-red-300 focus:ring-red-500'
+                    : 'ring-gray-300 focus:ring-blue-600'
+                }`}
               />
-              {touched.has('imageUrl') && errors.imageUrl && (
-                <p className="mt-1 text-sm text-red-600">{errors.imageUrl}</p>
+              {errors.description && touchedFields.description && (
+                <p className="mt-1 text-sm text-red-600">
+                  {errors.description.message}
+                </p>
               )}
             </div>
           </div>
-        </div>
-      </div>
 
-      {/* Action Buttons */}
-      <div className="mt-8 flex justify-end gap-4">
-        <button
-          type="button"
-          className="font-semibold rounded-md px-6 py-2 bg-gray-200 text-gray-800 hover:bg-gray-300 transition-colors disabled:opacity-50"
-          disabled={true}
-        >
-          Save as Draft
-        </button>
-        <button
-          type="submit"
-          className="font-semibold rounded-md px-6 py-2 text-white transition-colors hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
-          style={{
-            backgroundColor: isSubmitting ? '#9CA3AF' : config.colors.primary,
-          }}
-          disabled={isSubmitting}
-        >
-          {isSubmitting ? 'Creating Course...' : 'Create Course'}
-        </button>
+          {/* Image Upload */}
+          <ImageUploadField
+            id="image"
+            label="Course Image"
+            maxSize="10MB"
+            register={register}
+            errors={errors}
+          />
+
+          {/* Action Buttons */}
+          <div className="mt-8 flex justify-end gap-x-3 border-t border-gray-900/10 pt-6">
+            <button
+              type="button"
+              onClick={() => router.back()}
+              className="text-sm font-semibold leading-6 text-gray-900"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="rounded-md px-3 py-2 text-sm font-semibold text-white shadow-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              style={{
+                backgroundColor: isSubmitting
+                  ? '#9CA3AF'
+                  : config.colors.primary,
+              }}
+            >
+              {isSubmitting ? 'Creating...' : 'Create Course'}
+            </button>
+          </div>
+        </form>
       </div>
-    </form>
+    </div>
   );
 }

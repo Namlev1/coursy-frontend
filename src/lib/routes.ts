@@ -36,6 +36,10 @@ export const ROUTES = {
     path: '/dashboard/courses',
     private: true,
   },
+  MY_LEARNING: {
+    path: '/my-learning',
+    private: true,
+  },
 } as const satisfies Record<string, Route>;
 
 export const PRIVATE_ROUTES = Object.values(ROUTES)

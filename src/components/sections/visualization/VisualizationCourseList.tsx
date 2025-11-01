@@ -20,7 +20,6 @@ export default function VisualizationCourseList({
     const updateScale = () => {
       if (containerRef.current) {
         const containerWidth = containerRef.current.offsetWidth;
-        console.log('Container width:', containerWidth);
         setScale(containerWidth / fullWidth);
       }
     };

@@ -1,7 +1,8 @@
-import fetchPageTemplate, { PageType } from '@/types/pageTemplate';
+import { PageType } from '@/types/pageTemplate';
 import { PageHeaderSection } from '@/components/sections/header/PageHeaderSection';
 import DashboardContentGrid from '@/components/sections/dashboard/home/DashboardContentGrid';
 import DashboardContentRows from '@/components/sections/dashboard/home/DashboardContentRows';
+import fetchPageTemplate from '@/lib/apiClient/requests/pageTemplateServer';
 
 export default async function DashboardPage() {
   const pageTemplate = await fetchPageTemplate(PageType.Dashboard);
