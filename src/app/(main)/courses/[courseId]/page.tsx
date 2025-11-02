@@ -1,27 +1,27 @@
 import { PageHeaderSection } from '@/components/sections/header/PageHeaderSection';
 import CourseSection from '@/components/sections/video/CourseSection';
-import {
-  fetchCourse,
-  fetchCurrentUserCourseByCourse,
-  fetchVideos,
-} from '@/lib/apiClient';
+import { fetchCourse, fetchCurrentUserCourseByCourse } from '@/lib/apiClient';
 import { UUID } from 'node:crypto';
 import { getCachedConfig } from '@/lib/configCache';
+import { fetchCourseContent } from '@/lib/apiClient/requests/content';
 
 interface CoursePageProps {
-  params: { courseId: UUID };
+  params: Promise<{ courseId: UUID }>; // Dodaj Promise!
 }
 
 export default async function CoursePage({ params }: CoursePageProps) {
-  const courseId = params.courseId;
+  const { courseId } = await params; // Await params!
+
   const course = await fetchCourse(courseId);
-  const videos = await fetchVideos(courseId);
+  const content = await fetchCourseContent(courseId);
+
   let userCourse;
   try {
     userCourse = await fetchCurrentUserCourseByCourse(courseId);
   } catch {
     userCourse = null;
   }
+
   const config = await getCachedConfig();
 
   return (
@@ -31,7 +31,7 @@ export default async function CoursePage({ params }: CoursePageProps) {
           <PageHeaderSection title={course.name} />
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <CourseSection
-              videos={videos}
+              contentList={content}
               userCourse={userCourse}
               config={config}
             />

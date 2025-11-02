@@ -12,7 +12,7 @@ export interface UserCourse {
   courseId: UUID;
   progress: ProgressStatus;
   finishedDay: string | null;
-  currentVideo: UUID;
+  currentContent: UUID;
 }
 
 export enum ProgressStatus {

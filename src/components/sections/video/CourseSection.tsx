@@ -1,24 +1,24 @@
 'use client';
 
 import CourseContentWidget from '@/components/sections/dashboard/courses/CourseContentWidget';
-import { Video } from '@/types/video';
 import { useState } from 'react';
-import CoursePlayer from '@/components/sections/dashboard/courses/CoursePlayer';
 import { useAppSelector } from '@/store/hooks/redux';
 import { Role } from '@/types/enums';
 import { ProgressStatus, UserCourse } from '@/types/course';
 import { PlatformConfig } from '@/types/platformConfig';
 import { updateUserCourse } from '@/lib/apiClient';
 import dayjs from 'dayjs';
+import { ContentDto } from '@/types/content';
+import { ContentViewer } from '@/components/sections/dashboard/courses/ContentViewer';
 
 interface CourseSectionProps {
-  videos: Video[];
+  contentList: ContentDto[];
   userCourse: UserCourse | null;
   config: PlatformConfig;
 }
 
 export default function CourseSection({
-  videos,
+  contentList,
   userCourse,
   config,
 }: CourseSectionProps) {
@@ -30,8 +30,8 @@ export default function CourseSection({
 
   const findFirst = () => {
     if (userCourse) {
-      const index = videos.findIndex(
-        (video) => video.id === userCourse.currentVideo
+      const index = contentList.findIndex(
+        (video) => video.id === userCourse.currentContent
       );
       if (index !== -1) {
         return index;
@@ -43,16 +43,16 @@ export default function CourseSection({
   const [current, setCurrent] = useState<number>(findFirst());
   const { isAuthenticated, role, user } = useAppSelector((state) => state.auth);
 
-  const changeVideo = async (index: number) => {
+  const changeCurrentContent = async (index: number) => {
     let progress;
-    if (index === videos.length - 1) {
+    if (index === contentList.length - 1) {
       progress = ProgressStatus.COMPLETED;
     } else {
       progress = ProgressStatus.IN_PROGRESS;
     }
     const dto: UserCourse = {
       ...userCourse,
-      currentVideo: videos[index].id,
+      currentContent: contentList[index].id,
       progress,
       finishedDay:
         progress === ProgressStatus.COMPLETED
@@ -66,9 +66,8 @@ export default function CourseSection({
   return (
     <>
       <div className="lg:col-span-2">
-        <CoursePlayer
-          videos={videos}
-          current={current}
+        <ContentViewer
+          content={contentList[current]}
           isAuthenticated={isAuthenticated}
           isPreview={isPreview()}
           config={config}
@@ -77,10 +76,11 @@ export default function CourseSection({
       </div>
       <div className="lg:col-span-1">
         <CourseContentWidget
-          videos={videos}
+          contentList={contentList}
           current={current}
-          setCurrent={changeVideo}
+          setCurrent={changeCurrentContent}
           isPreview={isPreview()}
+          config={config}
         />
       </div>
     </>

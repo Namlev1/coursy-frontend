@@ -12,20 +12,10 @@ import {
   Volume2,
   VolumeX,
 } from 'lucide-react';
-import {
-  addCourseToUser,
-  getMasterPlaylistUrl,
-  getVideoThumbnailUrl,
-} from '@/lib/apiClient';
+import { getMasterPlaylistUrl, getVideoThumbnailUrl } from '@/lib/apiClient';
 import { ThumbnailSize, Video } from '@/types/video';
 import dynamic from 'next/dynamic';
-import Link from 'next/link';
-import { ROUTES } from '@/lib/routes';
 import { PlatformConfig } from '@/types/platformConfig';
-import { User } from '@/types/user';
-import { ProgressStatus, UserCourse } from '@/types/course';
-import { UUID } from 'node:crypto';
-import { useParams, useRouter } from 'next/navigation';
 
 const ReactPlayer = dynamic(() => import('react-player'), {
   ssr: false,
@@ -36,28 +26,20 @@ const ReactPlayer = dynamic(() => import('react-player'), {
   ),
 });
 
-interface CoursePlayerProps {
-  videos: Video[];
-  current: number;
-  isPreview: boolean;
-  isAuthenticated: boolean;
+interface VideoPlayerProps {
+  video: Video;
   videoUrl?: string;
   duration?: number;
   watchedTime?: number;
   onComplete?: () => void;
   config: PlatformConfig;
-  user: User;
 }
 
-const CoursePlayer: React.FC<CoursePlayerProps> = ({
-  videos,
-  current,
+const VideoPlayer: React.FC<VideoPlayerProps> = ({
+  video,
   watchedTime = 0,
   onComplete,
-  isPreview,
-  isAuthenticated,
   config,
-  user,
 }) => {
   const playerRef = useRef<ReactPlayerType>(null);
   const [playing, setPlaying] = useState(false);
@@ -69,13 +51,10 @@ const CoursePlayer: React.FC<CoursePlayerProps> = ({
   const [playbackRate, setPlaybackRate] = useState(1);
   const [showSettings, setShowSettings] = useState(false);
   const [seeking, setSeeking] = useState(false);
-  const params = useParams();
-  const courseId = params.courseId as UUID;
 
-  const { title, description, id } = videos[current];
+  const { title, description, id } = video;
   const videoUrl = getMasterPlaylistUrl(id);
   const [videoDuration, setVideoDuration] = useState(0);
-  const router = useRouter();
 
   // Resume from last watched position
   useEffect(() => {
@@ -83,20 +62,6 @@ const CoursePlayer: React.FC<CoursePlayerProps> = ({
       playerRef.current.seekTo(watchedTime, 'seconds');
     }
   }, [watchedTime]);
-
-  const handleCourseAdded = async () => {
-    const userId = user.id;
-    const dto: UserCourse = {
-      userId,
-      courseId,
-      progress: ProgressStatus.NOT_STARTED,
-      currentVideo: videos[current].id,
-      id: null,
-      finishedDay: null,
-    };
-    const res = await addCourseToUser(dto);
-    router.refresh();
-  };
 
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -318,29 +283,9 @@ const CoursePlayer: React.FC<CoursePlayerProps> = ({
             </p>
           </div>
         </div>
-        {/*TODO fix it*/}
-        {!isAuthenticated ? (
-          <Link
-            href={ROUTES.LOGIN.path}
-            className="flex min-w-[84px] items-center justify-center rounded-md h-10 px-4 text-white text-sm font-bold shadow-sm transition-all hover:opacity-90"
-            style={{ backgroundColor: config.colors.primary }}
-          >
-            Login to acces course
-          </Link>
-        ) : (
-          isPreview && (
-            <button
-              className="flex min-w-[84px] items-center justify-center rounded-md h-10 px-4 text-white text-sm font-bold shadow-sm transition-all hover:opacity-90"
-              style={{ backgroundColor: config.colors.primary }}
-              onClick={handleCourseAdded}
-            >
-              Add course to your learning
-            </button>
-          )
-        )}
       </div>
     </div>
   );
 };
 
-export default CoursePlayer;
+export default VideoPlayer;
