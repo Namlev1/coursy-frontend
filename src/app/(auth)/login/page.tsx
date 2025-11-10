@@ -13,8 +13,8 @@ export default async function LoginPage() {
         logoUrl={getLogo(platformId)}
         logoText={''}
         title={platform.name}
-        subtitle={'Create an account'}
-        submitText={'Sign up'}
+        subtitle={'Login'}
+        submitText={'Login'}
         loginLinkHref={ROUTES.DASHBOARD.path}
       />
     </div>

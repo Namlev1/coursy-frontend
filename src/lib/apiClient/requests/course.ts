@@ -1,4 +1,4 @@
-import { Course, UserCourse } from '@/types/course';
+import { Course, CourseUpdateRequest, UserCourse } from '@/types/course';
 import { getApiClient } from '../apiClient';
 import { handleError } from '@/lib/apiClient/errors';
 import { UUID } from 'node:crypto';
@@ -121,6 +121,16 @@ export async function updateUserCourse(
       `/api/courses/user-courses/${userCourseId}`,
       userCourse
     );
+    return response.data;
+  } catch (error) {
+    handleError(error);
+  }
+}
+
+export async function updateCourse(dto: CourseUpdateRequest, courseId: UUID) {
+  try {
+    const client = await getApiClient();
+    const response = await client.put<Course>(`/api/courses/${courseId}`, dto);
     return response.data;
   } catch (error) {
     handleError(error);

@@ -1,6 +1,7 @@
 'use client';
 
 import { ThumbnailSize } from '@/types/video';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { UUID } from 'node:crypto';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
@@ -13,6 +14,7 @@ import { ContentDto } from '@/types/content';
 import TextSnippetIcon from '@mui/icons-material/TextSnippet';
 import QuizIcon from '@mui/icons-material/Quiz';
 import { MaterialType } from '@/types/enums/MaterialType';
+import { deleteContent } from '@/lib/apiClient/requests/content';
 
 interface ContentManagementProps {
   content: ContentDto[];
@@ -38,10 +40,16 @@ function getIcon(contentItem: ContentDto) {
   }
 }
 
+const formatTime = (seconds: number) => {
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = Math.floor(seconds % 60);
+  return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+};
+
 function getContentDescription(contentItem: ContentDto) {
   switch (contentItem.type) {
     case MaterialType.VIDEO:
-      return `Video - Duration: ${contentItem.videoDuration} seconds`;
+      return `Video - Duration: ${formatTime(contentItem.videoDuration)}`;
     case MaterialType.TEXT:
       return 'Text Content';
     case MaterialType.QUIZ:
@@ -65,6 +73,11 @@ function getEditUrl(contentItem: ContentDto, courseId: UUID) {
 export default function ContentManagement({ content }: ContentManagementProps) {
   const config = useConfig();
   const params = useParams();
+
+  async function handleDeleteContent(id: UUID) {
+    await deleteContent(id);
+    content = content.filter((item) => item.id !== id);
+  }
 
   const EditIcon = () => (
     <svg
@@ -182,6 +195,7 @@ export default function ContentManagement({ content }: ContentManagementProps) {
                 </p>
               </div>
 
+              <DeleteIcon onClick={() => handleDeleteContent(contentItem.id)} />
               <Link
                 href={getEditUrl(contentItem, params.courseId as UUID)}
                 className="ml-4 p-2 rounded-full hover:opacity-80 transition-all"

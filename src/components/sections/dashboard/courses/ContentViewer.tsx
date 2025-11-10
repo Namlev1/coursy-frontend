@@ -108,7 +108,7 @@ export function ContentViewer({
       case 'video':
         return <VideoPlayer video={contentData.data} config={config} />;
       case 'quiz':
-        return <QuizPlayer quiz={contentData.data} config={config} />;
+        return <QuizPlayer quizContent={contentData.data} config={config} />;
       case 'text':
         return <TextPlayer textContent={contentData.data} config={config} />;
       default:
@@ -119,8 +119,8 @@ export function ContentViewer({
   return (
     <div className="bg-white rounded-lg overflow-hidden shadow-md">
       {renderViewer()}
-      <div className={'mt-2 p-4'}>
-        {!isAuthenticated ? (
+      {!isAuthenticated ? (
+        <div className={'mt-2 p-4'}>
           <Link
             href={ROUTES.LOGIN.path}
             className="inline-flex min-w-[84px] items-center justify-center rounded-md h-10 px-4 text-white text-sm font-bold shadow-sm transition-all hover:opacity-90"
@@ -128,8 +128,10 @@ export function ContentViewer({
           >
             Login to access course
           </Link>
-        ) : (
-          isPreview && (
+        </div>
+      ) : (
+        isPreview && (
+          <div className={'mt-2 p-4'}>
             <button
               className="flex min-w-[84px] items-center justify-center rounded-md h-10 px-4 text-white text-sm font-bold shadow-sm transition-all hover:opacity-90"
               style={{ backgroundColor: config.colors.primary }}
@@ -137,9 +139,9 @@ export function ContentViewer({
             >
               Add course to your learning
             </button>
-          )
-        )}
-      </div>
+          </div>
+        )
+      )}
     </div>
   );
 }

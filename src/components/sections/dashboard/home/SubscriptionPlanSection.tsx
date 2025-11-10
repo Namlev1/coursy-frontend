@@ -41,19 +41,11 @@ export default async function SubscriptionPlanSection({
         {platforms.length} of 4 platforms used.
       </p>
       <button
-        // onClick={onManageSubscription}
         className="mt-4 w-full rounded-lg border px-4 py-2 text-sm font-semibold shadow-sm hover:opacity-90 transition-opacity"
         style={{
-          // borderColor: config.colors.primary,
-          // color: config.colors.primary,
           backgroundColor: 'white',
         }}
-        // onMouseEnter={(e) => {
-        //   e.currentTarget.style.backgroundColor = `${theme.colors.primary}0D`; // 5% opacity
-        // }}
-        // onMouseLeave={(e) => {
-        //   e.currentTarget.style.backgroundColor = 'white';
-        // }}
+        disabled
       >
         Manage Subscription
       </button>

@@ -5,13 +5,15 @@ import { UserResponse } from '@/types/user';
 
 export async function loginUser(
   email: string,
-  password: string
+  password: string,
+  platformId: string | null
 ): Promise<LoginResponse> {
   try {
     const client = await getApiClient();
     const response = await client.post<LoginResponse>('/api/auth/login', {
       email: email.trim(),
       password,
+      platformId: platformId,
     });
     return response.data;
   } catch (error) {
@@ -46,7 +48,7 @@ export async function registerUser(dto: RegisterDto, platformId?: string) {
   try {
     const client = await getApiClient();
     const url = platformId
-      ? `/api/platforms/${platformId}/users/register`
+      ? `/api/users/platform/${platformId}/register`
       : '/api/users/host/register';
     await client.post<void>(url, dto);
   } catch (error) {

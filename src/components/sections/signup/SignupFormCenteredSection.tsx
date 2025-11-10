@@ -16,6 +16,7 @@ import { PlatformConfig } from '@/types/platformConfig';
 import { RegisterDto } from '@/types/auth';
 import { registerUser } from '@/lib/apiClient';
 import { UUID } from 'node:crypto';
+import Cookies from 'js-cookie';
 
 interface SignupFormCenteredSectionProps {
   logoUrl: string;
@@ -179,16 +180,16 @@ export default function SignupFormCenteredSection({
     setErrors({});
 
     try {
-      const isHost = platformId === '4e1c791d-c481-4f9a-9eff-b701c2875c5f';
+      const platformId = Cookies.get('platformId');
       const dto: RegisterDto = {
         firstName: formData.firstName.trim(),
         lastName: formData.lastName.trim(),
         email: formData.email.trim(),
         password: formData.password,
-        roleName: isHost ? Role.ROLE_TENANT : Role.ROLE_PLATFORM_USER,
+        roleName: platformId ? Role.ROLE_PLATFORM_USER : Role.ROLE_TENANT,
       };
 
-      await registerUser(dto);
+      await registerUser(dto, platformId);
 
       router.push(loginLinkHref);
     } catch (error) {

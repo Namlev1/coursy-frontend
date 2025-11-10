@@ -16,3 +16,12 @@ export async function fetchCourseContent(
     handleError(error);
   }
 }
+
+export async function deleteContent(contentId: UUID): Promise<void> {
+  try {
+    const client = await getApiClient();
+    return await client.delete(`/api/content/${contentId}`);
+  } catch (error) {
+    handleError(error);
+  }
+}

@@ -15,7 +15,7 @@ export async function PageHeaderSection({
     <div>
       <h1
         className="text-3xl font-bold text-gray-900 mb-2 mt-8"
-        style={{ color: config.colors.secondary }}
+        style={{ color: config.colors.primary }}
       >
         {title}
       </h1>

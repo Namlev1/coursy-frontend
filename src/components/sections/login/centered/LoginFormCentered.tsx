@@ -75,7 +75,11 @@ export default function LoginFormCentered({
 
   const onSubmit = async (data: LoginFormData) => {
     try {
-      const loginData = await loginUser(data.email, data.password);
+      let platformId: string | undefined | null = Cookies.get('platformId');
+      if (platformId === undefined) {
+        platformId = null;
+      }
+      const loginData = await loginUser(data.email, data.password, platformId);
 
       // Fetch user data
       const userData = await fetchUserData(loginData.token);
@@ -159,7 +163,7 @@ export default function LoginFormCentered({
                 }}
                 disabled={isSubmitting || !isValid}
               >
-                {isSubmitting ? 'Creating account...' : submitText}
+                {isSubmitting ? 'Loging in...' : submitText}
               </button>
             </div>
           </form>

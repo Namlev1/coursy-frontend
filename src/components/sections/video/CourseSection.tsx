@@ -3,7 +3,6 @@
 import CourseContentWidget from '@/components/sections/dashboard/courses/CourseContentWidget';
 import { useState } from 'react';
 import { useAppSelector } from '@/store/hooks/redux';
-import { Role } from '@/types/enums';
 import { ProgressStatus, UserCourse } from '@/types/course';
 import { PlatformConfig } from '@/types/platformConfig';
 import { updateUserCourse } from '@/lib/apiClient';
@@ -23,9 +22,7 @@ export default function CourseSection({
   config,
 }: CourseSectionProps) {
   const isPreview = () => {
-    return (
-      !isAuthenticated || (role === Role.ROLE_PLATFORM_USER && !userCourse)
-    );
+    return !isAuthenticated || !userCourse;
   };
 
   const findFirst = () => {
