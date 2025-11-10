@@ -5,7 +5,7 @@ interface ErrorResponse {
   message: string;
 }
 
-function extractErrorResponse(error: AxiosError): ErrorResponse {
+export function extractErrorResponse(error: AxiosError): ErrorResponse {
   const status = error.response?.status || 0;
   const responseData = error.response?.data;
 

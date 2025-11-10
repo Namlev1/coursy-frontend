@@ -45,13 +45,9 @@ export async function logoutUser() {
 }
 
 export async function registerUser(dto: RegisterDto, platformId?: string) {
-  try {
-    const client = await getApiClient();
-    const url = platformId
-      ? `/api/users/platform/${platformId}/register`
-      : '/api/users/host/register';
-    await client.post<void>(url, dto);
-  } catch (error) {
-    handleError(error);
-  }
+  const client = await getApiClient();
+  const url = platformId
+    ? `/api/users/platform/${platformId}/register`
+    : '/api/users/host/register';
+  await client.post<void>(url, dto);
 }

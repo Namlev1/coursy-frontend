@@ -1,17 +1,17 @@
 import React from 'react';
-import { PlatformConfig } from '@/types/platformConfig';
+import { PlatformFormData } from '@/components/sections/dashboard/platform/CreatePlatformWidget';
 
-interface CoursesSearchBarProps {
+interface MockCoursesSearchBarProps {
   placeholder?: string;
   onSearch?: (query: string) => void;
-  config: PlatformConfig;
+  formData: PlatformFormData;
 }
 
-export default function CoursesSearchBar({
+export default function MockCoursesSearchBar({
   placeholder = 'Search courses...',
   onSearch,
-  config,
-}: CoursesSearchBarProps) {
+  formData,
+}: MockCoursesSearchBarProps) {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (onSearch) {
       onSearch(e.target.value);
@@ -38,8 +38,8 @@ export default function CoursesSearchBar({
       <input
         className="form-input block w-full rounded-full py-3 pl-12 pr-4 text-base"
         style={{
-          borderColor: config.colors.primary,
-          '--tw-ring-color': config.colors.primary,
+          borderColor: formData.colors.primary,
+          '--tw-ring-color': formData.colors.primary,
         }}
         placeholder={placeholder}
         type="search"

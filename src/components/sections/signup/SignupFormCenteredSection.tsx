@@ -17,6 +17,8 @@ import { RegisterDto } from '@/types/auth';
 import { registerUser } from '@/lib/apiClient';
 import { UUID } from 'node:crypto';
 import Cookies from 'js-cookie';
+import { AxiosError } from 'axios';
+import { extractErrorResponse } from '@/lib/apiClient/errors';
 
 interface SignupFormCenteredSectionProps {
   logoUrl: string;
@@ -194,10 +196,16 @@ export default function SignupFormCenteredSection({
       router.push(loginLinkHref);
     } catch (error) {
       console.error('Registration error:', error);
-      setErrors({
-        general:
-          'Unable to connect to the server. Please check your connection and try again.',
-      });
+      if (error instanceof AxiosError) {
+        const { message } = extractErrorResponse(error);
+        setErrors({
+          general: message,
+        });
+      } else {
+        setErrors({
+          general: 'Unable to connect to the server. Please try again later.',
+        });
+      }
     } finally {
       setIsSubmitting(false);
     }

@@ -1,10 +1,10 @@
 'use client';
 
 import React from 'react';
-import CoursesSearchBar from '@/components/sections/courses/CoursesSearchBar';
 import { Course } from '@/types/course';
 import { PlatformFormData } from '@/components/sections/dashboard/platform/CreatePlatformWidget';
 import Link from 'next/link';
+import MockCoursesSearchBar from '@/components/sections/visualization/mockComponents/MockCourseSearchBar';
 
 interface MockCourseGridProps {
   formData: PlatformFormData;
@@ -59,9 +59,10 @@ export default function MockCourseGrid({ formData }: MockCourseGridProps) {
       <div className="container mx-auto">
         {/* Search and Filters */}
         <div className="mb-8 flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
-          <CoursesSearchBar
+          <MockCoursesSearchBar
             placeholder="Search for courses..."
             onSearch={() => {}}
+            formData={formData}
           />
         </div>
 

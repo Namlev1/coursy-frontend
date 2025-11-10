@@ -76,7 +76,7 @@ export default function ContentManagement({ content }: ContentManagementProps) {
 
   async function handleDeleteContent(id: UUID) {
     await deleteContent(id);
-    content = content.filter((item) => item.id !== id);
+    window.location.reload();
   }
 
   const EditIcon = () => (

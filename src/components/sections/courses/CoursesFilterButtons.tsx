@@ -1,11 +1,15 @@
+import { PlatformConfig } from '@/types/platformConfig';
+
 interface CoursesFilterButtonsProps {
   activeFilter: string;
   onFilterChange: (filter: string) => void;
+  config: PlatformConfig;
 }
 
 export default function CoursesFilterButtons({
   activeFilter,
   onFilterChange,
+  config,
 }: CoursesFilterButtonsProps) {
   const filters = ['All Courses', 'In Progress', 'Completed'];
 
@@ -16,9 +20,14 @@ export default function CoursesFilterButtons({
           key={filter}
           className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${
             activeFilter === filter
-              ? 'bg-indigo-600 text-white'
+              ? 'text-white'
               : 'text-slate-600 hover:bg-slate-200'
           }`}
+          style={
+            activeFilter === filter
+              ? { backgroundColor: config.colors.primary }
+              : undefined
+          }
           onClick={() => onFilterChange(filter)}
         >
           {filter}
