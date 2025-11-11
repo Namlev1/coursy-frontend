@@ -1,5 +1,6 @@
 import React from 'react';
 import { getCachedConfig } from '@/lib/configCache';
+import Image from 'next/image';
 
 interface HeroSectionProps {
   title: string;
@@ -19,10 +20,15 @@ export default async function HeroSection({
   const config = await getCachedConfig();
 
   return (
-    <section
-      className="flex-1 flex items-center justify-center bg-cover bg-center relative"
-      style={{ backgroundImage: `url("${backgroundImage}")` }}
-    >
+    <section className="flex-1 flex items-center justify-center bg-cover bg-center relative">
+      <Image
+        src={backgroundImage}
+        alt="Hero background"
+        fill
+        priority
+        className="object-cover -z-10"
+      />
+
       {/* Overlay */}
       <div className="absolute inset-0 bg-black/50 flex-1" />
 
