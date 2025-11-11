@@ -1,14 +1,12 @@
-import { headers } from 'next/headers';
-import { UUID } from 'node:crypto';
-
-export const PLATFORM_ID_HEADER = 'X-Platform-Id';
+import { cookies } from 'next/headers';
+import { UUID } from 'crypto';
 
 export async function getPlatformId() {
-  const headersList = await headers();
-  const platformId = headersList.get(PLATFORM_ID_HEADER);
+  const cookieStore = await cookies();
+  const platformId = cookieStore.get('platformId')?.value;
 
   if (!platformId) {
-    throw new Error('Platform ID not found in headers');
+    throw new Error('Platform ID not found in cookies');
   }
 
   return platformId as UUID;
