@@ -56,7 +56,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const videoUrl = getMasterPlaylistUrl(id);
   const [videoDuration, setVideoDuration] = useState(0);
 
-  // Resume from last watched position
   useEffect(() => {
     if (watchedTime > 0 && playerRef.current) {
       playerRef.current.seekTo(watchedTime, 'seconds');
@@ -259,7 +258,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
                 )}
               </div>
 
-              {/*TODO tutaj fullscreen*/}
               <button
                 className="text-white hover:text-blue-400 transition-colors"
                 onClick={handleFullscreen}

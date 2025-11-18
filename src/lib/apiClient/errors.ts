@@ -11,16 +11,14 @@ export function extractErrorResponse(error: AxiosError): ErrorResponse {
 
   let message = DEFAULT_ERROR_MESSAGE;
 
-  // Handle different types of response data
   if (typeof responseData === 'string') {
     message = responseData;
   } else if (responseData && typeof responseData === 'object') {
-    // Try to extract message from common fields
     message =
       (responseData as any).message ||
       (responseData as any).error ||
       (responseData as any).msg ||
-      JSON.stringify(responseData); // Fallback: stringify the object
+      JSON.stringify(responseData);
   }
 
   return { status, message };

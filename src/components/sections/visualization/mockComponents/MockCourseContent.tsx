@@ -107,7 +107,7 @@ export default function MockCourseContent({
                 className="flex-shrink-0 w-12 h-12 rounded-lg flex items-center justify-center bg-cover bg-center"
                 style={{
                   backgroundImage: `${video.thumbnail}`,
-                  backgroundColor: `${formData.colors.primary}20`, // fallback color
+                  backgroundColor: `${formData.colors.primary}20`,
                   color:
                     isCurrentlyPlaying || !isPreview
                       ? formData.colors.primary

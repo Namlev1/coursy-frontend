@@ -56,7 +56,7 @@ export default async function PlatformsTableSection() {
                   </td>
                   <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
                     <a
-                      href={`https://${platform.subdomain}.coursy.com`}
+                      href={`http://${platform.subdomain}.coursy.com`}
                       className="hover:opacity-80 transition-opacity"
                       style={{ color: config.colors.primary }}
                       target="_blank"

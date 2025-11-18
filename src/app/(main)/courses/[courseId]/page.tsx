@@ -6,11 +6,11 @@ import { getCachedConfig } from '@/lib/configCache';
 import { fetchCourseContent } from '@/lib/apiClient/requests/content';
 
 interface CoursePageProps {
-  params: Promise<{ courseId: UUID }>; // Dodaj Promise!
+  params: Promise<{ courseId: UUID }>;
 }
 
 export default async function CoursePage({ params }: CoursePageProps) {
-  const { courseId } = await params; // Await params!
+  const { courseId } = await params;
 
   const course = await fetchCourse(courseId);
   const content = await fetchCourseContent(courseId);

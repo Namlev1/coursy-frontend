@@ -19,7 +19,6 @@ export default async function DashboardPlatformSection() {
           {/* Right Column - Sidebar Widgets */}
           <div className="lg:col-span-1">
             <div className="sticky top-24 space-y-8">
-              {/* Your Platforms Widget */}
               <YourPlatformsWidget platforms={platforms} />
 
               <SubscriptionPlanSection planName={'Enterprise'} />

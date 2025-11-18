@@ -9,43 +9,16 @@ interface CourseRowProps {
 }
 
 const CourseRow: React.FC<CourseRowProps> = ({ course, userCourse }) => {
-  // todo fix
-  const getProgressPercentage = () => {
-    switch (userCourse.progress) {
-      case ProgressStatus.NOT_STARTED:
-        return 0;
-      case ProgressStatus.IN_PROGRESS:
-        return 75;
-      case ProgressStatus.COMPLETED:
-        return 100;
-      default:
-        return 0;
-    }
-  };
-
   const getStatusColor = () => {
     switch (userCourse.progress) {
       case ProgressStatus.NOT_STARTED:
-        return 'text-slate-600';
+        return 'text-slate-600 bg-slate-100';
       case ProgressStatus.IN_PROGRESS:
-        return 'text-amber-500';
+        return 'text-amber-600 bg-amber-100';
       case ProgressStatus.COMPLETED:
-        return 'text-emerald-500';
+        return 'text-emerald-600 bg-emerald-100';
       default:
-        return 'text-slate-600';
-    }
-  };
-
-  const getProgressBarColor = () => {
-    switch (userCourse.progress) {
-      case ProgressStatus.NOT_STARTED:
-        return 'bg-slate-400';
-      case ProgressStatus.IN_PROGRESS:
-        return 'bg-amber-500';
-      case ProgressStatus.COMPLETED:
-        return 'bg-emerald-500';
-      default:
-        return 'bg-slate-400';
+        return 'text-slate-600 bg-slate-100';
     }
   };
 
@@ -62,7 +35,6 @@ const CourseRow: React.FC<CourseRowProps> = ({ course, userCourse }) => {
           className: 'bg-blue-500 text-white hover:bg-blue-600',
         };
       case ProgressStatus.COMPLETED:
-        // todo
         return {
           text: 'Review',
           className: 'bg-emerald-500 text-white hover:bg-emerald-600',
@@ -75,9 +47,7 @@ const CourseRow: React.FC<CourseRowProps> = ({ course, userCourse }) => {
     }
   };
 
-  const progressPercentage = getProgressPercentage();
   const statusColor = getStatusColor();
-  const progressBarColor = getProgressBarColor();
   const buttonConfig = getButtonConfig();
   const statusText = userCourse.progress
     .replace('_', ' ')
@@ -88,26 +58,18 @@ const CourseRow: React.FC<CourseRowProps> = ({ course, userCourse }) => {
     <div className="flex flex-col md:flex-row items-center bg-white rounded-xl border border-gray-200 shadow-sm p-4 gap-4 transition-shadow hover:shadow-lg">
       <div className="w-full md:w-2/5 flex flex-col">
         <h3 className="font-bold text-lg text-gray-900">{course.name}</h3>
-        <p className="text-sm text-gray-500 mt-1">
-          Status:{' '}
-          <span className={`${statusColor} font-medium`}>{statusText}</span>
-        </p>
         {userCourse.finishedDay && (
-          <p className="text-xs text-gray-400 mt-1">
+          <p className="text-xs text-gray-500 mt-1">
             Completed: {new Date(userCourse.finishedDay).toLocaleDateString()}
           </p>
         )}
       </div>
 
-      <div className="w-full md:w-2/5 flex items-center gap-4">
-        <div className="w-full bg-gray-200 rounded-full h-2.5">
-          <div
-            className={`${progressBarColor} h-2.5 rounded-full transition-all duration-300`}
-            style={{ width: `${progressPercentage}%` }}
-          />
-        </div>
-        <span className="text-sm font-medium text-gray-900 min-w-[40px]">
-          {progressPercentage}%
+      <div className="w-full md:w-2/5 flex items-center">
+        <span
+          className={`${statusColor} px-3 py-1.5 rounded-full text-sm font-medium`}
+        >
+          {statusText}
         </span>
       </div>
 

@@ -76,16 +76,15 @@ export default function LoginFormCentered({
   const onSubmit = async (data: LoginFormData) => {
     try {
       let platformId: string | undefined | null = Cookies.get('platformId');
+
       if (platformId === undefined) {
         platformId = null;
       }
       const loginData = await loginUser(data.email, data.password, platformId);
 
-      // Fetch user data
       const userData = await fetchUserData(loginData.token);
       const encodedUserData = btoa(JSON.stringify(userData));
 
-      // Store token and update Redux state
       Cookies.set('jwt', loginData.token, { expires: JWT_EXPIRES_DAYS });
       Cookies.set('refreshToken', loginData.refreshToken, {
         expires: REFRESH_EXPIRES_DAYS,
@@ -94,13 +93,11 @@ export default function LoginFormCentered({
         expires: REFRESH_EXPIRES_DAYS,
       });
 
-      console.log('userData.roleName', userData.roleName);
-      if (userData.roleName === Role.ROLE_PLATFORM_USER) {
-        router.push(ROUTES.MY_LEARNING.path);
-        return;
-      }
-
-      router.push(loginLinkHref);
+      await new Promise((resolve) => setTimeout(resolve, 200));
+      window.location.href =
+        userData.roleName === Role.ROLE_PLATFORM_USER
+          ? ROUTES.MY_LEARNING.path
+          : loginLinkHref;
     } catch (error) {
       setError('root', {
         message: error instanceof Error ? error.message : DEFAULT_ERROR_MESSAGE,

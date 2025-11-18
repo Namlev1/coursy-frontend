@@ -10,15 +10,6 @@ export default async function SubscriptionPlanSection({
 }: SubscriptionPlanProps) {
   const platforms = await getUserPlatforms();
   const usagePercentage = (platforms.length / 4) * 100;
-  // const [platforms, setPlatforms] = React.useState<PlatformResponse[]>([]);
-  //
-  // useEffect(() => {
-  //   const fetchPlatforms = async () => {
-  //     const response = await getUserPlatforms()
-  //     setPlatforms(response)
-  //   }
-  //   fetchPlatforms();
-  // }, []);
 
   return (
     <div className="rounded-lg bg-white p-6 shadow">

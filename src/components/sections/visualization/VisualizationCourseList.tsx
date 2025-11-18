@@ -34,7 +34,7 @@ export default function VisualizationCourseList({
       ref={containerRef}
       className="rounded-lg border border-gray-200 bg-white overflow-hidden relative flex flex-col-reverse"
       style={{
-        aspectRatio: `${fullWidth} / ${fullHeight}`, // Maintain aspect ratio
+        aspectRatio: `${fullWidth} / ${fullHeight}`,
       }}
     >
       <div

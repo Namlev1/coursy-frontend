@@ -56,7 +56,6 @@ export default function UpdateTextForm({ textContent }: UpdateTextFormProps) {
       await updateText(textDto);
       router.push(`/dashboard/courses/${params.courseId}`);
     } catch (error) {
-      // todo show error in ui
       throw error;
     }
   };

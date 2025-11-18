@@ -80,8 +80,8 @@ export default function UpdateQuizForm({ quizDto }: UpdateQuizFormProps) {
           answerSelectionType: q.answerSelectionType as 'single' | 'multiple',
           answers: q.answers,
           correctAnswers: Array.isArray(q.correctAnswer)
-            ? q.correctAnswer.map((i) => i - 1) // ← DODAJ -1 dla każdego indeksu
-            : [parseInt(q.correctAnswer as string) - 1], // ← DODAJ -1
+            ? q.correctAnswer.map((i) => i - 1)
+            : [parseInt(q.correctAnswer as string) - 1],
           explanation: q.explanation || '',
           points: parseInt(q.point || '10'),
         })),
@@ -110,8 +110,8 @@ export default function UpdateQuizForm({ quizDto }: UpdateQuizFormProps) {
           answers: q.answers,
           correctAnswer:
             q.answerSelectionType === 'single'
-              ? (q.correctAnswers[0] + 1).toString() // +1 because react-quiz-component uses 1-based index
-              : q.correctAnswers.map((i) => i + 1), // +1 for each index
+              ? (q.correctAnswers[0] + 1).toString()
+              : q.correctAnswers.map((i) => i + 1),
           explanation: q.explanation || null,
           point: q.points.toString(),
         })),
@@ -122,7 +122,6 @@ export default function UpdateQuizForm({ quizDto }: UpdateQuizFormProps) {
       await updateQuiz(dto);
       router.push(`/dashboard/courses/${params.courseId}`);
     } catch (error) {
-      // todo show error in ui
       throw error;
     }
   };

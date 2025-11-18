@@ -58,7 +58,7 @@ export const PASSWORD_REGEXES = {
   LOWERCASE: /[a-z]/,
   DIGIT: /[0-9]/,
   SPECIAL_CHAR: /[^A-Za-z0-9]/,
-  REPEATING_CHARS: /(.)\\1{2,}/, // Three or more consecutive same characters
+  REPEATING_CHARS: /(.)\\1{2,}/,
 } as const;
 
 export const EMAIL_REGEX = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;

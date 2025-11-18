@@ -89,7 +89,7 @@ export default function MockCourseGrid({ formData }: MockCourseGridProps) {
                 <Link
                   className="mt-4 w-full rounded-full py-2 px-4 text-sm font-semibold transition-colors text-center"
                   style={{
-                    backgroundColor: `${formData.colors.primary}15`, // 15 is ~10% opacity in hex
+                    backgroundColor: `${formData.colors.primary}15`,
                     color: formData.colors.primary,
                   }}
                   onMouseEnter={(e) => {

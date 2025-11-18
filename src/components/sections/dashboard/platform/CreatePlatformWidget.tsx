@@ -149,7 +149,6 @@ export default function CreatePlatformWidget() {
         },
       };
 
-      // Pass files separately
       const platform = await postPlatform(
         formData,
         data.logoImage[0],

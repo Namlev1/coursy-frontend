@@ -21,7 +21,7 @@ interface CourseContentWidgetProps {
 }
 
 interface ContentWithDetails extends ContentDto {
-  details?: any; // Możesz dodać bardziej szczegółowy typ
+  details?: any;
 }
 
 export default function CourseContentWidget({

@@ -15,7 +15,7 @@ export default async function SupportSection({
   onContactSupport,
 }: SupportSectionProps) {
   const config = await getCachedConfig();
-  const lighterColor = `${config.colors.primary}1A`; // 10% opacity for background
+  const lighterColor = `${config.colors.primary}1A`;
 
   return (
     <div className="rounded-lg p-6" style={{ backgroundColor: lighterColor }}>

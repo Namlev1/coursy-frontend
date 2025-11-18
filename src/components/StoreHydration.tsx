@@ -15,13 +15,12 @@ export default function StoreHydration() {
       const encodedUserData = Cookies.get('userData');
 
       if (!encodedUserData) {
-        return; // User not logged in
+        return;
       }
 
       const decodedUserData = atob(encodedUserData);
       const userData: UserResponse = JSON.parse(decodedUserData);
 
-      // Update Redux state
       dispatch(
         login({
           user: {

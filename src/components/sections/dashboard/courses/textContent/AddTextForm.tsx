@@ -50,7 +50,6 @@ export default function AddTextForm() {
       await addText(textDto);
       router.push(`/dashboard/courses/${params.courseId}`);
     } catch (error) {
-      // todo show error in ui
       throw error;
     }
   };

@@ -101,7 +101,6 @@ export default function SignupFormCenteredSection({
       const value = e.target.value;
       setFormData((prev) => ({ ...prev, [field]: value }));
 
-      // Validate field if it has been touched
       if (touched.has(field)) {
         let error: string | undefined;
 
@@ -117,7 +116,7 @@ export default function SignupFormCenteredSection({
             break;
           case 'password':
             error = validatePassword(value);
-            // Also revalidate confirm password if it has been touched
+
             if (touched.has('confirmPassword')) {
               const confirmError = validateConfirmPassword(
                 formData.confirmPassword,
@@ -166,12 +165,10 @@ export default function SignupFormCenteredSection({
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // Mark all fields as touched
     setTouched(
       new Set(['firstName', 'lastName', 'email', 'password', 'confirmPassword'])
     );
 
-    // Validate form
     const formErrors = validateForm();
     if (Object.keys(formErrors).length > 0) {
       setErrors(formErrors);
@@ -182,7 +179,10 @@ export default function SignupFormCenteredSection({
     setErrors({});
 
     try {
-      const platformId = Cookies.get('platformId');
+      let platformId = Cookies.get('platformId');
+      if (platformId == '4e1c791d-c481-4f9a-9eff-b701c2875c5f') {
+        platformId = undefined;
+      }
       const dto: RegisterDto = {
         firstName: formData.firstName.trim(),
         lastName: formData.lastName.trim(),

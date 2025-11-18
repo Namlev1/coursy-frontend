@@ -3,7 +3,7 @@ import { UUID } from 'node:crypto';
 export interface QuizDto {
   quizTitle: string;
   quizSynopsis: string | null;
-  nrOfQuestions: string; // String, bo komponent tego oczekuje
+  nrOfQuestions: string;
   questions: QuestionDto[];
   position?: number;
   course: UUID;
@@ -12,10 +12,10 @@ export interface QuizDto {
 
 export interface QuestionDto {
   question: string;
-  questionType?: string; // Optional with default "text"
+  questionType?: string;
   answerSelectionType: 'single' | 'multiple';
   answers: string[];
-  correctAnswer: string | number[]; // String for single, number[] for multiple
+  correctAnswer: string | number[];
   messageForCorrectAnswer?: string;
   messageForIncorrectAnswer?: string;
   explanation?: string | null;

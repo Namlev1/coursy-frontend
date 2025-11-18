@@ -74,7 +74,7 @@ export const isPrivateRoute = (path: string) =>
 export const canAccessRoute = (path: string, role: Role | null): boolean => {
   const matchedRoute = Object.values(ROUTES)
     .filter((route) => path.startsWith(route.path))
-    .sort((a, b) => b.path.length - a.path.length)[0]; // Sortuj malejąco po długości
+    .sort((a, b) => b.path.length - a.path.length)[0];
 
   if (!matchedRoute) {
     throw new Error(`Route not found for path: ${path}`);
@@ -92,7 +92,6 @@ export const canAccessRoute = (path: string, role: Role | null): boolean => {
     return false;
   }
 
-  // Route prywatna - musi mieć zdefiniowane role
   if (!matchedRoute.access) {
     throw new Error(
       `Private route ${matchedRoute.path} must have access roles defined`

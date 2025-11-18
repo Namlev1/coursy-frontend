@@ -1,4 +1,3 @@
-// lib/apiClient/index.ts
 import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
 import Cookies from 'js-cookie';
 import { API_BASE_URL } from '@/lib/apiClient/urls';
@@ -11,7 +10,6 @@ const apiClient = axios.create({
   },
 });
 
-// Flag żeby uniknąć wielu równoczesnych requestów refresh
 let isRefreshing = false;
 let refreshSubscribers: ((token: string) => void)[] = [];
 
@@ -24,7 +22,6 @@ function addRefreshSubscriber(callback: (token: string) => void) {
   refreshSubscribers.push(callback);
 }
 
-// REQUEST INTERCEPTOR - dodaj token
 apiClient.interceptors.request.use(
   (config) => {
     if (typeof window !== 'undefined') {
@@ -38,7 +35,6 @@ apiClient.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// RESPONSE INTERCEPTOR - obsłuż 401 i refresh
 apiClient.interceptors.response.use(
   (response) => response,
   async (error: AxiosError) => {
@@ -46,10 +42,8 @@ apiClient.interceptors.response.use(
       _retry?: boolean;
     };
 
-    // Jeśli 401 i jeszcze nie próbowaliśmy refreshować
     if (error.response?.status === 401 && !originalRequest._retry) {
       if (isRefreshing) {
-        // Jeśli już trwa refresh, czekaj na nowy token
         return new Promise((resolve) => {
           addRefreshSubscriber((token: string) => {
             originalRequest.headers['Authorization'] = `Bearer ${token}`;
@@ -62,15 +56,13 @@ apiClient.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        const refreshToken = Cookies.get('refreshToken'); // lub localStorage
+        const refreshToken = Cookies.get('refreshToken');
 
         if (!refreshToken) {
-          // Brak refresh tokenu - wyloguj
           handleLogout();
           return Promise.reject(error);
         }
 
-        // Wywołaj endpoint refresh
         const response = await axios.post(`${API_BASE_URL}/api/auth/refresh`, {
           refreshToken,
         });
@@ -78,7 +70,6 @@ apiClient.interceptors.response.use(
         const { token: newAccessToken, refreshToken: newRefreshToken } =
           response.data;
 
-        // Zapisz nowe tokeny
         Cookies.set('jwt', newAccessToken, {
           secure: true,
           sameSite: 'strict',
@@ -88,14 +79,11 @@ apiClient.interceptors.response.use(
           sameSite: 'strict',
         });
 
-        // Zaktualizuj header w oryginalnym requeście
         originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
 
-        // Powiadom wszystkie czekające requesty
         onRefreshed(newAccessToken);
         isRefreshing = false;
 
-        // Ponów oryginalny request
         return apiClient(originalRequest);
       } catch (refreshError) {
         isRefreshing = false;
@@ -111,7 +99,7 @@ apiClient.interceptors.response.use(
 function handleLogout() {
   Cookies.remove('jwt');
   Cookies.remove('refreshToken');
-  // Redirect do loginu
+
   if (typeof window !== 'undefined') {
     window.location.href = '/login';
   }
@@ -148,7 +136,6 @@ export async function getServerApiClient() {
   let token = cookieStore.get('jwt')?.value;
   const refreshToken = cookieStore.get('refreshToken')?.value;
 
-  // Jeśli token wygasł lub nie istnieje, spróbuj odświeżyć
   if ((!token || isJwtExpired(token)) && refreshToken) {
     const res = await refreshAccessTokenServer(refreshToken);
     token = res?.token;

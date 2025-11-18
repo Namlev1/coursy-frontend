@@ -8,17 +8,13 @@ export async function loginUser(
   password: string,
   platformId: string | null
 ): Promise<LoginResponse> {
-  try {
-    const client = await getApiClient();
-    const response = await client.post<LoginResponse>('/api/auth/login', {
-      email: email.trim(),
-      password,
-      platformId: platformId,
-    });
-    return response.data;
-  } catch (error) {
-    handleError(error);
-  }
+  const client = await getApiClient();
+  const response = await client.post<LoginResponse>('/api/auth/login', {
+    email: email.trim(),
+    password,
+    platformId: platformId,
+  });
+  return response.data;
 }
 
 export async function fetchUserData(token: string): Promise<UserResponse> {

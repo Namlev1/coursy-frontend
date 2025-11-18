@@ -27,7 +27,6 @@ const quizSchema = z.object({
           .array(z.number())
           .min(1, 'Select at least one correct answer'),
         explanation: z.string().optional(),
-        points: z.number().min(1).default(10),
       })
     )
     .min(1, 'At least one question is required'),
@@ -58,7 +57,6 @@ export default function AddQuizForm() {
           answers: ['', ''],
           correctAnswers: [],
           explanation: '',
-          points: 10,
         },
       ],
     },
@@ -88,14 +86,13 @@ export default function AddQuizForm() {
               ? q.correctAnswers[0].toString()
               : q.correctAnswers,
           explanation: q.explanation || null,
-          point: q.points.toString(),
+          point: '10',
         })),
         course: params.courseId as UUID,
       };
       await addQuiz(dto);
       router.push(`/dashboard/courses/${params.courseId}`);
     } catch (error) {
-      // todo show error in ui
       throw error;
     }
   };
@@ -183,7 +180,6 @@ export default function AddQuizForm() {
                   answers: ['', ''],
                   correctAnswers: [],
                   explanation: '',
-                  points: 10,
                 })
               }
               className="px-4 py-2 rounded-lg font-medium transition-all"
@@ -421,31 +417,6 @@ function QuestionItem({
             )}
           </div>
         ))}
-      </div>
-
-      {/* Points */}
-      <div>
-        <label
-          className="block text-sm font-medium mb-2"
-          style={{ color: config.colors.textPrimary }}
-        >
-          Points
-        </label>
-        <input
-          {...register(`questions.${questionIndex}.points`, {
-            valueAsNumber: true,
-          })}
-          type="number"
-          min="1"
-          className="form-input w-32 border rounded-lg px-4 py-2"
-          style={
-            {
-              backgroundColor: config.colors.background,
-              borderColor: config.colors.secondary,
-              color: config.colors.textPrimary,
-            } as React.CSSProperties
-          }
-        />
       </div>
 
       {/* Explanation */}

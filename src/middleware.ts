@@ -78,9 +78,9 @@ export async function middleware(request: NextRequest) {
       return redirectResponse;
     }
     response.cookies.set('platformId', platformId, {
-      httpOnly: true,
+      httpOnly: false,
       sameSite: 'lax',
-      maxAge: 60 * 60 * 24 * 365, // 1 rok
+      maxAge: 60 * 60 * 24 * 365,
       path: '/',
     });
   }
@@ -89,14 +89,13 @@ export async function middleware(request: NextRequest) {
   const refreshToken = request.cookies.get('refreshToken')?.value;
   const jwtInvalid = !jwt || isJwtExpired(jwt);
 
-  // JWT nieważny i mamy refreshToken
   if (jwtInvalid && refreshToken) {
     const tokens = await refreshAccessToken(refreshToken);
     if (!tokens) {
       const redirectResponse = redirectToLogin(request, pathname);
-      // Zachowaj platformId w cookie podczas redirectu
+
       redirectResponse.cookies.set('platformId', platformId, {
-        httpOnly: true,
+        httpOnly: false,
         sameSite: 'lax',
         maxAge: 60 * 60 * 24 * 365,
         path: '/',
@@ -122,7 +121,7 @@ export async function middleware(request: NextRequest) {
     });
 
     response.cookies.set('platformId', platformId, {
-      httpOnly: true,
+      httpOnly: false,
       sameSite: 'lax',
       maxAge: 60 * 60 * 24 * 365,
       path: '/',
@@ -131,11 +130,10 @@ export async function middleware(request: NextRequest) {
     return response;
   }
 
-  // JWT nieważny, brak refreshToken i prywatna ścieżka - redirect
   if (jwtInvalid && isPrivateRoute(pathname)) {
     const redirectResponse = redirectToLogin(request, pathname);
     redirectResponse.cookies.set('platformId', platformId, {
-      httpOnly: true,
+      httpOnly: false,
       sameSite: 'lax',
       maxAge: 60 * 60 * 24 * 365,
       path: '/',
@@ -143,11 +141,10 @@ export async function middleware(request: NextRequest) {
     return redirectResponse;
   }
 
-  // JWT ważny, ale brak dostępu do ścieżki - redirect
   if (jwt && !canAccessRoute(pathname, getRoleFromJwt(jwt))) {
     const redirectResponse = getRedirectHome(request);
     redirectResponse.cookies.set('platformId', platformId, {
-      httpOnly: true,
+      httpOnly: false,
       sameSite: 'lax',
       maxAge: 60 * 60 * 24 * 365,
       path: '/',

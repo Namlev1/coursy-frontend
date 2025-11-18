@@ -20,7 +20,7 @@ export function isJwtExpired(token: string): boolean {
   try {
     const parts = token.split('.');
     if (parts.length !== 3) {
-      return true; // Invalid format
+      return true;
     }
     const payload = JSON.parse(atob(parts[1])) as JWTPayload;
     const currentTimestamp = Math.floor(Date.now() / 1000);

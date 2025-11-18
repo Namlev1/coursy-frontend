@@ -13,7 +13,6 @@ export const validateDescription = createLengthValidator(
   VALIDATION_LIMITS.COURSE.DESCRIPTION.MAX_LENGTH
 );
 
-// TODO improve that when adding feature/upload-images
 export const validateImageUrl = (value: string): string | undefined => {
   if (!value || value.length === 0) {
     return 'Image URL is required';

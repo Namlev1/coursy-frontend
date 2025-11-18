@@ -51,7 +51,6 @@ export default function OrganizationDetailsSection() {
                 className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${getStatusColor('active')}`}
               >
                 {' '}
-                {/*todo*/}
                 Active
               </span>
             </dd>

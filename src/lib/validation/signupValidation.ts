@@ -37,7 +37,6 @@ export const validatePassword = (value: string): ValidationResult => {
     return `Password cannot exceed ${MAX_LENGTH} characters`;
   }
 
-  // Collect all complexity issues
   const complexityErrors: string[] = [];
 
   if (!PASSWORD_REGEXES.UPPERCASE.test(value)) {

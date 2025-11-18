@@ -56,8 +56,6 @@ export default function AddVideoForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // todo validate
-
     try {
       const formData = new FormData();
       formData.append('title', title);
@@ -69,7 +67,6 @@ export default function AddVideoForm() {
 
       router.push(`/dashboard/courses/${params.courseId}`);
     } catch (error) {
-      // todo show error in ui
       throw error;
     }
   };

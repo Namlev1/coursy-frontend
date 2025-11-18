@@ -46,7 +46,6 @@ export default function MockVideoPlayer({ formData }: MockVideoPlayerProps) {
             light="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&h=600&fit=crop"
           />
 
-          {/* Invisible overlay to block clicks */}
           <div
             className="absolute inset-0 z-10 cursor-default"
             onClick={(e) => e.preventDefault()}
@@ -63,7 +62,7 @@ export default function MockVideoPlayer({ formData }: MockVideoPlayerProps) {
                 step="any"
                 className="w-full h-1 bg-gray-600 rounded-lg appearance-none cursor-pointer slider"
                 style={{
-                  background: '#4b5563', // gray-600
+                  background: '#4b5563',
                   accentColor: formData.colors.primary,
                 }}
               />
@@ -126,7 +125,7 @@ export default function MockVideoPlayer({ formData }: MockVideoPlayerProps) {
                     onChange={(e) => e.preventDefault()}
                     className="w-16 h-1 bg-gray-600 rounded-lg appearance-none cursor-pointer"
                     style={{
-                      background: '#4b5563', // gray-600
+                      background: '#4b5563',
                       accentColor: formData.colors.primary,
                     }}
                   />
